@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="css/styles.css">
 
   <style>
+    /* Review Cards */
     .review-card {
       background-color: var(--color-white);
       border: 1px solid var(--color-border);
@@ -64,7 +65,7 @@
     }
 
     .review-text::before {
-      content: '"';
+      content: '\201C';
       position: absolute;
       left: 0;
       font-size: 2rem;
@@ -85,6 +86,23 @@
       color: var(--color-medium-text);
     }
 
+    .review-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-top: 0.5rem;
+    }
+
+    .badge-verified {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+    }
+
+    /* Leave a Review Section */
     .leave-review-section {
       background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
       color: var(--color-white);
@@ -121,6 +139,198 @@
       background-color: var(--color-accent-light);
       transform: translateY(-2px);
       box-shadow: var(--shadow-lg);
+    }
+
+    /* ===== Review Submission Form ===== */
+    .review-form-section {
+      background-color: var(--color-light-bg);
+      padding: 4rem 0;
+    }
+
+    .review-form-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .review-form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .review-form-header h2 {
+      font-size: 1.5rem;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .review-form-header p {
+      color: var(--color-medium-text);
+      font-size: 0.95rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--color-dark-text);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.01em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-family: var(--font-base);
+      font-size: 0.9rem;
+      color: var(--color-dark-text);
+      background: var(--color-white);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Star Rating Input */
+    .star-rating-input {
+      display: flex;
+      gap: 0.35rem;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    .star-rating-input input {
+      display: none;
+    }
+
+    .star-rating-input label {
+      font-size: 1.8rem;
+      color: #D1D5DB;
+      cursor: pointer;
+      transition: color 0.15s ease, transform 0.15s ease;
+      margin-bottom: 0;
+      font-weight: normal;
+    }
+
+    .star-rating-input label:hover,
+    .star-rating-input label:hover ~ label,
+    .star-rating-input input:checked ~ label {
+      color: #FFB81C;
+      transform: scale(1.1);
+    }
+
+    .review-form-consent {
+      font-size: 0.8rem;
+      color: var(--color-medium-text);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .review-submit-btn {
+      display: block;
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      background: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-base);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+      letter-spacing: 0.01em;
+      margin-top: 0.5rem;
+    }
+
+    .review-submit-btn:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .review-submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Success State */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .form-success.active {
+      display: block;
+    }
+
+    .form-success-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      background: rgba(34, 197, 94, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-success-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #16a34a;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .form-success h3 {
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-success p {
+      color: var(--color-medium-text);
+      font-size: 0.95rem;
+    }
+
+    /* Page load */
+    body {
+      opacity: 0.99;
+      transition: opacity 0.3s ease-in;
     }
   </style>
 </head>
@@ -185,8 +395,8 @@
         <h1>Client Reviews</h1>
         <p class="hero-subtitle">Hear from the professionals and homeowners we've had the privilege of serving.</p>
         <div class="hero-ctas">
-          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
-          <a href="contact.html" class="btn btn-secondary btn-lg">Contact Us</a>
+          <a href="#submit-review" class="btn btn-primary btn-lg">Leave a Review</a>
+          <a href="contact.html#request-quote" class="btn btn-secondary btn-lg">Request a Quote</a>
         </div>
       </div>
 
@@ -276,13 +486,112 @@
       </div>
     </section>
 
-    <!-- Leave a Review Section -->
+    <!-- ===============================================
+         REVIEW SUBMISSION FORM (Netlify Forms)
+         =============================================== -->
+    <section class="review-form-section" id="submit-review">
+      <div class="container">
+        <div class="review-form-wrapper">
+          <div class="review-form-header">
+            <h2>Share Your Experience</h2>
+            <p>Recently received your appraisal? We'd love to hear how it went. Your feedback helps us improve and assists future clients in their decision.</p>
+          </div>
+
+          <!-- Netlify Forms — submissions go to Netlify dashboard + email notification -->
+          <form name="client-reviews" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="reviewForm">
+            <!-- Honeypot for spam prevention -->
+            <p style="display:none;">
+              <label>Don't fill this out: <input name="bot-field"></label>
+            </p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reviewer-name">Your Name *</label>
+                <input type="text" id="reviewer-name" name="name" required placeholder="e.g. Sarah M.">
+              </div>
+              <div class="form-group">
+                <label for="reviewer-email">Email Address *</label>
+                <input type="email" id="reviewer-email" name="email" required placeholder="you@email.com">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="service-type">Service Received *</label>
+                <select id="service-type" name="service-type" required>
+                  <option value="" disabled selected>Select a service</option>
+                  <option value="Single-Family Appraisal">Single-Family Appraisal</option>
+                  <option value="Multi-Family Appraisal">Multi-Family Appraisal</option>
+                  <option value="Condo Appraisal">Condo / Townhome Appraisal</option>
+                  <option value="Land Appraisal">Land / Vacant Lot Appraisal</option>
+                  <option value="Estate Appraisal">Estate Appraisal</option>
+                  <option value="Divorce Appraisal">Divorce Appraisal</option>
+                  <option value="Tax Appeal Appraisal">Tax Appeal Appraisal</option>
+                  <option value="FHA Appraisal">FHA / Lender Appraisal</option>
+                  <option value="Investment Analysis">Investment / Valuation Analysis</option>
+                  <option value="Mass Appraisal Consulting">Mass Appraisal Consulting</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="reviewer-role">Your Role / Title</label>
+                <input type="text" id="reviewer-role" name="role" placeholder="e.g. Homeowner, Attorney, Loan Officer">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Your Rating *</label>
+              <div class="star-rating-input">
+                <input type="radio" id="star5" name="rating" value="5" required>
+                <label for="star5" title="5 stars">★</label>
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4" title="4 stars">★</label>
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3" title="3 stars">★</label>
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2" title="2 stars">★</label>
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1" title="1 star">★</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="review-body">Your Review *</label>
+              <textarea id="review-body" name="review" required placeholder="Tell us about your experience working with Designer Homes..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" name="consent" required style="width:auto; margin-right:0.4rem; vertical-align:middle;">
+                I agree that my review may be published on the Designer Homes website.
+              </label>
+              <p class="review-form-consent">Your email address will never be shared publicly. We may display your first name, last initial, role, and review text on our site.</p>
+            </div>
+
+            <button type="submit" class="review-submit-btn">Submit Your Review</button>
+          </form>
+
+          <!-- Success Message (shown after submission) -->
+          <div class="form-success" id="formSuccess">
+            <div class="form-success-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Thank You for Your Feedback!</h3>
+            <p>Your review has been submitted successfully. We review every submission and may feature your testimonial on our website. We truly appreciate you taking the time to share your experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Google Review CTA -->
     <section class="section-spacing">
       <div class="container">
         <div class="leave-review-section">
-          <h3>Share Your Experience</h3>
+          <h3>Also Leave Us a Google Review</h3>
           <p style="color: rgba(255, 255, 255, 0.95); margin-bottom: var(--spacing-2xl); font-size: var(--font-size-lg);">
-            We'd love to hear about your experience with Designer Homes Real Estate Services.
+            Your Google review helps other clients find Designer Homes and builds trust in the community.
           </p>
           <div class="review-links">
             <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="review-link-btn">
@@ -303,7 +612,7 @@
         <p class="cta-subtitle">Join our satisfied clients and request your appraisal today.</p>
         <div class="cta-buttons">
           <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
-          <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+          <a href="tel:+19737259580" class="btn btn-secondary btn-lg">Call (973) 725-9580</a>
         </div>
       </div>
     </section>
@@ -359,7 +668,7 @@
           <div class="footer-contact">
             <p><strong>Designer Homes Real Estate Services</strong></p>
             <p>Durham, NC<br>USA</p>
-            <p><strong>Phone:</strong><br><a href="tel:+19195555555" class="footer-link">(919) 555-5555</a></p>
+            <p><strong>Phone:</strong><br><a href="tel:+19737259580" class="footer-link">(973) 725-9580</a></p>
             <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
           </div>
         </div>
@@ -393,7 +702,7 @@
       "postalCode": "27701",
       "addressCountry": "US"
     },
-    "telephone": "+19195555555",
+    "telephone": "+19737259580",
     "email": "info@designerhomesre.com",
     "url": "https://designerhomesre.com/reviews.html",
     "aggregateRating": {
@@ -491,15 +800,41 @@
       }
     });
 
+    // ===== Review Form Submission Handler =====
+    const reviewForm = document.getElementById('reviewForm');
+    const formSuccess = document.getElementById('formSuccess');
+
+    if (reviewForm) {
+      reviewForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(reviewForm);
+
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        })
+        .then(response => {
+          if (response.ok) {
+            reviewForm.style.display = 'none';
+            formSuccess.classList.add('active');
+            // Scroll to success message
+            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            alert('There was an issue submitting your review. Please try again or contact us directly.');
+          }
+        })
+        .catch(() => {
+          alert('There was a network error. Please try again or email us at info@designerhomesre.com.');
+        });
+      });
+    }
+
     // ===== Page Load Animation =====
     window.addEventListener('load', () => {
       document.body.style.opacity = '1';
     });
-
-    body {
-      opacity: 0.99;
-      transition: opacity 0.3s ease-in;
-    }
   </script>
 </body>
 </html>
