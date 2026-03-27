@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Designer Homes Appraisal Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        DESIGNER HOMES<br>
+        <small>APPRAISAL PLATFORM</small>
+      </div>
+      <form id="login-form" onsubmit="App.handleLogin(event)">
+        <div class="form-group">
+          <input type="password" id="login-password" placeholder="Enter password" required>
+        </div>
+        <div id="login-error" class="login-error" style="display:none;"></div>
+        <button type="submit" class="btn-primary btn-login">Sign In</button>
+      </form>
+      <p class="login-hint">Contact administrator for credentials</p>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div id="app" class="app-wrapper" style="display:none;">
+
+    <!-- TOP HEADER BAR -->
+    <header class="app-header">
+      <button id="sidebar-toggle" class="hamburger" onclick="App.toggleSidebar()">☰</button>
+      <div class="header-brand">DESIGNER HOMES <span>Appraisal Platform</span></div>
+      <div class="header-search search-wrapper">
+        <input type="text" id="global-search" placeholder="Search assignments, clients..." onkeyup="App.globalSearch(event)">
+      </div>
+      <div class="header-actions">
+        <span class="header-user">Keith M.</span>
+        <button class="btn-link" onclick="App.logout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar">
+      <nav>
+        <a href="#" class="sidebar-link active" data-section="dashboard" onclick="App.switchSection(event, 'dashboard')">📊 Dashboard</a>
+
+        <div class="sidebar-group-label">Appraisal</div>
+        <a href="#" class="sidebar-link" data-section="assignments" onclick="App.switchSection(event, 'assignments')">📋 Assignments</a>
+        <a href="#" class="sidebar-link" data-section="mls-import" onclick="App.switchSection(event, 'mls-import')">📥 MLS Import</a>
+        <a href="#" class="sidebar-link" data-section="comps" onclick="App.switchSection(event, 'comps')">🏘️ Comparables</a>
+        <a href="#" class="sidebar-link" data-section="market-analysis" onclick="App.switchSection(event, 'market-analysis')">📈 Market Analysis</a>
+        <a href="#" class="sidebar-link" data-section="adjustments" onclick="App.switchSection(event, 'adjustments')">⚖️ Adjustments</a>
+        <a href="#" class="sidebar-link" data-section="cost-approach" onclick="App.switchSection(event, 'cost-approach')">🏗️ Cost Approach</a>
+        <a href="#" class="sidebar-link" data-section="income-approach" onclick="App.switchSection(event, 'income-approach')">💰 Income Approach</a>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-group-label">Documentation</div>
+        <a href="#" class="sidebar-link" data-section="comments" onclick="App.switchSection(event, 'comments')">📝 Comments</a>
+        <a href="#" class="sidebar-link" data-section="mileage" onclick="App.switchSection(event, 'mileage')">🚗 Mileage</a>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-group-label">Operations</div>
+        <a href="#" class="sidebar-link" data-section="invoices" onclick="App.switchSection(event, 'invoices')">💳 Invoices</a>
+        <a href="#" class="sidebar-link" data-section="reports" onclick="App.switchSection(event, 'reports')">📄 Reports</a>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-group-label">Management</div>
+        <a href="#" class="sidebar-link" data-section="clients" onclick="App.switchSection(event, 'clients')">👥 Clients</a>
+        <a href="#" class="sidebar-link" data-section="trainees" onclick="App.switchSection(event, 'trainees')">🎓 Trainees</a>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-group-label">Admin</div>
+        <a href="#" class="sidebar-link" data-section="audit" onclick="App.switchSection(event, 'audit')">🔒 Audit Trail</a>
+        <a href="#" class="sidebar-link" data-section="settings" onclick="App.switchSection(event, 'settings')">⚙️ Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="compliance-badge">USPAP-Conscious Workflow</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- ASSIGNMENT SELECTOR BAR -->
+      <div id="assignment-bar" class="assignment-bar" style="display:none;">
+        <label>Active Assignment:</label>
+        <select id="active-assignment-select" onchange="App.setActiveAssignment(this.value)">
+          <option value="">Select an assignment</option>
+        </select>
+        <span id="active-assignment-info"></span>
+      </div>
+
+      <!-- COMPLIANCE DISCLAIMER -->
+      <div id="compliance-disclaimer" class="compliance-disclaimer" style="display:none;">
+        All conclusions remain the responsibility of the appraiser. This system is an organizational and analytical support tool and does not automatically determine appraisal conclusions.
+      </div>
+
+      <!-- SECTION: DASHBOARD -->
+      <section id="section-dashboard" class="content-section active">
+        <h1>Dashboard</h1>
+        <div id="morning-briefing" class="morning-briefing" style="display:none;"></div>
+        <div class="metrics-grid" id="dashboard-metrics">
+          <div class="metric-card">
+            <div class="metric-label">Active Assignments</div>
+            <div class="metric-value">8</div>
+            <div class="metric-change">+2 this week</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Reports Due</div>
+            <div class="metric-value">3</div>
+            <div class="metric-change">Next: Today</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">YTD Revenue</div>
+            <div class="metric-value">$47,250</div>
+            <div class="metric-change">+12% vs last year</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Avg. Turnaround</div>
+            <div class="metric-value">4.2 days</div>
+            <div class="metric-change">Industry avg: 5 days</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Pending Payment</div>
+            <div class="metric-value">$5,800</div>
+            <div class="metric-change">From 2 invoices</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Mileage This Month</div>
+            <div class="metric-value">287 miles</div>
+            <div class="metric-change">$200.90 deduction</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Client Count</div>
+            <div class="metric-value">24</div>
+            <div class="metric-change">+3 new this quarter</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Completed This Month</div>
+            <div class="metric-value">12</div>
+            <div class="metric-change">Delivered on schedule</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card" id="dashboard-pipeline">
+            <h3>Assignment Pipeline</h3>
+            <div id="pipeline-list">
+              <div class="pipeline-item">
+                <div class="pipeline-stage">
+                  <div class="pipeline-dot" style="background: #2196F3;"></div>
+                  <span>New</span>
+                </div>
+                <span class="pipeline-count">2</span>
+              </div>
+              <div class="pipeline-item">
+                <div class="pipeline-stage">
+                  <div class="pipeline-dot" style="background: #00897B;"></div>
+                  <span>Scheduled</span>
+                </div>
+                <span class="pipeline-count">3</span>
+              </div>
+              <div class="pipeline-item">
+                <div class="pipeline-stage">
+                  <div class="pipeline-dot" style="background: #D4941E;"></div>
+                  <span>In Review</span>
+                </div>
+                <span class="pipeline-count">2</span>
+              </div>
+              <div class="pipeline-item">
+                <div class="pipeline-stage">
+                  <div class="pipeline-dot" style="background: #2D8F5E;"></div>
+                  <span>Delivered</span>
+                </div>
+                <span class="pipeline-count">12</span>
+              </div>
+            </div>
+          </div>
+          <div class="card" id="dashboard-activity">
+            <h3>Recent Activity</h3>
+            <div id="activity-feed">
+              <div class="activity-item">
+                <div class="activity-icon">✓</div>
+                <div class="activity-text">
+                  <strong>Report delivered</strong> for 4521 Riverside Dr
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">📝</div>
+                <div class="activity-text">
+                  <strong>MLS data imported</strong> - 34 comparables added
+                  <div class="activity-time">1 day ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">💳</div>
+                <div class="activity-text">
+                  <strong>Invoice created</strong> for Coastal Mortgage
+                  <div class="activity-time">2 days ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">🚗</div>
+                <div class="activity-text">
+                  <strong>Mileage logged</strong> - 45 miles
+                  <div class="activity-time">3 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="btn-primary" onclick="App.quickAction('new-assignment')">+ New Assignment</button>
+          <button class="btn-secondary" onclick="App.quickAction('import-mls')">📥 Import MLS</button>
+          <button class="btn-secondary" onclick="App.quickAction('log-mileage')">🚗 Log Mileage</button>
+          <button class="btn-secondary" onclick="App.quickAction('create-invoice')">💳 Create Invoice</button>
+        </div>
+      </section>
+
+      <!-- SECTION: ASSIGNMENTS -->
+      <section id="section-assignments" class="content-section">
+        <div class="section-header">
+          <h1>Assignments</h1>
+          <button class="btn-primary" onclick="AssignmentModule.showCreate()">+ New Assignment</button>
+        </div>
+        <div class="filters-row">
+          <select id="asgn-filter-status" onchange="AssignmentModule.render()">
+            <option value="all">All Statuses</option>
+            <option value="new">New</option>
+            <option value="accepted">Accepted</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="inspected">Inspected</option>
+            <option value="in_review">In Review</option>
+            <option value="report_complete">Report Complete</option>
+            <option value="awaiting_payment">Awaiting Payment</option>
+            <option value="delivered">Delivered</option>
+          </select>
+          <select id="asgn-filter-type" onchange="AssignmentModule.render()">
+            <option value="all">All Types</option>
+            <option value="current_value">Current Value</option>
+            <option value="divorce">Divorce</option>
+            <option value="estate">Estate</option>
+            <option value="retrospective">Retrospective</option>
+            <option value="new_construction">New Construction</option>
+            <option value="fha">FHA</option>
+            <option value="green_home">Green Home</option>
+          </select>
+          <input type="text" id="asgn-search" placeholder="Search assignments..." oninput="AssignmentModule.render()">
+        </div>
+        <div id="assignments-list" class="assignments-list">
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <p>No assignments yet. Create one to get started.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: MLS IMPORT -->
+      <section id="section-mls-import" class="content-section">
+        <div class="section-header">
+          <h1>MLS CSV Import</h1>
+        </div>
+        <div class="import-workspace">
+          <div class="import-slots">
+            <div class="import-slot" id="slot-dataset1">
+              <h3>Dataset 1</h3>
+              <div class="upload-zone" id="dropzone-1" ondrop="MLSModule.handleDrop(event,1)" ondragover="event.preventDefault()" ondragenter="event.preventDefault()">
+                <p>📂 Drop CSV file here or click to browse</p>
+                <input type="file" accept=".csv" id="file-input-1" onchange="MLSModule.handleFile(event,1)" style="display:none;">
+                <button type="button" class="btn-secondary" onclick="document.getElementById('file-input-1').click()">Choose File</button>
+              </div>
+              <div id="import-status-1" class="import-status"></div>
+            </div>
+            <div class="import-slot" id="slot-dataset2">
+              <h3>Dataset 2</h3>
+              <div class="upload-zone" id="dropzone-2" ondrop="MLSModule.handleDrop(event,2)" ondragover="event.preventDefault()" ondragenter="event.preventDefault()">
+                <p>📂 Drop CSV file here or click to browse</p>
+                <input type="file" accept=".csv" id="file-input-2" onchange="MLSModule.handleFile(event,2)" style="display:none;">
+                <button type="button" class="btn-secondary" onclick="document.getElementById('file-input-2').click()">Choose File</button>
+              </div>
+              <div id="import-status-2" class="import-status"></div>
+            </div>
+            <div class="import-slot" id="slot-dataset3">
+              <h3>Dataset 3</h3>
+              <div class="upload-zone" id="dropzone-3" ondrop="MLSModule.handleDrop(event,3)" ondragover="event.preventDefault()" ondragenter="event.preventDefault()">
+                <p>📂 Drop CSV file here or click to browse</p>
+                <input type="file" accept=".csv" id="file-input-3" onchange="MLSModule.handleFile(event,3)" style="display:none;">
+                <button type="button" class="btn-secondary" onclick="document.getElementById('file-input-3').click()">Choose File</button>
+              </div>
+              <div id="import-status-3" class="import-status"></div>
+            </div>
+          </div>
+          <div id="mapping-preview" class="mapping-preview" style="display:none;">
+            <h3>Column Mapping</h3>
+            <div id="mapping-table"></div>
+            <button class="btn-primary" onclick="MLSModule.confirmImport()">Confirm Import</button>
+          </div>
+          <div id="import-results" class="import-results" style="display:none;">
+            <h3>Import Results</h3>
+            <div id="import-summary"></div>
+            <div id="duplicate-alerts"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: COMPARABLES -->
+      <section id="section-comps" class="content-section">
+        <div class="section-header">
+          <h1>Comparable Workspace</h1>
+          <div class="view-toggle">
+            <button class="btn-sm active" onclick="CompsModule.setView('table')">Table</button>
+            <button class="btn-sm" onclick="CompsModule.setView('grid')">Grid</button>
+            <button class="btn-sm" onclick="CompsModule.setView('compare')">Compare</button>
+          </div>
+        </div>
+        <div class="filters-row" id="comp-filters">
+          <select id="comp-filter-tag" onchange="CompsModule.applyFilters()">
+            <option value="all">All Tags</option>
+            <option value="candidate">Candidate</option>
+            <option value="selected">Selected</option>
+            <option value="visited">Visited</option>
+            <option value="excluded">Excluded</option>
+          </select>
+          <input type="number" id="comp-filter-min-price" placeholder="Min Price" onchange="CompsModule.applyFilters()">
+          <input type="number" id="comp-filter-max-price" placeholder="Max Price" onchange="CompsModule.applyFilters()">
+          <input type="number" id="comp-filter-min-gla" placeholder="Min GLA" onchange="CompsModule.applyFilters()">
+          <input type="number" id="comp-filter-max-gla" placeholder="Max GLA" onchange="CompsModule.applyFilters()">
+          <button class="btn-sm btn-secondary" onclick="CompsModule.applyFilters()">Filter</button>
+          <button class="btn-sm" onclick="CompsModule.clearFilters()">Clear</button>
+        </div>
+        <div id="comps-stats" class="comps-stats-bar"></div>
+        <div id="comps-content">
+          <div class="empty-state">
+            <div class="empty-icon">🏘️</div>
+            <p>Select an assignment to load its comparable workspace.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: MARKET ANALYSIS -->
+      <section id="section-market-analysis" class="content-section">
+        <div class="section-header">
+          <h1>Market Analysis Support</h1>
+          <button class="btn-secondary" onclick="MarketModule.saveAnalysis()">Save Analysis</button>
+        </div>
+        <div class="analysis-controls">
+          <div class="filters-row">
+            <input type="date" id="ma-date-start" placeholder="Start Date">
+            <input type="date" id="ma-date-end" placeholder="End Date">
+            <select id="ma-status-filter">
+              <option value="all">All Statuses</option>
+              <option value="sold">Sold</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+            </select>
+            <input type="text" id="ma-neighborhood" placeholder="Neighborhood/Subdivision">
+            <button class="btn-primary" onclick="MarketModule.runAnalysis()">Run Analysis</button>
+          </div>
+        </div>
+        <div id="market-stats" class="market-stats"></div>
+        <div id="market-results" class="market-results"></div>
+        <div id="market-trends" class="market-trends"></div>
+        <div id="market-narrative" class="narrative-section">
+          <h3>Market Conditions Narrative</h3>
+          <textarea id="market-narrative-text" rows="10" placeholder="Click 'Generate Draft' to create a USPAP-safe market narrative based on the data above..."></textarea>
+          <div class="narrative-actions">
+            <button class="btn-secondary" onclick="MarketModule.generateNarrative()">Generate Draft</button>
+            <button class="btn-primary" onclick="MarketModule.saveNarrative()">Save to Assignment</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: ADJUSTMENTS -->
+      <section id="section-adjustments" class="content-section">
+        <div class="section-header">
+          <h1>Adjustment Support</h1>
+          <div class="header-actions-inline">
+            <button class="btn-secondary btn-sm" onclick="AdjustmentModule.exportResults()">📄 Export</button>
+            <button class="btn-secondary btn-sm" onclick="AdjustmentModule.viewSummary()">📊 Summary</button>
+          </div>
+        </div>
+        <div class="adjustment-workspace">
+          <div class="feature-tabs" id="adjustment-features">
+            <!-- Rebuilt dynamically -->
+          </div>
+
+          <div class="adj-analysis-panel">
+            <!-- Data Source -->
+            <div class="adj-data-section">
+              <div class="adj-data-header">
+                <h3 id="adj-feature-title">GLA</h3>
+                <span class="adj-pair-count" id="adj-pair-count">0 pairs</span>
+              </div>
+              <div class="adj-subject-row">
+                <label>Subject Value:</label>
+                <input type="number" id="adj-subject-value" placeholder="e.g., 1850" onchange="AdjustmentModule.onSubjectValueChange()">
+                <span class="adj-unit" id="adj-unit">sqft</span>
+              </div>
+              <div class="adj-pairs-table-wrap">
+                <table class="adj-pairs-table" id="adj-pairs-table">
+                  <thead><tr><th>Comp</th><th>Sale Price</th><th>Feature Value</th><th>Diff</th><th>Use</th></tr></thead>
+                  <tbody id="adj-pairs-body">
+                    <tr><td colspan="5" class="empty-state">Select comparables first</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Method Selection -->
+            <div class="adj-methods-section">
+              <h3>Methods</h3>
+              <div class="adj-methods-grid" id="adj-methods-grid">
+                <label class="adj-method-toggle"><input type="checkbox" data-method="grouped_data" checked> Grouped Data</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="true_paired"> True Paired Sales</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="adjusted_paired"> Adjusted Paired Sales</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="sensitivity"> Sensitivity Analysis</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="allocation"> Allocation</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="depreciated_cost"> Depreciated Cost</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="ols_regression" checked> OLS Regression</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="theil_sen"> Theil-Sen</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="lad"> LAD (Least Absolute)</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="lms"> LMS (Least Median)</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="robust_simple"> Robust Simple</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="modified_quantile"> Modified Quantile</label>
+                <label class="adj-method-toggle"><input type="checkbox" data-method="survey"> Survey / Manual</label>
+              </div>
+              <button class="btn-primary" onclick="AdjustmentModule.runAnalysis()">⚡ Run Analysis</button>
+            </div>
+
+            <!-- Results -->
+            <div class="adj-results-section" id="adj-results-section" style="display:none;">
+              <h3>Results</h3>
+              <div class="adj-range-chart" id="adj-range-chart"></div>
+              <div class="adj-summary-stats" id="adj-summary-stats"></div>
+              <div class="adj-selected-row">
+                <label>Selected Adjustment:</label>
+                <input type="number" id="adj-selected-value" placeholder="Your judgment">
+                <span class="adj-unit" id="adj-selected-unit">$/unit</span>
+                <button class="btn-primary btn-sm" onclick="AdjustmentModule.saveAdjustment()">💾 Save</button>
+              </div>
+              <div class="adj-notes-row">
+                <label>Support Notes:</label>
+                <textarea id="adj-support-notes" rows="3" placeholder="Document your reasoning..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: COST APPROACH -->
+      <section id="section-cost-approach" class="content-section">
+        <div class="section-header">
+          <h1>Cost Approach</h1>
+          <div>
+            <span class="source-badge">Source: DwellingCost.com</span>
+            <button class="btn-secondary" onclick="CostApproachModule.saveApproach()">Save</button>
+          </div>
+        </div>
+        <div id="cost-approach-content" class="approach-form">
+          <div class="empty-state">
+            <p>Select an assignment to begin cost approach calculations</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: INCOME APPROACH -->
+      <section id="section-income-approach" class="content-section">
+        <div class="section-header">
+          <h1>Income Approach</h1>
+          <div>
+            <span class="approach-type-badge">GRM / GIM Analysis</span>
+            <button class="btn-secondary" onclick="IncomeApproachModule.saveApproach()">Save</button>
+          </div>
+        </div>
+        <div id="income-approach-content">
+          <div class="empty-state">
+            <p>Select an assignment to begin income approach analysis</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: COMMENTS GENERATOR -->
+      <section id="section-comments" class="content-section">
+        <div class="section-header">
+          <h1>Comments Generator</h1>
+          <div class="header-actions-inline">
+            <button class="btn-secondary btn-sm" onclick="CommentsModule.openStatementsLibrary()">📚 Statements Library</button>
+            <button class="btn-secondary btn-sm" onclick="CommentsModule.openSavedComments()">💾 Saved Comments</button>
+          </div>
+        </div>
+
+        <!-- OUTPUT TYPE TABS -->
+        <div class="cg-output-tabs">
+          <button class="cg-tab active" data-output="general" onclick="CommentsModule.selectOutput('general')">General</button>
+          <button class="cg-tab" data-output="sales_comparison" onclick="CommentsModule.selectOutput('sales_comparison')">Sales Comp</button>
+          <button class="cg-tab" data-output="market_analysis" onclick="CommentsModule.selectOutput('market_analysis')">Market</button>
+          <button class="cg-tab" data-output="adjustment_support" onclick="CommentsModule.selectOutput('adjustment_support')">Adjustments</button>
+          <button class="cg-tab" data-output="cost_approach" onclick="CommentsModule.selectOutput('cost_approach')">Cost</button>
+          <button class="cg-tab" data-output="income_approach" onclick="CommentsModule.selectOutput('income_approach')">Income</button>
+          <button class="cg-tab" data-output="addendum" onclick="CommentsModule.selectOutput('addendum')">Addendum</button>
+          <button class="cg-tab" data-output="revision" onclick="CommentsModule.selectOutput('revision')">Revision</button>
+          <button class="cg-tab" data-output="special" onclick="CommentsModule.selectOutput('special')">Inserts</button>
+        </div>
+
+        <!-- TEMPLATE MODE SELECTOR -->
+        <div class="cg-config-bar">
+          <div class="cg-config-item">
+            <label>Template Mode:</label>
+            <select id="cg-template-mode" onchange="CommentsModule.onTemplateChange()">
+              <option value="1004_standard">Standard 1004</option>
+              <option value="2055_exterior">2055 Exterior Only</option>
+              <option value="1004c_manufactured">1004C / Manufactured</option>
+              <option value="purchase">Purchase</option>
+              <option value="refinance">Refinance</option>
+              <option value="subject_to_arv">Subject-To / ARV</option>
+              <option value="limited_comps">Limited Comps</option>
+              <option value="split_level">Split Level / Below Grade</option>
+              <option value="subdivision">Subdivision Search</option>
+              <option value="pud">PUD</option>
+              <option value="condo">Condo</option>
+              <option value="rural">Rural / Acreage</option>
+            </select>
+          </div>
+          <div class="cg-config-item">
+            <label>Purpose:</label>
+            <select id="cg-purpose">
+              <option value="purchase">Purchase</option>
+              <option value="refinance">Refinance</option>
+              <option value="cash_out">Cash-Out Refinance</option>
+              <option value="heloc">HELOC</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="cg-config-item">
+            <label>Value Type:</label>
+            <select id="cg-value-type">
+              <option value="as_is">As-Is</option>
+              <option value="subject_to">Subject-To Completion</option>
+              <option value="arv">After Renovated Value</option>
+              <option value="prospective">Prospective</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SUBJECT DATA REVIEW (auto-filled from assignment) -->
+        <div class="cg-data-review" id="cg-data-review">
+          <div class="cg-data-header" onclick="CommentsModule.toggleDataReview()">
+            <h3>📋 Subject &amp; Assignment Data <span class="cg-toggle-arrow">▼</span></h3>
+            <span class="cg-data-status" id="cg-data-status">Loading...</span>
+          </div>
+          <div class="cg-data-grid" id="cg-data-grid" style="display:none;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- CONDITIONAL INSERT TOGGLES -->
+        <div class="cg-inserts">
+          <h3>Conditional Inserts</h3>
+          <div class="cg-insert-grid" id="cg-insert-grid">
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-pre1978" onchange="CommentsModule.onInsertChange()"> Pre-1978 Lead Paint</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-2055" onchange="CommentsModule.onInsertChange()"> 2055 Extraordinary Assumption</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-septic" onchange="CommentsModule.onInsertChange()"> Public Water / Septic</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-well" onchange="CommentsModule.onInsertChange()"> Well / Septic</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-no-mls" onchange="CommentsModule.onInsertChange()"> No MLS History</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-fsbo" onchange="CommentsModule.onInsertChange()"> FSBO / Private Sale</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-below-grade" onchange="CommentsModule.onInsertChange()"> Below-Grade GLA / Split Level</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-limited-comps" onchange="CommentsModule.onInsertChange()"> Limited Comparables</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-active-listing" onchange="CommentsModule.onInsertChange()"> Active Listing Used</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-renovations" onchange="CommentsModule.onInsertChange()"> Renovations / Updates</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-flood" onchange="CommentsModule.onInsertChange()"> Flood Zone</label>
+            <label class="cg-insert-toggle"><input type="checkbox" id="cg-insert-adu" onchange="CommentsModule.onInsertChange()"> ADU / Accessory Dwelling</label>
+          </div>
+        </div>
+
+        <!-- REVISION RESPONSE FIELDS (only shown when Revision tab active) -->
+        <div class="cg-revision-fields" id="cg-revision-fields" style="display:none;">
+          <h3>Revision Request Items</h3>
+          <div id="cg-revision-items">
+            <div class="cg-revision-item">
+              <span class="cg-revision-num">1.</span>
+              <input type="text" class="cg-revision-request" placeholder="Reviewer request / question...">
+              <textarea class="cg-revision-response" rows="3" placeholder="Your response..."></textarea>
+            </div>
+          </div>
+          <button class="btn-secondary btn-sm" onclick="CommentsModule.addRevisionItem()">+ Add Item</button>
+        </div>
+
+        <!-- GENERATION & EDITOR -->
+        <div class="cg-generate-bar">
+          <button class="btn-primary" onclick="CommentsModule.generateDraft()">⚡ Generate Draft</button>
+          <button class="btn-secondary" onclick="CommentsModule.regenerate()">🔄 Regenerate</button>
+          <span class="cg-gen-status" id="cg-gen-status"></span>
+        </div>
+
+        <div class="cg-editor-area">
+          <div class="cg-editor-pane">
+            <div class="cg-editor-header">
+              <h3>Generated Output</h3>
+              <button class="btn-link btn-sm" onclick="CommentsModule.copyGenerated()">📋 Copy</button>
+            </div>
+            <div id="cg-generated-output" class="cg-generated-display">
+              <div class="cg-placeholder">Select a template mode, configure inserts, and click Generate Draft to create USPAP-compliant comments.</div>
+            </div>
+          </div>
+          <div class="cg-editor-pane">
+            <div class="cg-editor-header">
+              <h3>Your Edits</h3>
+              <div>
+                <button class="btn-link btn-sm" onclick="CommentsModule.copyFromGenerated()">← Pull Generated</button>
+                <button class="btn-link btn-sm" onclick="CommentsModule.clearEditor()">Clear</button>
+              </div>
+            </div>
+            <textarea id="cg-edited-output" class="cg-edit-textarea" rows="18" placeholder="Edit the generated draft here or write your own..."></textarea>
+          </div>
+        </div>
+
+        <!-- SAVE & EXPORT ACTIONS -->
+        <div class="cg-actions-bar">
+          <button class="btn-primary" onclick="CommentsModule.saveDraft()">💾 Save Draft</button>
+          <button class="btn-secondary" onclick="CommentsModule.finalize()">✅ Mark as Final</button>
+          <button class="btn-secondary" onclick="CommentsModule.exportText()">📄 Export .txt</button>
+          <button class="btn-secondary" onclick="CommentsModule.exportAllComments()">📦 Export All Comments</button>
+        </div>
+
+        <!-- STATEMENTS LIBRARY MODAL -->
+        <div id="cg-statements-modal" class="modal-overlay" style="display:none;">
+          <div class="modal-content modal-lg">
+            <div class="modal-header">
+              <h2>Special Statements Library</h2>
+              <button class="btn-link" onclick="CommentsModule.closeStatementsLibrary()">✕</button>
+            </div>
+            <div class="modal-body">
+              <div class="cg-stmt-categories" id="cg-stmt-categories"></div>
+              <div class="cg-stmt-list" id="cg-stmt-list"></div>
+              <div class="cg-stmt-actions">
+                <button class="btn-primary btn-sm" onclick="CommentsModule.insertSelectedStatements()">Insert Selected</button>
+                <button class="btn-secondary btn-sm" onclick="CommentsModule.addCustomStatement()">+ Add Custom</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAVED COMMENTS MODAL -->
+        <div id="cg-saved-modal" class="modal-overlay" style="display:none;">
+          <div class="modal-content modal-lg">
+            <div class="modal-header">
+              <h2>Saved Comments</h2>
+              <button class="btn-link" onclick="CommentsModule.closeSavedComments()">✕</button>
+            </div>
+            <div class="modal-body" id="cg-saved-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: MILEAGE -->
+      <section id="section-mileage" class="content-section">
+        <div class="section-header">
+          <h1>Mileage Tracker</h1>
+          <button class="btn-primary" onclick="MileageModule.showLog()">+ Log Trip</button>
+        </div>
+        <div class="mileage-summary" id="mileage-summary">
+          <div class="metric-card">
+            <div class="metric-label">Total Miles</div>
+            <div class="metric-value">287</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Total Deduction</div>
+            <div class="metric-value">$200.90</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Trips</div>
+            <div class="metric-value">18</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Avg Miles/Trip</div>
+            <div class="metric-value">15.9</div>
+          </div>
+        </div>
+        <div class="filters-row">
+          <select id="mileage-period" onchange="MileageModule.render()">
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+            <option value="all">All Time</option>
+          </select>
+          <button class="btn-sm btn-secondary" onclick="MileageModule.exportCSV()">Export CSV</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Assignment</th>
+              <th>Subject</th>
+              <th>Stops</th>
+              <th>Miles</th>
+              <th>Deduction</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="mileage-tbody">
+            <tr>
+              <td>Mar 24, 2026</td>
+              <td>ASG-2026-0041</td>
+              <td>4521 Riverside Dr</td>
+              <td>3</td>
+              <td>28</td>
+              <td>$19.60</td>
+              <td>Subject + 2 comps</td>
+              <td><button class="btn-link" onclick="MileageModule.editTrip(1)">Edit</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION: INVOICES -->
+      <section id="section-invoices" class="content-section">
+        <div class="section-header">
+          <h1>Invoices & Payments</h1>
+          <button class="btn-primary" onclick="InvoiceModule.showCreate()">+ Create Invoice</button>
+        </div>
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="InvoiceModule.showTab('list')">Invoices</button>
+          <button class="tab-btn" onclick="InvoiceModule.showTab('overview')">Revenue Overview</button>
+        </div>
+        <div id="invoices-tab-list" class="tab-content active">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Assignment</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Due</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="invoices-tbody">
+              <tr>
+                <td><strong>INV-2026-0008</strong></td>
+                <td>Mar 20, 2026</td>
+                <td>Coastal Mortgage</td>
+                <td>ASG-2026-0040</td>
+                <td>$425.00</td>
+                <td><span class="badge-amber">Pending</span></td>
+                <td>Apr 4, 2026</td>
+                <td><button class="btn-link" onclick="InvoiceModule.viewInvoice(8)">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="invoices-tab-overview" class="tab-content">
+          <div class="metrics-grid" id="revenue-metrics">
+            <div class="metric-card">
+              <div class="metric-label">This Month</div>
+              <div class="metric-value">$3,400</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">This Quarter</div>
+              <div class="metric-value">$9,200</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">YTD</div>
+              <div class="metric-value">$47,250</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Avg per Assignment</div>
+              <div class="metric-value">$425</div>
+            </div>
+          </div>
+          <div id="revenue-chart-container"></div>
+        </div>
+      </section>
+
+      <!-- SECTION: REPORTS -->
+      <section id="section-reports" class="content-section">
+        <div class="section-header">
+          <h1>Report Delivery</h1>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Assignment</th>
+              <th>Client</th>
+              <th>Property</th>
+              <th>Report Status</th>
+              <th>Payment</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reports-tbody">
+            <tr>
+              <td>ASG-2026-0041</td>
+              <td>County Bank</td>
+              <td>4521 Riverside Dr</td>
+              <td><span class="badge-teal">Delivered</span></td>
+              <td><span class="badge-green">Paid</span></td>
+              <td><button class="btn-link" onclick="ReportModule.viewReport(41)">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION: CLIENTS -->
+      <section id="section-clients" class="content-section">
+        <div class="section-header">
+          <h1>Clients</h1>
+          <button class="btn-secondary btn-sm" onclick="PortalTokenModule.showTokenManager()">🔑 Portal Tokens</button>
+          <button class="btn-primary" onclick="ClientModule.showAdd()">+ Add Client</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Type</th>
+              <th>Assignments</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="clients-tbody">
+            <tr>
+              <td><strong>Coastal Mortgage</strong></td>
+              <td>orders@coastalmtg.com</td>
+              <td>(919) 555-0142</td>
+              <td><span class="badge-blue">Lender</span></td>
+              <td>12</td>
+              <td><button class="btn-link" onclick="ClientModule.showEdit('coastal')">Edit</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION: TRAINEE TRACKING -->
+      <section id="section-trainees" class="content-section">
+        <div class="section-header">
+          <h1>Trainee Experience Tracking</h1>
+          <button class="btn-primary" onclick="TraineeModule.showLogEntry()">+ Log Experience</button>
+        </div>
+
+        <div class="trainee-grid" id="trainee-stats" style="margin-bottom: 24px;">
+          <!-- populated by TraineeModule.render() -->
+        </div>
+
+        <div class="filters-row" style="margin-bottom: 16px;">
+          <select id="trainee-filter-name" onchange="TraineeModule.render()">
+            <option value="all">All Trainees</option>
+          </select>
+          <select id="trainee-filter-type" onchange="TraineeModule.render()">
+            <option value="all">All Report Types</option>
+            <option value="1004_urar">1004 URAR</option>
+            <option value="1073_condo">1073 Condo</option>
+            <option value="1025_small_res">1025 Small Residential</option>
+            <option value="2055_exterior">2055 Exterior Only</option>
+            <option value="desktop">Desktop</option>
+            <option value="other">Other</option>
+          </select>
+          <button class="btn-sm btn-secondary" onclick="TraineeModule.exportCSV()">Export CSV</button>
+          <button class="btn-sm btn-secondary" onclick="TraineeModule.exportExperienceReport()">Experience Report</button>
+        </div>
+
+        <table class="data-table experience-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Trainee</th>
+              <th>Assignment</th>
+              <th>Property Address</th>
+              <th>Report Type</th>
+              <th>Hours</th>
+              <th>Tasks Performed</th>
+              <th>Approved</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="trainee-tbody">
+            <tr><td colspan="9" style="text-align:center;">No experience entries yet</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION: AUDIT TRAIL -->
+      <section id="section-audit" class="content-section">
+        <div class="section-header">
+          <h1>Audit Trail</h1>
+        </div>
+        <div class="filters-row">
+          <select id="audit-filter-type" onchange="AuditModule.render()">
+            <option value="all">All Actions</option>
+            <option value="create">Created</option>
+            <option value="update">Updated</option>
+            <option value="delete">Deleted</option>
+            <option value="import">Imported</option>
+            <option value="release">Released</option>
+          </select>
+          <input type="date" id="audit-date-start" onchange="AuditModule.render()">
+          <input type="date" id="audit-date-end" onchange="AuditModule.render()">
+          <button class="btn-sm btn-secondary" onclick="AuditModule.render()">Filter</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Assignment</th>
+              <th>Action</th>
+              <th>Entity</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="audit-tbody">
+            <tr>
+              <td>Mar 24, 2026 2:45 PM</td>
+              <td>ASG-2026-0041</td>
+              <td><span class="badge-green">Created</span></td>
+              <td>Assignment</td>
+              <td>4521 Riverside Dr, Durham, NC</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- SECTION: SETTINGS -->
+      <section id="section-settings" class="content-section">
+        <div class="section-header">
+          <h1>Settings</h1>
+        </div>
+        <div class="settings-grid">
+          <div class="card">
+            <h3>Business Information</h3>
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" id="set-biz-name" value="Designer Homes Real Estate Services">
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" id="set-biz-phone" value="(919) 555-0100">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="set-biz-email" value="info@designerhomesre.com">
+            </div>
+            <div class="form-group">
+              <label>License #</label>
+              <input type="text" id="set-license" value="A9156">
+            </div>
+          </div>
+          <div class="card">
+            <h3>Mileage Settings</h3>
+            <div class="form-group">
+              <label>Default Start Location</label>
+              <input type="text" id="set-start-loc" value="Durham, NC">
+            </div>
+            <div class="form-group">
+              <label>IRS Rate ($/mile)</label>
+              <input type="number" id="set-irs-rate" value="0.70" step="0.005">
+            </div>
+            <div class="form-group">
+              <label>Base Miles (office → subject → return)</label>
+              <input type="number" id="set-base-miles" value="15">
+            </div>
+            <div class="form-group">
+              <label>Per Additional Stop (miles)</label>
+              <input type="number" id="set-per-stop" value="5">
+            </div>
+          </div>
+          <div class="card">
+            <h3>Invoice Settings</h3>
+            <div class="form-group">
+              <label>Default Due Days</label>
+              <input type="number" id="set-due-days" value="15">
+            </div>
+            <div class="form-group">
+              <label>Payment Instructions</label>
+              <textarea id="set-payment-inst" rows="3">Payment required before report release.</textarea>
+            </div>
+          </div>
+          <div class="card card-wide">
+            <h3>💳 Payment Processing (Stripe)</h3>
+            <p class="setting-note">Configure online payment processing. Stripe handles credit card and ACH bank transfers securely.</p>
+            <div class="form-row">
+              <div class="form-group flex-1">
+                <label>Enable Stripe Payments</label>
+                <select id="set-stripe-enabled" onchange="SettingsModule.onStripeToggle()">
+                  <option value="false">Disabled (Manual Payments Only)</option>
+                  <option value="true">Enabled</option>
+                </select>
+              </div>
+            </div>
+            <div id="stripe-config-fields" style="display: none;">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label>Stripe Publishable Key</label>
+                  <input type="text" id="set-stripe-pk" placeholder="pk_live_... or pk_test_...">
+                  <small>Public key — safe for client-side use</small>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label>Functions URL Override (optional)</label>
+                  <input type="text" id="set-stripe-functions-url" placeholder="/.netlify/functions (default)">
+                  <small>Leave blank unless using custom endpoint</small>
+                </div>
+              </div>
+              <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; margin: 12px 0;">
+                <p style="margin: 0; font-size: 12px; color: #1e40af;">
+                  <strong>Setup Required:</strong> Your Stripe Secret Key and Webhook Secret must be set as Netlify environment variables (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET). These are never stored in the browser.
+                </p>
+              </div>
+              <div class="stripe-status-row" style="display: flex; gap: 12px; align-items: center; margin-top: 12px;">
+                <button class="btn-secondary btn-sm" onclick="SettingsModule.testStripe()">🧪 Test Connection</button>
+                <button class="btn-secondary btn-sm" onclick="StripeUI.showNotifications()">🔔 Payment Notifications</button>
+                <button class="btn-secondary btn-sm" onclick="StripeService.syncAllPendingPayments().then(() => { App.toast('Payment sync complete', 'success'); InvoiceModule.render(); })">🔄 Sync Payments</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Security</h3>
+            <div class="form-group">
+              <label>Change Password</label>
+              <input type="password" id="set-new-pw" placeholder="New password">
+            </div>
+            <button class="btn-secondary" onclick="SettingsModule.changePassword()">Update Password</button>
+          </div>
+          <div class="card">
+            <h3>Data Management</h3>
+            <button class="btn-secondary" onclick="SettingsModule.exportAll()">Export All Data (JSON)</button>
+            <button class="btn-secondary" onclick="document.getElementById('import-data-file').click()">Import Data</button>
+            <input type="file" id="import-data-file" accept=".json" style="display:none;" onchange="SettingsModule.importData(event)">
+            <button class="btn-danger" onclick="if(confirm('Clear all data permanently?')) SettingsModule.clearAll()">Clear All Data</button>
+          </div>
+          <div class="card card-wide">
+            <h3>AI Integration</h3>
+            <p class="setting-note">Configure AI-assisted comment generation. API keys are stored locally and never shared.</p>
+            <div class="ai-settings-grid">
+              <div class="form-group">
+                <label>AI Provider</label>
+                <select id="set-ai-provider" onchange="SettingsModule.onAIProviderChange()">
+                  <option value="none">Disabled (Rule-Based Only)</option>
+                  <option value="openai">OpenAI</option>
+                  <option value="anthropic">Anthropic (Claude)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" id="set-ai-key" placeholder="Enter API key...">
+                <small>Stored locally in your browser only</small>
+              </div>
+              <div class="form-group">
+                <label>Model</label>
+                <select id="set-ai-model">
+                  <option value="">Default</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Temperature</label>
+                <input type="number" id="set-ai-temp" value="0.3" step="0.1" min="0" max="1">
+                <small>Lower = more consistent, Higher = more creative</small>
+              </div>
+              <div class="form-group">
+                <label>Max Tokens Per Request</label>
+                <input type="number" id="set-ai-max-tokens" value="3000" step="500">
+              </div>
+              <div class="form-group">
+                <label>Monthly Token Cap</label>
+                <input type="number" id="set-ai-monthly-cap" value="500000" step="50000">
+              </div>
+            </div>
+            <div class="ai-usage-display" id="ai-usage-display">
+              <span>Monthly Usage: <strong id="ai-usage-tokens">0</strong> tokens (<strong id="ai-usage-requests">0</strong> requests)</span>
+            </div>
+            <div class="ai-settings-actions">
+              <button class="btn-secondary btn-sm" onclick="SettingsModule.testAI()">🧪 Test Connection</button>
+              <button class="btn-secondary btn-sm" onclick="SettingsModule.viewAILogs()">📊 View AI Logs</button>
+              <button class="btn-secondary btn-sm" onclick="SettingsModule.saveAISettings()">💾 Save AI Settings</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Portal Tokens</h3>
+            <p class="setting-note">Manage client portal access tokens. Tokens expire after 90 days.</p>
+            <div id="portal-tokens-list" style="margin-bottom: 16px;">
+              <!-- Active tokens will be rendered here -->
+            </div>
+            <button class="btn-secondary" onclick="PortalTokenModule.showTokenManager()">Manage Tokens</button>
+          </div>
+        </div>
+        <div class="settings-actions">
+          <button class="btn-primary" onclick="SettingsModule.save()">Save Settings</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MODAL -->
+    <div id="modal-overlay" class="modal-overlay" onclick="App.closeModal(event)" style="display:none;">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2 id="modal-title"></h2>
+          <button class="modal-close" onclick="App.closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+        <div class="modal-footer" id="modal-footer"></div>
+      </div>
+    </div>
+
+    <!-- DETAIL PANEL -->
+    <div id="detail-panel" class="detail-panel" style="display:none;">
+      <div class="detail-header">
+        <h2 id="detail-title"></h2>
+        <button class="detail-close" onclick="App.closeDetail()">&times;</button>
+      </div>
+      <div class="detail-body" id="detail-body"></div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script src="js/app-core.js"></script>
+  <script src="js/app-mls.js"></script>
+  <script src="js/app-statistics.js"></script>
+  <script src="js/app-analysis.js"></script>
+  <script src="js/app-approaches.js"></script>
+  <script src="js/app-ai-service.js"></script>
+  <script src="js/app-comments.js"></script>
+  <script src="js/app-operations.js"></script>
+  <script src="js/app-stripe.js"></script>
+  <!-- Supabase CDN: uncomment when ready -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
+  <!-- <script src="js/app-supabase.js"></script> -->
+
+</body>
+</html>

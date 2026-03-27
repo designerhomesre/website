@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Service Area | Designer Homes Real Estate Services - Triangle NC</title>
+  <meta name="description" content="Serving Durham, Raleigh, Chapel Hill, Cary, Apex and surrounding communities in the Triangle region of North Carolina with professional appraisal services.">
+  <meta name="keywords" content="service area, Triangle, Durham, Raleigh, Chapel Hill, Cary, appraisal services">
+  <meta name="author" content="Designer Homes Real Estate Services">
+  <meta name="theme-color" content="#1B2A4A">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://designerhomesre.com/service-area.html">
+  <meta property="og:title" content="Service Area - Designer Homes Real Estate Services">
+  <meta property="og:description" content="Proudly serving the Triangle region and surrounding communities in North Carolina.">
+  <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .service-cities {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .city-card {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      color: var(--color-white);
+      padding: var(--spacing-2xl);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      transition: all var(--transition-base);
+      box-shadow: var(--shadow-md);
+    }
+
+    .city-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .city-card h3 {
+      color: var(--color-accent);
+      font-size: var(--font-size-lg);
+      margin-bottom: 0.5rem;
+    }
+
+    .city-card p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .counties-section {
+      background-color: var(--color-light-bg);
+      padding: var(--spacing-2xl);
+      border-radius: var(--radius-lg);
+      margin-bottom: 3rem;
+    }
+
+    .counties-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .county-item {
+      padding: var(--spacing-lg);
+      background-color: var(--color-white);
+      border-left: 4px solid var(--color-accent);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .county-item h4 {
+      color: var(--color-primary);
+      margin-bottom: 0;
+      font-size: var(--font-size-base);
+    }
+
+    .map-placeholder {
+      background: linear-gradient(135deg, var(--color-light-bg) 0%, #E8EAEF 100%);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 4rem;
+      text-align: center;
+      color: var(--color-medium-text);
+      margin-bottom: 3rem;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .map-placeholder-icon {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    @media (max-width: 768px) {
+      .service-cities {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .counties-list {
+        grid-template-columns: 1fr;
+      }
+
+      .map-placeholder {
+        padding: 2rem;
+        min-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===============================================
+       HEADER / NAVIGATION
+       =============================================== -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-text">DESIGNER HOMES</span>
+        <span class="logo-subtext">REAL ESTATE SERVICES</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html" class="nav-link">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
+          <ul class="dropdown-menu">
+            <li><a href="services.html#appraisals" class="dropdown-item">Appraisal Services</a></li>
+            <li><a href="mass-appraisal.html" class="dropdown-item">Mass Appraisal Consulting</a></li>
+            <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="service-area.html" class="nav-link">Service Area</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a href="faq.html" class="nav-link">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html#request-quote" class="btn btn-primary">Request a Quote</a>
+        </li>
+      </ul>
+
+      <button class="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===============================================
+       MAIN CONTENT
+       =============================================== -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Service Area</h1>
+        <p class="hero-subtitle">Proudly serving the Triangle region and surrounding communities.</p>
+        <div class="hero-ctas">
+          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="contact.html" class="btn btn-secondary btn-lg">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Primary Service Area -->
+    <section class="section-spacing">
+      <div class="container">
+        <h2 class="section-title">Primary Service Area</h2>
+        <p class="section-subtitle">We proudly serve these communities with comprehensive appraisal services.</p>
+
+        <div class="service-cities">
+          <div class="city-card fade-in-up">
+            <h3>Durham</h3>
+            <p>Appraisals for the Research Triangle's anchor city.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Raleigh</h3>
+            <p>Serving North Carolina's capital and surrounding areas.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Chapel Hill</h3>
+            <p>Expert valuations for university town properties.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Cary</h3>
+            <p>Appraisals for the region's fastest-growing community.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Apex</h3>
+            <p>Quality appraisals for Apex's residential market.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Morrisville</h3>
+            <p>Professional valuations near RTP and the airport.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Wake Forest</h3>
+            <p>Serving Wake Forest's growing residential areas.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Holly Springs</h3>
+            <p>Appraisals for Holly Springs' diverse properties.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Hillsborough</h3>
+            <p>Valuations for historic and modern homes.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Carrboro</h3>
+            <p>Expert appraisals in Carrboro's unique market.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Pittsboro</h3>
+            <p>Appraisals serving Chatham County's county seat.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Garner</h3>
+            <p>Professional valuations in Greater Raleigh.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Clayton</h3>
+            <p>Serving Clayton's fast-growing residential market.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Fuquay-Varina</h3>
+            <p>Appraisals for the Johnston County area.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Knightdale</h3>
+            <p>Valuations serving Greater Raleigh communities.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Wendell</h3>
+            <p>Professional appraisals in Wendell.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Zebulon</h3>
+            <p>Serving Pike County and surrounding areas.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Creedmoor</h3>
+            <p>Appraisals for Granville County properties.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Butner</h3>
+            <p>Serving Granville County communities.</p>
+          </div>
+
+          <div class="city-card fade-in-up">
+            <h3>Mebane</h3>
+            <p>Appraisals in Alamance County area.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Counties Served -->
+    <section class="section-spacing bg-light" style="background-color: var(--color-light-bg);">
+      <div class="container">
+        <h2 class="section-title">Counties Served</h2>
+
+        <div class="counties-section">
+          <div class="counties-list">
+            <div class="county-item fade-in-up">
+              <h4>Durham County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Wake County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Orange County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Chatham County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Granville County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Person County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Alamance County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Johnston County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Franklin County</h4>
+            </div>
+
+            <div class="county-item fade-in-up">
+              <h4>Harnett County</h4>
+            </div>
+          </div>
+        </div>
+
+        <div style="background-color: var(--color-white); padding: var(--spacing-2xl); border-radius: var(--radius-lg); border-left: 4px solid var(--color-accent);">
+          <p style="color: var(--color-medium-text); margin: 0; font-size: var(--font-size-base); line-height: var(--line-height-relaxed);">
+            <strong>Assignments outside the primary service area may be considered on a case-by-case basis.</strong> If you're located outside our primary service area, please contact us to discuss your specific needs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section-spacing">
+      <div class="container">
+        <h2 class="section-title">Service Area Map</h2>
+
+        <div class="map-placeholder">
+          <div class="map-placeholder-icon">🗺️</div>
+          <p style="font-size: var(--font-size-lg); margin-bottom: var(--spacing-lg);">Interactive Map Coming Soon</p>
+          <p style="margin: 0;">In the meantime, please refer to the service area list above or contact us with your property location.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Designer Homes -->
+    <section class="section-spacing bg-light" style="background-color: var(--color-light-bg);">
+      <div class="container">
+        <h2 class="section-title">Why Our Service Area Matters</h2>
+
+        <div class="grid grid-3">
+          <div class="card fade-in-up">
+            <div class="card-icon">📍</div>
+            <h3>Local Market Knowledge</h3>
+            <p>Deep understanding of Triangle market dynamics, neighborhood characteristics, and local factors that influence property values.</p>
+          </div>
+
+          <div class="card fade-in-up">
+            <div class="card-icon">⚡</div>
+            <h3>Prompt Service</h3>
+            <p>Located in the Triangle, we provide quick turnarounds and efficient scheduling for property inspections and appraisals.</p>
+          </div>
+
+          <div class="card fade-in-up">
+            <div class="card-icon">🤝</div>
+            <h3>Strong Relationships</h3>
+            <p>Established relationships with local professionals, lenders, and attorneys throughout the Triangle region.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Ready to Request an Appraisal?</h2>
+        <p class="cta-subtitle">Submit your quote request today and experience professional appraisal services in the Triangle.</p>
+        <div class="cta-buttons">
+          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===============================================
+       FOOTER
+       =============================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <!-- Column 1: Logo & Description -->
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo">
+              <span class="logo-text">DESIGNER HOMES</span>
+              <span class="logo-subtext">REAL ESTATE SERVICES</span>
+            </div>
+          </div>
+          <p class="footer-description">Professional appraisal services delivering accuracy, expertise, and modern technology for every valuation scenario across the Triangle.</p>
+          <a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="services.html" class="footer-link">Services</a></li>
+            <li><a href="service-area.html" class="footer-link">Service Area</a></li>
+            <li><a href="reviews.html" class="footer-link">Reviews</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="mass-appraisal.html" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <div class="footer-contact">
+            <p><strong>Designer Homes Real Estate Services</strong></p>
+            <p>Durham, NC<br>USA</p>
+            <p><strong>Phone:</strong><br><a href="tel:+19195555555" class="footer-link">(919) 555-5555</a></p>
+            <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-links">
+          <span>&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</span>
+          <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===============================================
+       SCHEMA.ORG JSON-LD
+       =============================================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "LocalBusiness",
+    "name": "Designer Homes Real Estate Services",
+    "image": "https://designerhomesre.com/logo.png",
+    "description": "Professional appraisal services serving the Triangle and surrounding areas.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Durham",
+      "addressRegion": "NC",
+      "postalCode": "27701",
+      "addressCountry": "US"
+    },
+    "telephone": "+19195555555",
+    "email": "info@designerhomesre.com",
+    "url": "https://designerhomesre.com/service-area.html",
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Durham"
+      },
+      {
+        "@type": "City",
+        "name": "Raleigh"
+      },
+      {
+        "@type": "City",
+        "name": "Chapel Hill"
+      },
+      {
+        "@type": "City",
+        "name": "Cary"
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===============================================
+       JAVASCRIPT
+       =============================================== -->
+  <script>
+    'use strict';
+
+    // ===== Smooth Scroll for Anchor Links =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || !document.querySelector(href)) return;
+
+        e.preventDefault();
+        const target = document.querySelector(href);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ===== Mobile Navigation Toggle =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    // Close menu when a link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== Dropdown Menu Toggle (Mobile) =====
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      toggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+
+    // ===== Navbar Background on Scroll =====
+    const header = document.querySelector('header');
+    const initialOffset = window.innerHeight * 0.5;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > initialOffset) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ===== Scroll-Triggered Fade-In Animations =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== Close mobile menu on outside click =====
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== Page Load Animation =====
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+
+    body {
+      opacity: 0.99;
+      transition: opacity 0.3s ease-in;
+    }
+  </script>
+</body>
+</html>

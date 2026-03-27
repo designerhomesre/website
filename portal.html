@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Client Portal | Designer Homes Real Estate Services</title>
+  <meta name="description" content="Secure client portal to track appraisal assignments, download reports, and receive status updates.">
+  <meta name="keywords" content="client portal, appraisal tracking, report download, secure portal">
+  <meta name="author" content="Designer Homes Real Estate Services">
+  <meta name="theme-color" content="#1B2A4A">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://designerhomesre.com/portal.html">
+  <meta property="og:title" content="Client Portal - Designer Homes Real Estate Services">
+  <meta property="og:description" content="Track your appraisal assignments and download reports securely.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Public Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Portal Styles -->
+  <style>
+    /* ===== Portal-Specific Styles ===== */
+
+    /* Login Screen */
+    .portal-login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #253350 100%);
+      padding: var(--spacing-lg);
+    }
+
+    .portal-login-container {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-width: 480px;
+      padding: var(--spacing-3xl);
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .portal-logo-section {
+      text-align: center;
+      margin-bottom: var(--spacing-2xl);
+      padding-bottom: var(--spacing-xl);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .portal-logo-mark {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-md);
+      color: var(--color-accent);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .portal-logo-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .portal-login-title {
+      color: var(--color-primary);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-sm);
+      text-align: center;
+    }
+
+    .portal-login-subtitle {
+      color: var(--color-medium-text);
+      font-size: var(--font-size-sm);
+      text-align: center;
+      margin-bottom: var(--spacing-2xl);
+      line-height: var(--line-height-normal);
+    }
+
+    .portal-form-group {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .portal-form-label {
+      display: block;
+      margin-bottom: var(--spacing-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-dark-text);
+      font-size: var(--font-size-sm);
+    }
+
+    .portal-form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base);
+      transition: all var(--transition-fast);
+      background-color: var(--color-white);
+    }
+
+    .portal-form-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+    }
+
+    .portal-form-input:disabled {
+      background-color: var(--color-light-bg);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .portal-login-button {
+      width: 100%;
+      padding: 0.875rem 1.75rem;
+      background-color: var(--color-accent);
+      color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-top: var(--spacing-lg);
+    }
+
+    .portal-login-button:hover:not(:disabled) {
+      background-color: var(--color-accent-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .portal-login-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .portal-login-note {
+      background-color: var(--color-light-bg);
+      border-left: 4px solid var(--color-accent);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+      margin-top: var(--spacing-xl);
+    }
+
+    .portal-error-message {
+      background-color: #FEE;
+      border: 1px solid #FCC;
+      color: var(--color-error);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--spacing-lg);
+      display: none;
+    }
+
+    .portal-error-message.show {
+      display: block;
+      animation: shake 0.3s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .portal-lockout-message {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--spacing-lg);
+      display: none;
+    }
+
+    .portal-lockout-message.show {
+      display: block;
+    }
+
+    /* ===== Dashboard Screen ===== */
+    .portal-dashboard-wrapper {
+      display: none;
+      min-height: 100vh;
+      background-color: var(--color-light-bg);
+    }
+
+    .portal-dashboard-wrapper.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portal-header {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .portal-header-content {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
+    }
+
+    .portal-header-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .portal-header-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .portal-header-subtitle {
+      font-size: var(--font-size-sm);
+      opacity: 0.9;
+      margin: 0;
+    }
+
+    .portal-header-actions {
+      display: flex;
+      gap: var(--spacing-lg);
+      align-items: center;
+    }
+
+    .portal-logout-button {
+      padding: 0.5rem 1.25rem;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: var(--color-white);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .portal-logout-button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .portal-main {
+      flex: 1;
+      max-width: var(--container-max-width);
+      width: 100%;
+      margin: 0 auto;
+      padding: var(--spacing-2xl) var(--spacing-lg);
+    }
+
+    .portal-welcome {
+      background: linear-gradient(135deg, var(--color-primary) 0%, #253350 100%);
+      color: var(--color-white);
+      padding: var(--spacing-2xl);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--spacing-2xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .portal-welcome-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .portal-welcome-text {
+      font-size: var(--font-size-base);
+      margin: 0;
+      opacity: 0.95;
+    }
+
+    .portal-section {
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .portal-section-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .portal-empty-state {
+      background-color: var(--color-white);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-3xl);
+      text-align: center;
+      color: var(--color-medium-text);
+    }
+
+    .portal-empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .portal-empty-state-title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-dark-text);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .portal-assignments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--spacing-xl);
+    }
+
+    .portal-assignment-card {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portal-assignment-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .portal-assignment-header {
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-lg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .portal-assignment-address {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-dark-text);
+      margin-bottom: var(--spacing-sm);
+      word-break: break-word;
+    }
+
+    .portal-assignment-type {
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .portal-assignment-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--spacing-lg);
+      gap: var(--spacing-md);
+    }
+
+    .portal-assignment-dates {
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+    }
+
+    .portal-assignment-date-label {
+      display: block;
+      font-size: var(--font-size-xs);
+      color: var(--color-medium-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .portal-status-badge {
+      display: inline-block;
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .portal-status-ordered {
+      background-color: #E3F2FD;
+      color: #1565C0;
+    }
+
+    .portal-status-in-progress {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    .portal-status-inspection {
+      background-color: #F3E5F5;
+      color: #6A1B9A;
+    }
+
+    .portal-status-draft {
+      background-color: #FCE4EC;
+      color: #C2185B;
+    }
+
+    .portal-status-complete {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .portal-status-delivered {
+      background-color: #E0F2F1;
+      color: #00695C;
+    }
+
+    .portal-assignment-footer {
+      margin-top: auto;
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid var(--color-border);
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+    }
+
+    /* ===== Detail View ===== */
+    .portal-detail-wrapper {
+      display: none;
+    }
+
+    .portal-detail-wrapper.active {
+      display: block;
+    }
+
+    .portal-back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: 0.5rem 1rem;
+      background-color: transparent;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .portal-back-button:hover {
+      background-color: var(--color-light-bg);
+      border-color: var(--color-accent);
+    }
+
+    .portal-detail-header {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      margin-bottom: var(--spacing-xl);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .portal-detail-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .portal-detail-address {
+      font-size: var(--font-size-lg);
+      color: var(--color-dark-text);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .portal-detail-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .portal-detail-meta-item {
+      padding: var(--spacing-lg);
+      background-color: var(--color-light-bg);
+      border-radius: var(--radius-md);
+    }
+
+    .portal-detail-meta-label {
+      font-size: var(--font-size-xs);
+      color: var(--color-medium-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--spacing-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .portal-detail-meta-value {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+    }
+
+    .portal-detail-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--spacing-xl);
+    }
+
+    @media (max-width: 768px) {
+      .portal-detail-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .portal-detail-section {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .portal-detail-section-title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .portal-timeline {
+      position: relative;
+      padding-left: var(--spacing-2xl);
+    }
+
+    .portal-timeline::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: var(--color-border);
+    }
+
+    .portal-timeline-item {
+      position: relative;
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-lg);
+    }
+
+    .portal-timeline-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .portal-timeline-dot {
+      position: absolute;
+      left: -12px;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      background-color: var(--color-white);
+      border: 3px solid var(--color-border);
+      border-radius: 50%;
+      transition: all var(--transition-fast);
+    }
+
+    .portal-timeline-item.active .portal-timeline-dot {
+      border-color: var(--color-accent);
+      background-color: var(--color-accent);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.2);
+    }
+
+    .portal-timeline-item.completed .portal-timeline-dot {
+      border-color: var(--color-success);
+      background-color: var(--color-success);
+    }
+
+    .portal-timeline-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--spacing-lg);
+    }
+
+    .portal-timeline-text {
+      flex: 1;
+    }
+
+    .portal-timeline-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-dark-text);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .portal-timeline-date {
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+      margin: 0;
+    }
+
+    .portal-invoice-box {
+      background-color: var(--color-light-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .portal-invoice-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-md) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .portal-invoice-item:last-child {
+      border-bottom: none;
+      padding-top: var(--spacing-lg);
+      padding-bottom: 0;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-lg);
+      color: var(--color-primary);
+    }
+
+    .portal-invoice-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+    }
+
+    .portal-invoice-value {
+      font-size: var(--font-size-sm);
+      color: var(--color-dark-text);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .portal-payment-status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .portal-payment-status.paid {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .portal-payment-status.pending {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    .portal-download-button {
+      width: 100%;
+      padding: 1rem;
+      background-color: var(--color-accent);
+      color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .portal-download-button:hover:not(:disabled) {
+      background-color: var(--color-accent-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .portal-download-button:disabled {
+      background-color: #CCC;
+      color: #666;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .portal-download-button.locked {
+      background-color: #D3D3D3;
+    }
+
+    .portal-payment-required {
+      background-color: #FEE;
+      border: 1px solid #FCC;
+      color: var(--color-error);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--spacing-lg);
+      display: none;
+    }
+
+    .portal-payment-required.show {
+      display: block;
+    }
+
+    .portal-pay-online-button {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px 20px;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .portal-pay-online-button:hover {
+      background: #4f46e5;
+    }
+
+    .portal-pay-online-button:disabled {
+      background: #a5b4fc;
+      cursor: not-allowed;
+    }
+
+    /* ===== Footer ===== */
+    .portal-footer {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: var(--spacing-2xl) var(--spacing-lg);
+      margin-top: var(--spacing-3xl);
+      font-size: var(--font-size-sm);
+      text-align: center;
+    }
+
+    .portal-footer-content {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
+    }
+
+    .portal-footer-link {
+      color: var(--color-white);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .portal-footer-link:hover {
+      color: var(--color-accent);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .portal-login-container {
+        padding: var(--spacing-2xl);
+      }
+
+      .portal-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .portal-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .portal-main {
+        padding: var(--spacing-lg);
+      }
+
+      .portal-assignments-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .portal-detail-meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .portal-footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .portal-logo-section {
+        padding-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Login Screen ===== -->
+  <div id="loginScreen" class="portal-login-wrapper active">
+    <div class="portal-login-container">
+      <div class="portal-logo-section">
+        <div class="portal-logo-mark">DH</div>
+        <div class="portal-logo-text">Designer Homes Real Estate Services</div>
+      </div>
+
+      <h2 class="portal-login-title">Client Portal</h2>
+      <p class="portal-login-subtitle">Enter your access token to view your assignments and download reports</p>
+
+      <div id="errorMessage" class="portal-error-message"></div>
+      <div id="lockoutMessage" class="portal-lockout-message"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="portal-form-group">
+          <label for="accessToken" class="portal-form-label">Access Token</label>
+          <input
+            type="password"
+            id="accessToken"
+            name="accessToken"
+            class="portal-form-input"
+            placeholder="Enter your access token"
+            autocomplete="off"
+            required
+          >
+        </div>
+
+        <button type="submit" id="loginButton" class="portal-login-button">Sign In</button>
+      </form>
+
+      <div class="portal-login-note">
+        <strong>Don't have a token?</strong> Your access token will be provided by email when your assignment is accepted. Contact <a href="mailto:info@designerhomesre.com" style="color: var(--color-accent); text-decoration: none;">info@designerhomesre.com</a> for assistance.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Dashboard Screen ===== -->
+  <div id="dashboardScreen" class="portal-dashboard-wrapper">
+    <header class="portal-header">
+      <div class="portal-header-content">
+        <div class="portal-header-info">
+          <h2 class="portal-header-title">Client Portal</h2>
+          <p class="portal-header-subtitle">Welcome, <span id="clientNameDisplay">Client</span></p>
+        </div>
+        <div class="portal-header-actions">
+          <button id="logoutButton" class="portal-logout-button">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="portal-main">
+      <!-- Welcome Section -->
+      <section class="portal-welcome">
+        <h3 class="portal-welcome-title">Welcome Back</h3>
+        <p class="portal-welcome-text">You have <span id="assignmentCount">0</span> active assignment(s). Click on any assignment to view details and download reports.</p>
+      </section>
+
+      <!-- Assignments Section -->
+      <section class="portal-section">
+        <h3 class="portal-section-title">📋 Your Assignments</h3>
+        <div id="assignmentsGrid" class="portal-assignments-grid">
+          <div class="portal-empty-state">
+            <div class="portal-empty-state-icon">📭</div>
+            <div class="portal-empty-state-title">No Assignments Yet</div>
+            <p>Once an assignment is created for you, it will appear here.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="portal-footer">
+      <div class="portal-footer-content">
+        <div>Copyright © 2026 Designer Homes Real Estate Services. All rights reserved.</div>
+        <div>
+          Email: <a href="mailto:info@designerhomesre.com" class="portal-footer-link">info@designerhomesre.com</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===== Detail Screen ===== -->
+  <div id="detailScreen" class="portal-detail-wrapper">
+    <header class="portal-header">
+      <div class="portal-header-content">
+        <div class="portal-header-info">
+          <h2 class="portal-header-title">Assignment Details</h2>
+        </div>
+        <div class="portal-header-actions">
+          <button id="logoutButton2" class="portal-logout-button">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="portal-main">
+      <button id="backButton" class="portal-back-button">← Back to Assignments</button>
+
+      <!-- Detail Header -->
+      <div class="portal-detail-header">
+        <h3 class="portal-detail-title" id="detailTitle">Assignment Details</h3>
+        <p class="portal-detail-address" id="detailAddress">123 Main St, City, State 12345</p>
+
+        <div class="portal-detail-meta-grid">
+          <div class="portal-detail-meta-item">
+            <div class="portal-detail-meta-label">Assignment Type</div>
+            <div class="portal-detail-meta-value" id="detailType">1004</div>
+          </div>
+          <div class="portal-detail-meta-item">
+            <div class="portal-detail-meta-label">Status</div>
+            <div class="portal-detail-meta-value">
+              <span id="detailStatus" class="portal-status-badge">Ordered</span>
+            </div>
+          </div>
+          <div class="portal-detail-meta-item">
+            <div class="portal-detail-meta-label">Order Date</div>
+            <div class="portal-detail-meta-value" id="detailOrderDate">Loading...</div>
+          </div>
+          <div class="portal-detail-meta-item">
+            <div class="portal-detail-meta-label">Est. Completion</div>
+            <div class="portal-detail-meta-value" id="detailEstCompletion">TBD</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="portal-detail-content">
+        <!-- Timeline Section -->
+        <section class="portal-detail-section">
+          <h4 class="portal-detail-section-title">📅 Timeline & Status</h4>
+          <div class="portal-timeline" id="detailTimeline">
+            <!-- Timeline items inserted here -->
+          </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside>
+          <!-- Download Section -->
+          <section class="portal-detail-section">
+            <h4 class="portal-detail-section-title">📄 Report</h4>
+            <div id="paymentRequired" class="portal-payment-required">
+              <strong>Payment Required</strong><br>
+              Your report will be available for download once payment is received.
+              <button id="payOnlineButton" class="portal-pay-online-button" style="display: none;" onclick="handlePayOnline()">
+                💳 Pay Online Now
+              </button>
+              <p id="achPreferredMsg" style="display: none; font-size: 11px; color: #1e40af; font-style: italic; margin-top: 8px;">
+                ACH payments are preferred to minimize processing fees. Credit card payments are accepted for convenience.
+              </p>
+            </div>
+            <button id="downloadButton" class="portal-download-button" style="display: none;">
+              ⬇️ Download Report
+            </button>
+            <div id="downloadLocked" class="portal-empty-state" style="margin-top: var(--spacing-lg); display: none;">
+              <div class="portal-empty-state-icon">🔒</div>
+              <div class="portal-empty-state-title">Report Not Available Yet</div>
+              <p>Report will be available once this assignment is marked as delivered.</p>
+            </div>
+          </section>
+
+          <!-- Invoice Section -->
+          <section class="portal-detail-section" style="margin-top: var(--spacing-xl);">
+            <h4 class="portal-detail-section-title">💰 Invoice</h4>
+            <div class="portal-invoice-box" id="detailInvoice">
+              <div class="portal-invoice-item">
+                <span class="portal-invoice-label">Invoice #</span>
+                <span class="portal-invoice-value" id="invoiceNumber">-</span>
+              </div>
+              <div class="portal-invoice-item">
+                <span class="portal-invoice-label">Amount Due</span>
+                <span class="portal-invoice-value" id="invoiceAmount">$0.00</span>
+              </div>
+              <div class="portal-invoice-item">
+                <span class="portal-invoice-label">Due Date</span>
+                <span class="portal-invoice-value" id="invoiceDueDate">-</span>
+              </div>
+              <div class="portal-invoice-item">
+                <span class="portal-invoice-label">Status</span>
+                <span id="invoiceStatus" class="portal-payment-status pending">Pending</span>
+              </div>
+              <div class="portal-invoice-item" id="paymentMethodRow" style="display: none;">
+                <span class="portal-invoice-label">Paid Via</span>
+                <span class="portal-invoice-value" id="invoicePaymentMethod">-</span>
+              </div>
+            </div>
+            <!-- Payment Success Banner -->
+            <div id="paymentSuccessBanner" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px; margin-top: 12px; text-align: center;">
+              <strong style="color: #166534;">Payment Received!</strong>
+              <p style="margin: 4px 0 0; font-size: 12px; color: #15803d;">Your report will be available for download shortly.</p>
+            </div>
+            <p style="font-size: var(--font-size-xs); color: var(--color-medium-text); margin-top: var(--spacing-lg); text-align: center;">
+              Questions about payment? Email <a href="mailto:info@designerhomesre.com" style="color: var(--color-accent); text-decoration: none;">info@designerhomesre.com</a>
+            </p>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="portal-footer">
+      <div class="portal-footer-content">
+        <div>Copyright © 2026 Designer Homes Real Estate Services. All rights reserved.</div>
+        <div>
+          Email: <a href="mailto:info@designerhomesre.com" class="portal-footer-link">info@designerhomesre.com</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===== JavaScript ===== -->
+  <script>
+    'use strict';
+
+    // ===== Portal Configuration =====
+    const PORTAL_CONFIG = {
+      SESSION_TIMEOUT: 60 * 60 * 1000, // 60 minutes
+      SESSION_STORAGE_KEY: 'portal_session',
+      FAILED_ATTEMPTS_KEY: 'portal_failed_attempts',
+      LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes
+      MAX_FAILED_ATTEMPTS: 5,
+      TOKENS_STORAGE_KEY: 'dh_portal_tokens'
+    };
+
+    // ===== State Management =====
+    let portalState = {
+      isLoggedIn: false,
+      clientId: null,
+      clientName: null,
+      token: null,
+      sessionStartTime: null,
+      lastActivityTime: null,
+      currentAssignment: null,
+      assignments: [],
+      invoices: [],
+      reports: []
+    };
+
+    // ===== DOM Elements =====
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboardScreen = document.getElementById('dashboardScreen');
+    const detailScreen = document.getElementById('detailScreen');
+    const loginForm = document.getElementById('loginForm');
+    const accessTokenInput = document.getElementById('accessToken');
+    const loginButton = document.getElementById('loginButton');
+    const errorMessage = document.getElementById('errorMessage');
+    const lockoutMessage = document.getElementById('lockoutMessage');
+    const logoutButtons = document.querySelectorAll('[id^="logoutButton"]');
+    const backButton = document.getElementById('backButton');
+    const assignmentsGrid = document.getElementById('assignmentsGrid');
+    const clientNameDisplay = document.getElementById('clientNameDisplay');
+    const assignmentCount = document.getElementById('assignmentCount');
+    const downloadButton = document.getElementById('downloadButton');
+    const paymentRequiredMsg = document.getElementById('paymentRequired');
+    const downloadLockedMsg = document.getElementById('downloadLocked');
+
+    // ===== Initialize on Page Load =====
+    window.addEventListener('DOMContentLoaded', () => {
+      restoreSession();
+      setupEventListeners();
+      checkPaymentReturn();
+    });
+
+    // ===== Event Listeners =====
+    function setupEventListeners() {
+      loginForm.addEventListener('submit', handleLogin);
+      logoutButtons.forEach(btn => btn.addEventListener('click', handleLogout));
+      backButton.addEventListener('click', goBackToDashboard);
+      downloadButton.addEventListener('click', handleDownloadReport);
+
+      // Activity tracking for session timeout
+      document.addEventListener('click', updateLastActivity);
+      document.addEventListener('keypress', updateLastActivity);
+
+      // Check session timeout periodically
+      setInterval(checkSessionTimeout, 60000); // Check every minute
+    }
+
+    // ===== Login Handler =====
+    function handleLogin(e) {
+      e.preventDefault();
+
+      const token = accessTokenInput.value.trim();
+
+      if (!token) {
+        showError('Please enter your access token.');
+        return;
+      }
+
+      // Check for lockout
+      if (isLockedOut()) {
+        showLockoutMessage();
+        return;
+      }
+
+      // Validate token
+      if (validateToken(token)) {
+        loginButton.disabled = true;
+        loginButton.textContent = 'Signing in...';
+
+        // Simulate server request delay
+        setTimeout(() => {
+          completeLogin(token);
+          loginButton.disabled = false;
+          loginButton.textContent = 'Sign In';
+        }, 500);
+      } else {
+        recordFailedAttempt();
+        showError('Invalid access token. Please check and try again.');
+        accessTokenInput.value = '';
+        accessTokenInput.focus();
+      }
+    }
+
+    // ===== Token Validation =====
+    function validateToken(token) {
+      const allTokens = JSON.parse(localStorage.getItem(PORTAL_CONFIG.TOKENS_STORAGE_KEY) || '[]');
+
+      // Find token in storage
+      const tokenRecord = allTokens.find(t => t.token === token);
+
+      if (!tokenRecord) {
+        return false;
+      }
+
+      // Check expiration
+      if (tokenRecord.expires_at) {
+        const expiryTime = new Date(tokenRecord.expires_at).getTime();
+        if (Date.now() > expiryTime) {
+          return false;
+        }
+      }
+
+      // Store session info
+      portalState.clientId = tokenRecord.client_id;
+      portalState.clientName = tokenRecord.client_name;
+      portalState.token = token;
+
+      return true;
+    }
+
+    // ===== Complete Login =====
+    function completeLogin(token) {
+      portalState.isLoggedIn = true;
+      portalState.sessionStartTime = Date.now();
+      portalState.lastActivityTime = Date.now();
+
+      // Save session to sessionStorage
+      saveSession();
+
+      // Clear failed attempts
+      localStorage.removeItem(PORTAL_CONFIG.FAILED_ATTEMPTS_KEY);
+      clearError();
+      clearLockout();
+
+      // Load client data
+      loadClientData();
+
+      // Switch to dashboard
+      switchScreen('dashboard');
+    }
+
+    // ===== Load Client Data =====
+    function loadClientData() {
+      try {
+        // Get all data from localStorage
+        const assignments = JSON.parse(localStorage.getItem('assignments') || '[]');
+        const invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+        const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+
+        // Filter by client ID
+        portalState.assignments = assignments.filter(a => a.client_id === portalState.clientId);
+        portalState.invoices = invoices.filter(i => i.client_id === portalState.clientId);
+        portalState.reports = reports.filter(r => r.client_id === portalState.clientId);
+
+        // Update UI
+        clientNameDisplay.textContent = portalState.clientName;
+        assignmentCount.textContent = portalState.assignments.length;
+
+        // Render assignments
+        renderAssignments();
+      } catch (error) {
+        console.error('Error loading client data:', error);
+        showError('Error loading your data. Please refresh the page.');
+      }
+    }
+
+    // ===== Render Assignments =====
+    function renderAssignments() {
+      if (portalState.assignments.length === 0) {
+        assignmentsGrid.innerHTML = `
+          <div class="portal-empty-state">
+            <div class="portal-empty-state-icon">📭</div>
+            <div class="portal-empty-state-title">No Assignments Yet</div>
+            <p>Once an assignment is created for you, it will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      assignmentsGrid.innerHTML = portalState.assignments.map(assignment => `
+        <div class="portal-assignment-card" onclick="viewAssignmentDetail('${assignment.id}')">
+          <div class="portal-assignment-header">
+            <div class="portal-assignment-address">${escapeHtml(assignment.property_address)}</div>
+            <div class="portal-assignment-type">${escapeHtml(assignment.assignment_type)}</div>
+          </div>
+
+          <div class="portal-assignment-meta">
+            <div class="portal-assignment-dates">
+              <span class="portal-assignment-date-label">Ordered</span>
+              ${formatDate(assignment.order_date)}
+            </div>
+            <span class="portal-status-badge ${getStatusClass(assignment.status)}">
+              ${formatStatus(assignment.status)}
+            </span>
+          </div>
+
+          <div class="portal-assignment-footer">
+            <span class="portal-assignment-date-label">Est. Completion</span>
+            ${assignment.estimated_completion ? formatDate(assignment.estimated_completion) : 'TBD'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== View Assignment Detail =====
+    function viewAssignmentDetail(assignmentId) {
+      const assignment = portalState.assignments.find(a => a.id === assignmentId);
+      if (!assignment) return;
+
+      portalState.currentAssignment = assignment;
+
+      // Update detail header
+      document.getElementById('detailTitle').textContent = assignment.property_address;
+      document.getElementById('detailAddress').textContent = assignment.property_address;
+      document.getElementById('detailType').textContent = assignment.assignment_type;
+      document.getElementById('detailOrderDate').textContent = formatDate(assignment.order_date);
+      document.getElementById('detailEstCompletion').textContent = assignment.estimated_completion ? formatDate(assignment.estimated_completion) : 'TBD';
+
+      // Update status badge
+      const statusBadge = document.getElementById('detailStatus');
+      statusBadge.textContent = formatStatus(assignment.status);
+      statusBadge.className = 'portal-status-badge ' + getStatusClass(assignment.status);
+
+      // Update timeline
+      renderTimeline(assignment);
+
+      // Update invoice
+      renderInvoice(assignment);
+
+      // Update download button
+      updateDownloadButton(assignment);
+
+      switchScreen('detail');
+    }
+
+    // ===== Render Timeline =====
+    function renderTimeline(assignment) {
+      const timeline = document.getElementById('detailTimeline');
+      const statuses = ['Ordered', 'In Progress', 'Inspection Complete', 'Report Draft', 'Report Complete', 'Delivered'];
+      const currentStatusIndex = statuses.indexOf(assignment.status);
+
+      timeline.innerHTML = statuses.map((status, index) => {
+        const isCompleted = index < currentStatusIndex;
+        const isActive = index === currentStatusIndex;
+        const date = assignment[`${status.toLowerCase().replace(/\s+/g, '_')}_date`] || null;
+
+        return `
+          <div class="portal-timeline-item ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}">
+            <div class="portal-timeline-dot"></div>
+            <div class="portal-timeline-content">
+              <div class="portal-timeline-text">
+                <div class="portal-timeline-label">${status}</div>
+                <p class="portal-timeline-date">
+                  ${date ? formatDate(date) : 'Pending'}
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ===== Render Invoice =====
+    function renderInvoice(assignment) {
+      const invoice = portalState.invoices.find(inv => inv.assignment_id === assignment.id);
+
+      if (invoice) {
+        document.getElementById('invoiceNumber').textContent = invoice.invoice_number || '-';
+        document.getElementById('invoiceAmount').textContent = formatCurrency(invoice.amount);
+        document.getElementById('invoiceDueDate').textContent = invoice.due_date ? formatDate(invoice.due_date) : '-';
+
+        const statusEl = document.getElementById('invoiceStatus');
+        const paymentMethodRow = document.getElementById('paymentMethodRow');
+        const paymentMethodEl = document.getElementById('invoicePaymentMethod');
+
+        if (invoice.payment_confirmed) {
+          statusEl.textContent = 'Paid';
+          statusEl.className = 'portal-payment-status paid';
+
+          // Show payment method
+          if (paymentMethodRow && invoice.payment_method) {
+            const methodLabels = {
+              'credit_card': 'Credit Card',
+              'ach': 'ACH Transfer',
+              'check': 'Check',
+              'zelle': 'Zelle',
+              'cash': 'Cash'
+            };
+            paymentMethodEl.textContent = methodLabels[invoice.payment_method] || invoice.payment_method;
+            paymentMethodRow.style.display = 'flex';
+          }
+        } else {
+          statusEl.textContent = 'Pending';
+          statusEl.className = 'portal-payment-status pending';
+          if (paymentMethodRow) paymentMethodRow.style.display = 'none';
+        }
+
+        // Show pay online button if Stripe link is available
+        const payOnlineBtn = document.getElementById('payOnlineButton');
+        const achMsg = document.getElementById('achPreferredMsg');
+        if (payOnlineBtn && invoice.stripe_checkout_url && !invoice.payment_confirmed) {
+          payOnlineBtn.style.display = 'block';
+          payOnlineBtn.dataset.paymentUrl = invoice.stripe_checkout_url;
+          if (achMsg) achMsg.style.display = 'block';
+        } else if (payOnlineBtn) {
+          payOnlineBtn.style.display = 'none';
+          if (achMsg) achMsg.style.display = 'none';
+        }
+      }
+    }
+
+    // ===== Handle Pay Online =====
+    function handlePayOnline() {
+      const btn = document.getElementById('payOnlineButton');
+      if (!btn || !btn.dataset.paymentUrl) return;
+      window.open(btn.dataset.paymentUrl, '_blank');
+    }
+
+    // ===== Check for Payment Success Return =====
+    function checkPaymentReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const paymentStatus = params.get('payment');
+      const invoiceId = params.get('invoice');
+
+      if (paymentStatus === 'success' && invoiceId) {
+        const banner = document.getElementById('paymentSuccessBanner');
+        if (banner) banner.style.display = 'block';
+
+        // Clean URL
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, '', cleanUrl);
+      }
+    }
+
+    // ===== Update Download Button =====
+    function updateDownloadButton(assignment) {
+      const invoice = portalState.invoices.find(inv => inv.assignment_id === assignment.id);
+      const isDelivered = assignment.status === 'Delivered';
+      const isPaid = invoice && invoice.payment_confirmed;
+
+      if (isDelivered && isPaid) {
+        downloadButton.style.display = 'flex';
+        paymentRequiredMsg.classList.remove('show');
+        downloadLockedMsg.style.display = 'none';
+      } else if (isDelivered && !isPaid) {
+        downloadButton.style.display = 'none';
+        paymentRequiredMsg.classList.add('show');
+        downloadLockedMsg.style.display = 'none';
+      } else {
+        downloadButton.style.display = 'none';
+        paymentRequiredMsg.classList.remove('show');
+        downloadLockedMsg.style.display = 'flex';
+      }
+    }
+
+    // ===== Handle Download Report =====
+    function handleDownloadReport() {
+      if (!portalState.currentAssignment) return;
+
+      const assignment = portalState.currentAssignment;
+      const invoice = portalState.invoices.find(inv => inv.assignment_id === assignment.id);
+
+      // Final security check
+      if (assignment.status !== 'Delivered' || !invoice || !invoice.payment_confirmed) {
+        showError('This report is not available for download.');
+        return;
+      }
+
+      // Simulate download
+      downloadButton.disabled = true;
+      downloadButton.textContent = '⬇️ Downloading...';
+
+      setTimeout(() => {
+        // In production, this would trigger an actual download
+        const reportName = `APPRAISAL_${assignment.id}_${portalState.clientId}.pdf`;
+
+        // Create a blob and trigger download (for demo)
+        const blob = new Blob([`Appraisal Report for ${assignment.property_address}`], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = reportName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        downloadButton.disabled = false;
+        downloadButton.textContent = '⬇️ Download Report';
+      }, 800);
+    }
+
+    // ===== Screen Navigation =====
+    function switchScreen(screen) {
+      loginScreen.classList.remove('active');
+      dashboardScreen.classList.remove('active');
+      detailScreen.classList.remove('active');
+
+      if (screen === 'login') {
+        loginScreen.classList.add('active');
+      } else if (screen === 'dashboard') {
+        dashboardScreen.classList.add('active');
+      } else if (screen === 'detail') {
+        detailScreen.classList.add('active');
+      }
+    }
+
+    function goBackToDashboard() {
+      portalState.currentAssignment = null;
+      switchScreen('dashboard');
+    }
+
+    // ===== Logout Handler =====
+    function handleLogout() {
+      if (confirm('Are you sure you want to logout?')) {
+        portalState.isLoggedIn = false;
+        portalState.token = null;
+        portalState.clientId = null;
+        portalState.clientName = null;
+        sessionStorage.removeItem(PORTAL_CONFIG.SESSION_STORAGE_KEY);
+        accessTokenInput.value = '';
+        switchScreen('login');
+        clearError();
+      }
+    }
+
+    // ===== Session Management =====
+    function saveSession() {
+      const sessionData = {
+        token: portalState.token,
+        clientId: portalState.clientId,
+        clientName: portalState.clientName,
+        startTime: portalState.sessionStartTime,
+        lastActivity: portalState.lastActivityTime
+      };
+      sessionStorage.setItem(PORTAL_CONFIG.SESSION_STORAGE_KEY, JSON.stringify(sessionData));
+    }
+
+    function restoreSession() {
+      const sessionData = sessionStorage.getItem(PORTAL_CONFIG.SESSION_STORAGE_KEY);
+      if (sessionData) {
+        try {
+          const data = JSON.parse(sessionData);
+          portalState.token = data.token;
+          portalState.clientId = data.clientId;
+          portalState.clientName = data.clientName;
+          portalState.sessionStartTime = data.startTime;
+          portalState.lastActivityTime = data.lastActivity;
+          portalState.isLoggedIn = true;
+
+          // Verify token is still valid
+          if (validateToken(data.token) && !isSessionExpired()) {
+            loadClientData();
+            switchScreen('dashboard');
+          } else {
+            // Session invalid, return to login
+            sessionStorage.removeItem(PORTAL_CONFIG.SESSION_STORAGE_KEY);
+            portalState.isLoggedIn = false;
+            switchScreen('login');
+          }
+        } catch (error) {
+          console.error('Error restoring session:', error);
+          sessionStorage.removeItem(PORTAL_CONFIG.SESSION_STORAGE_KEY);
+          switchScreen('login');
+        }
+      }
+    }
+
+    function updateLastActivity() {
+      if (portalState.isLoggedIn) {
+        portalState.lastActivityTime = Date.now();
+        saveSession();
+      }
+    }
+
+    function isSessionExpired() {
+      const timeSinceLastActivity = Date.now() - portalState.lastActivityTime;
+      return timeSinceLastActivity > PORTAL_CONFIG.SESSION_TIMEOUT;
+    }
+
+    function checkSessionTimeout() {
+      if (portalState.isLoggedIn && isSessionExpired()) {
+        handleLogout();
+        showError('Your session has expired. Please login again.');
+      }
+    }
+
+    // ===== Failed Attempt Tracking =====
+    function recordFailedAttempt() {
+      let attempts = JSON.parse(localStorage.getItem(PORTAL_CONFIG.FAILED_ATTEMPTS_KEY) || '{"count": 0, "timestamp": 0}');
+
+      attempts.count += 1;
+      attempts.timestamp = Date.now();
+
+      localStorage.setItem(PORTAL_CONFIG.FAILED_ATTEMPTS_KEY, JSON.stringify(attempts));
+
+      if (attempts.count >= PORTAL_CONFIG.MAX_FAILED_ATTEMPTS) {
+        showLockoutMessage();
+      }
+    }
+
+    function isLockedOut() {
+      const attempts = JSON.parse(localStorage.getItem(PORTAL_CONFIG.FAILED_ATTEMPTS_KEY) || '{"count": 0, "timestamp": 0}');
+
+      if (attempts.count < PORTAL_CONFIG.MAX_FAILED_ATTEMPTS) {
+        return false;
+      }
+
+      const timeSinceLock = Date.now() - attempts.timestamp;
+      return timeSinceLock < PORTAL_CONFIG.LOCKOUT_DURATION;
+    }
+
+    // ===== Error Messages =====
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+      setTimeout(() => {
+        errorMessage.classList.remove('show');
+      }, 5000);
+    }
+
+    function clearError() {
+      errorMessage.classList.remove('show');
+    }
+
+    function showLockoutMessage() {
+      const attemptsData = JSON.parse(localStorage.getItem(PORTAL_CONFIG.FAILED_ATTEMPTS_KEY) || '{"timestamp": 0}');
+      const lockoutEndTime = new Date(attemptsData.timestamp + PORTAL_CONFIG.LOCKOUT_DURATION);
+      const formattedTime = lockoutEndTime.toLocaleTimeString();
+
+      lockoutMessage.textContent = `Too many failed attempts. Please try again after ${formattedTime} or contact info@designerhomesre.com for assistance.`;
+      lockoutMessage.classList.add('show');
+      loginButton.disabled = true;
+    }
+
+    function clearLockout() {
+      lockoutMessage.classList.remove('show');
+      lockoutMessage.textContent = '';
+      loginButton.disabled = false;
+    }
+
+    // ===== Utility Functions =====
+    function formatStatus(status) {
+      const statusMap = {
+        'ordered': 'Ordered',
+        'in_progress': 'In Progress',
+        'inspection_complete': 'Inspection Complete',
+        'report_draft': 'Report Draft',
+        'report_complete': 'Report Complete',
+        'delivered': 'Delivered'
+      };
+      return statusMap[status] || status;
+    }
+
+    function getStatusClass(status) {
+      const classMap = {
+        'ordered': 'portal-status-ordered',
+        'in_progress': 'portal-status-in-progress',
+        'inspection_complete': 'portal-status-inspection',
+        'report_draft': 'portal-status-draft',
+        'report_complete': 'portal-status-complete',
+        'delivered': 'portal-status-delivered'
+      };
+      return classMap[status] || 'portal-status-ordered';
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return 'N/A';
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch {
+        return 'N/A';
+      }
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(amount || 0);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

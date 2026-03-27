@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Contact Us | Designer Homes Real Estate Services</title>
+  <meta name="description" content="Contact Designer Homes Real Estate Services in Durham, NC. Request a quote, schedule a consultation, or get in touch with our appraisal team.">
+  <meta name="keywords" content="contact, appraisal quote, consultation, Durham NC">
+  <meta name="author" content="Designer Homes Real Estate Services">
+  <meta name="theme-color" content="#1B2A4A">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://designerhomesre.com/contact.html">
+  <meta property="og:title" content="Contact Us - Designer Homes Real Estate Services">
+  <meta property="og:description" content="Contact Designer Homes to request a quote or schedule a consultation.">
+  <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-form {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-3xl);
+    }
+
+    .contact-info {
+      background-color: var(--color-light-bg);
+      padding: var(--spacing-3xl);
+      border-radius: var(--radius-lg);
+    }
+
+    .contact-info-item {
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .contact-info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-info-title {
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-sm);
+      font-size: var(--font-size-base);
+    }
+
+    .contact-info-content {
+      color: var(--color-medium-text);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .contact-info-content a {
+      color: var(--color-accent);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .contact-info-content a:hover {
+      color: var(--color-accent-light);
+    }
+
+    .form-section-title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-xl);
+      padding-bottom: var(--spacing-lg);
+      border-bottom: 2px solid var(--color-accent);
+    }
+
+    .form-success-message {
+      display: none;
+      background-color: #D4EDDA;
+      border: 1px solid #C3E6CB;
+      color: #155724;
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .form-success-message.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .map-placeholder {
+      background: linear-gradient(135deg, var(--color-light-bg) 0%, #E8EAEF 100%);
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      text-align: center;
+      color: var(--color-medium-text);
+      margin-top: var(--spacing-2xl);
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .map-placeholder-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .quote-form-link {
+      background-color: var(--color-light-bg);
+      padding: var(--spacing-2xl);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      margin-top: var(--spacing-3xl);
+    }
+
+    .quote-form-link a {
+      display: inline-block;
+      background-color: var(--color-accent);
+      color: var(--color-primary);
+      padding: 0.875rem 1.75rem;
+      border-radius: var(--radius-md);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+
+    .quote-form-link a:hover {
+      background-color: var(--color-accent-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 1024px) {
+      .contact-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===============================================
+       HEADER / NAVIGATION
+       =============================================== -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-text">DESIGNER HOMES</span>
+        <span class="logo-subtext">REAL ESTATE SERVICES</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html" class="nav-link">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
+          <ul class="dropdown-menu">
+            <li><a href="services.html#appraisals" class="dropdown-item">Appraisal Services</a></li>
+            <li><a href="mass-appraisal.html" class="dropdown-item">Mass Appraisal Consulting</a></li>
+            <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="service-area.html" class="nav-link">Service Area</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a href="faq.html" class="nav-link">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html#request-quote" class="btn btn-primary">Request a Quote</a>
+        </li>
+      </ul>
+
+      <button class="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===============================================
+       MAIN CONTENT
+       =============================================== -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Contact Us</h1>
+        <p class="hero-subtitle">Let's discuss your valuation needs.</p>
+        <div class="hero-ctas">
+          <a href="#contact-form" class="btn btn-primary btn-lg">Send a Message</a>
+          <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section-spacing" id="contact-form">
+      <div class="container">
+        <div class="contact-wrapper fade-in-up">
+          <!-- Contact Form -->
+          <div class="contact-form">
+            <h2 class="form-section-title">Contact Form</h2>
+
+            <div class="form-success-message" id="successMessage">
+              <strong>Thank you!</strong> We've received your message and will respond within one business day.
+            </div>
+
+            <form id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+              <input type="hidden" name="form-name" value="contact">
+              <input type="hidden" name="bot-field">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone">
+              </div>
+
+              <div class="form-group">
+                <label for="service">Service Type *</label>
+                <select id="service" name="service" required>
+                  <option value="">-- Select a Service --</option>
+                  <option value="private-appraisal">Private Appraisal</option>
+                  <option value="divorce-appraisal">Divorce Appraisal</option>
+                  <option value="estate-appraisal">Estate Appraisal</option>
+                  <option value="retrospective-appraisal">Retrospective Appraisal</option>
+                  <option value="new-construction">New Construction Appraisal</option>
+                  <option value="fha-appraisal">FHA Appraisal</option>
+                  <option value="green-appraisal">Green Home Appraisal</option>
+                  <option value="mass-appraisal">Mass Appraisal Consulting</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" required placeholder="Please tell us about your appraisal needs..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Send Message</button>
+            </form>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="contact-info fade-in-up">
+            <h2 style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-xl); color: var(--color-primary);">Get In Touch</h2>
+
+            <div class="contact-info-item">
+              <div class="contact-info-title">Email</div>
+              <div class="contact-info-content">
+                <a href="mailto:info@designerhomesre.com">info@designerhomesre.com</a>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-title">Phone</div>
+              <div class="contact-info-content">
+                <a href="tel:+19195555555">(919) 555-5555</a>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-title">Office Hours</div>
+              <div class="contact-info-content">
+                <p>Monday – Friday<br>8:00 AM – 6:00 PM</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-title">Service Area</div>
+              <div class="contact-info-content">
+                <p>Triangle Region<br>North Carolina</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-info-title">Location</div>
+              <div class="contact-info-content">
+                <p>Designer Homes Real Estate Services<br>Durham, NC<br>USA</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Placeholder -->
+        <div class="map-placeholder">
+          <div class="map-placeholder-icon">🗺️</div>
+          <p style="font-size: var(--font-size-lg); margin-bottom: var(--spacing-lg);">Interactive Map Coming Soon</p>
+          <p style="margin: 0;">Located in Durham, NC serving the Triangle and surrounding areas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote Form CTA -->
+    <section class="section-spacing bg-light" style="background-color: var(--color-light-bg);" id="request-quote">
+      <div class="container">
+        <div class="quote-form-link fade-in-up">
+          <h3 style="margin-bottom: var(--spacing-lg); color: var(--color-primary);">Need a Detailed Quote?</h3>
+          <p style="color: var(--color-medium-text); margin-bottom: var(--spacing-lg); font-size: var(--font-size-base);">
+            Our detailed quote form allows you to provide specific property information for a comprehensive estimate.
+          </p>
+          <a href="quote.html">Request a Formal Quote</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-subtitle">Contact us today or use our detailed quote form to request an appraisal.</p>
+        <div class="cta-buttons">
+          <a href="#contact-form" class="btn btn-primary btn-lg">Send Message</a>
+          <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===============================================
+       FOOTER
+       =============================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <!-- Column 1: Logo & Description -->
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo">
+              <span class="logo-text">DESIGNER HOMES</span>
+              <span class="logo-subtext">REAL ESTATE SERVICES</span>
+            </div>
+          </div>
+          <p class="footer-description">Professional appraisal services delivering accuracy, expertise, and modern technology for every valuation scenario across the Triangle.</p>
+          <a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="services.html" class="footer-link">Services</a></li>
+            <li><a href="service-area.html" class="footer-link">Service Area</a></li>
+            <li><a href="reviews.html" class="footer-link">Reviews</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="mass-appraisal.html" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <div class="footer-contact">
+            <p><strong>Designer Homes Real Estate Services</strong></p>
+            <p>Durham, NC<br>USA</p>
+            <p><strong>Phone:</strong><br><a href="tel:+19195555555" class="footer-link">(919) 555-5555</a></p>
+            <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-links">
+          <span>&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</span>
+          <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===============================================
+       SCHEMA.ORG JSON-LD
+       =============================================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "LocalBusiness",
+    "name": "Designer Homes Real Estate Services",
+    "image": "https://designerhomesre.com/logo.png",
+    "description": "Professional appraisal services in Durham, Raleigh, Chapel Hill, and surrounding areas.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Durham",
+      "addressRegion": "NC",
+      "postalCode": "27701",
+      "addressCountry": "US"
+    },
+    "telephone": "+19195555555",
+    "email": "info@designerhomesre.com",
+    "url": "https://designerhomesre.com/contact.html",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Support",
+      "telephone": "+19195555555",
+      "email": "info@designerhomesre.com",
+      "areaServed": ["NC"],
+      "hoursAvailable": "M-F 8:00-18:00"
+    }
+  }
+  </script>
+
+  <!-- ===============================================
+       JAVASCRIPT
+       =============================================== -->
+  <script>
+    'use strict';
+
+    // ===== Smooth Scroll for Anchor Links =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || !document.querySelector(href)) return;
+
+        e.preventDefault();
+        const target = document.querySelector(href);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ===== Mobile Navigation Toggle =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    // Close menu when a link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== Dropdown Menu Toggle (Mobile) =====
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      toggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+
+    // ===== Navbar Background on Scroll =====
+    const header = document.querySelector('header');
+    const initialOffset = window.innerHeight * 0.5;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > initialOffset) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ===== Scroll-Triggered Fade-In Animations =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== Contact Form Submission (Netlify Forms) =====
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(contactForm);
+
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        })
+        .then(() => {
+          successMessage.classList.add('show');
+          contactForm.reset();
+          setTimeout(() => {
+            successMessage.classList.remove('show');
+          }, 5000);
+        })
+        .catch((err) => {
+          console.error('Form submission error:', err);
+          alert('There was an error sending your message. Please try again or email us directly at info@designerhomesre.com');
+        });
+      });
+    }
+
+    // ===== Close mobile menu on outside click =====
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== Page Load Animation =====
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+
+    body {
+      opacity: 0.99;
+      transition: opacity 0.3s ease-in;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Request a Quote - Designer Homes Real Estate Services</title>
+  <meta name="description" content="Request a professional appraisal quote online. Designer Homes provides fast, accurate valuations for all appraisal types. Respond within one business day.">
+  <meta name="keywords" content="request appraisal quote, appraisal pricing, Durham, Raleigh, Chapel Hill, NC appraisal">
+  <meta name="author" content="Designer Homes Real Estate Services">
+  <meta name="theme-color" content="#1B2A4A">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://designerhomesre.com/quote.html">
+  <meta property="og:title" content="Request a Quote - Designer Homes Real Estate Services">
+  <meta property="og:description" content="Request a professional appraisal quote online. Fast response within one business day.">
+  <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    /* =====================================================
+       QUOTE REQUEST PAGE STYLES
+       ===================================================== */
+
+    /* Multi-Step Form Wrapper */
+    .quote-container {
+      max-width: 750px;
+      margin: 0 auto;
+      padding: var(--spacing-3xl) var(--container-padding);
+    }
+
+    .quote-hero {
+      text-align: center;
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .quote-hero h1 {
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .quote-hero p {
+      color: var(--color-medium-text);
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-relaxed);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Progress Indicator */
+    .progress-bar-container {
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .progress-step {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .progress-step-number {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: var(--color-light-bg);
+      border: 2px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-medium-text);
+      transition: all var(--transition-base);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .progress-step.active .progress-step-number {
+      background-color: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+    }
+
+    .progress-step.completed .progress-step-number {
+      background-color: var(--color-success);
+      border-color: var(--color-success);
+      color: var(--color-white);
+    }
+
+    .progress-step.completed .progress-step-number::after {
+      content: '✓';
+      position: absolute;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .progress-step.completed .progress-step-number {
+      color: transparent;
+    }
+
+    .progress-step-label {
+      font-size: var(--font-size-xs);
+      color: var(--color-medium-text);
+      text-align: center;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .progress-step.active .progress-step-label {
+      color: var(--color-primary);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .progress-connector {
+      position: absolute;
+      top: 1.25rem;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: var(--color-border);
+      transform: translateX(-25%);
+      z-index: -1;
+    }
+
+    .progress-step.completed .progress-connector {
+      background-color: var(--color-success);
+    }
+
+    /* Progress Text */
+    .progress-text {
+      text-align: center;
+      color: var(--color-medium-text);
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    /* Form Card */
+    .form-card {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-3xl);
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .form-card h2 {
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-2xl);
+      font-size: var(--font-size-2xl);
+    }
+
+    /* Form Steps */
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Form Field Groups */
+    .form-group {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      margin-bottom: var(--spacing-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-dark-text);
+      font-size: var(--font-size-sm);
+    }
+
+    label .required {
+      color: var(--color-error);
+      margin-left: 0.25rem;
+    }
+
+    input[type='text'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='date'],
+    input[type='number'],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base);
+      transition: all var(--transition-fast);
+      background-color: var(--color-white);
+    }
+
+    input[type='text']:focus,
+    input[type='email']:focus,
+    input[type='tel']:focus,
+    input[type='date']:focus,
+    input[type='number']:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+    }
+
+    input.error,
+    select.error,
+    textarea.error {
+      border-color: var(--color-error);
+      background-color: rgba(201, 69, 69, 0.05);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpolyline points='1 4 6 9 11 4' fill='none' stroke='%235A6275' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    /* Radio and Checkbox Styles */
+    .form-group.radio-group,
+    .form-group.checkbox-group {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .radio-option,
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+      cursor: pointer;
+    }
+
+    input[type='radio'],
+    input[type='checkbox'] {
+      appearance: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid var(--color-border);
+      border-radius: 0.375rem;
+      margin-right: var(--spacing-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background-color: var(--color-white);
+    }
+
+    input[type='radio'] {
+      border-radius: 50%;
+    }
+
+    input[type='radio']:checked,
+    input[type='checkbox']:checked {
+      background-color: var(--color-accent);
+      border-color: var(--color-accent);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 10 8'%3E%3Cpolyline points='1 4 3 6 8 1' fill='none' stroke='%231B2A4A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    input[type='radio']:checked {
+      box-shadow: inset 0 0 0 3px var(--color-white);
+    }
+
+    .radio-option label,
+    .checkbox-option label {
+      margin-bottom: 0;
+      font-weight: var(--font-weight-regular);
+      cursor: pointer;
+    }
+
+    /* Error Messages */
+    .error-message {
+      color: var(--color-error);
+      font-size: var(--font-size-sm);
+      margin-top: var(--spacing-xs);
+      display: none;
+    }
+
+    input.error ~ .error-message,
+    select.error ~ .error-message,
+    textarea.error ~ .error-message {
+      display: block;
+    }
+
+    /* Conditional Fields */
+    .conditional-field {
+      display: none;
+      animation: slideDown 0.3s ease-in-out;
+    }
+
+    .conditional-field.show {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+        overflow: hidden;
+      }
+      to {
+        opacity: 1;
+        max-height: 500px;
+      }
+    }
+
+    /* Form Navigation */
+    .form-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-3xl);
+      padding-top: var(--spacing-2xl);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .btn-prev,
+    .btn-next,
+    .btn-submit {
+      padding: 0.875rem 1.75rem;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-align: center;
+    }
+
+    .btn-prev {
+      background-color: var(--color-light-bg);
+      color: var(--color-primary);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-prev:hover {
+      background-color: var(--color-border);
+    }
+
+    .btn-next,
+    .btn-submit {
+      background-color: var(--color-accent);
+      color: var(--color-primary);
+      margin-left: auto;
+    }
+
+    .btn-next:hover,
+    .btn-submit:hover {
+      background-color: var(--color-accent-light);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .btn-prev:disabled,
+    .btn-next:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Review Step */
+    .review-section {
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .review-section h3 {
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-lg);
+      padding-bottom: var(--spacing-md);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .review-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+      padding: var(--spacing-md);
+      background-color: var(--color-light-bg);
+      border-radius: var(--radius-md);
+    }
+
+    .review-label {
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-dark-text);
+      flex: 1;
+    }
+
+    .review-value {
+      color: var(--color-medium-text);
+      text-align: right;
+      flex: 1;
+    }
+
+    .review-edit-btn {
+      background: none;
+      border: none;
+      color: var(--color-accent);
+      cursor: pointer;
+      margin-left: var(--spacing-lg);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      transition: color var(--transition-fast);
+    }
+
+    .review-edit-btn:hover {
+      color: var(--color-accent-light);
+    }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      background-color: rgba(45, 143, 94, 0.1);
+      border: 2px solid var(--color-success);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      text-align: center;
+    }
+
+    .success-message.show {
+      display: block;
+      animation: slideDown 0.3s ease-in-out;
+    }
+
+    .success-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      background-color: var(--color-success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+      font-size: 2rem;
+      margin: 0 auto var(--spacing-lg);
+    }
+
+    .success-message h2 {
+      color: var(--color-success);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .success-message p {
+      color: var(--color-dark-text);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .success-details {
+      background-color: var(--color-white);
+      border-left: 4px solid var(--color-success);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      text-align: left;
+      margin-top: var(--spacing-lg);
+    }
+
+    .success-details strong {
+      color: var(--color-primary);
+    }
+
+    /* Sidebar / Info Section */
+    .quote-info-section {
+      background-color: var(--color-light-bg);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      margin-top: var(--spacing-3xl);
+    }
+
+    .quote-info-section h3 {
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .info-steps {
+      list-style: none;
+      counter-reset: step-counter;
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .info-steps li {
+      counter-increment: step-counter;
+      margin-bottom: var(--spacing-lg);
+      padding-left: 2.5rem;
+      position: relative;
+    }
+
+    .info-steps li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.75rem;
+      height: 1.75rem;
+      background-color: var(--color-accent);
+      color: var(--color-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-sm);
+    }
+
+    .info-steps li p {
+      margin-bottom: 0;
+      color: var(--color-dark-text);
+    }
+
+    .contact-alternative {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+      text-align: center;
+    }
+
+    .contact-alternative h4 {
+      margin-bottom: var(--spacing-md);
+      color: var(--color-primary);
+    }
+
+    .contact-alternative p {
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .contact-alternative a {
+      color: var(--color-accent);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .contact-alternative a:hover {
+      color: var(--color-accent-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .quote-container {
+        padding: var(--spacing-2xl) var(--container-padding);
+      }
+
+      .form-card {
+        padding: var(--spacing-2xl);
+      }
+
+      .form-card h2 {
+        font-size: var(--font-size-xl);
+      }
+
+      .progress-steps {
+        gap: var(--spacing-md);
+      }
+
+      .progress-step-number {
+        width: 2rem;
+        height: 2rem;
+        font-size: var(--font-size-sm);
+      }
+
+      .progress-step-label {
+        font-size: 0.625rem;
+      }
+
+      .form-buttons {
+        flex-direction: column;
+      }
+
+      .btn-prev,
+      .btn-next {
+        width: 100%;
+      }
+
+      .form-buttons .btn-next {
+        margin-left: 0;
+        order: 2;
+      }
+
+      .form-buttons .btn-prev {
+        order: 1;
+      }
+
+      .review-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .review-value {
+        text-align: left;
+        margin-top: var(--spacing-sm);
+      }
+
+      .review-edit-btn {
+        margin-left: 0;
+        margin-top: var(--spacing-sm);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===============================================
+       HEADER / NAVIGATION
+       =============================================== -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-text">DESIGNER HOMES</span>
+        <span class="logo-subtext">REAL ESTATE SERVICES</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html" class="nav-link">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
+          <ul class="dropdown-menu">
+            <li><a href="services.html#appraisals" class="dropdown-item">Appraisal Services</a></li>
+            <li><a href="services.html#consulting" class="dropdown-item">Mass Appraisal Consulting</a></li>
+            <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="service-area.html" class="nav-link">Service Area</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a href="faq.html" class="nav-link">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="quote.html" class="btn btn-primary">Request a Quote</a>
+        </li>
+      </ul>
+
+      <button class="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===============================================
+       MAIN CONTENT
+       =============================================== -->
+  <main style="padding-top: 5rem;">
+    <!-- Hero Section -->
+    <section class="quote-container">
+      <div class="quote-hero">
+        <h1>Request a Quote</h1>
+        <p>Tell us about your property and valuation needs. We'll respond within one business day.</p>
+      </div>
+
+      <!-- Progress Indicator -->
+      <div class="progress-bar-container">
+        <div class="progress-text">Step <span id="current-step">1</span> of 5</div>
+        <div class="progress-steps">
+          <div class="progress-step active" data-step="1">
+            <div class="progress-connector"></div>
+            <div class="progress-step-number">1</div>
+            <div class="progress-step-label">About You</div>
+          </div>
+          <div class="progress-step" data-step="2">
+            <div class="progress-connector"></div>
+            <div class="progress-step-number">2</div>
+            <div class="progress-step-label">Service</div>
+          </div>
+          <div class="progress-step" data-step="3">
+            <div class="progress-connector"></div>
+            <div class="progress-step-number">3</div>
+            <div class="progress-step-label">Property</div>
+          </div>
+          <div class="progress-step" data-step="4">
+            <div class="progress-connector"></div>
+            <div class="progress-step-number">4</div>
+            <div class="progress-step-label">Timeline</div>
+          </div>
+          <div class="progress-step" data-step="5">
+            <div class="progress-step-number">5</div>
+            <div class="progress-step-label">Review</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="form-card">
+        <form id="quote-form" name="quote-form" method="POST" netlify-honeypot="bot-field" data-netlify="true">
+          <!-- Honeypot field for spam protection -->
+          <input type="hidden" name="bot-field">
+
+          <!-- STEP 1: About You -->
+          <div class="form-step active" data-step="1">
+            <h2>About You</h2>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="name">Your Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required>
+                <div class="error-message">Please enter your name</div>
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-message">Please enter a valid email address</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone">
+              </div>
+
+              <div class="form-group">
+                <label for="role">Your Role <span class="required">*</span></label>
+                <select id="role" name="role" required>
+                  <option value="">Select your role...</option>
+                  <option value="Homeowner">Homeowner</option>
+                  <option value="Attorney">Attorney</option>
+                  <option value="CPA/Accountant">CPA/Accountant</option>
+                  <option value="Lender/Loan Officer">Lender/Loan Officer</option>
+                  <option value="Real Estate Agent">Real Estate Agent</option>
+                  <option value="Investor">Investor</option>
+                  <option value="Developer">Developer</option>
+                  <option value="Estate Representative">Estate Representative</option>
+                  <option value="Government Agency">Government Agency</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="error-message">Please select your role</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Service Needed -->
+          <div class="form-step" data-step="2">
+            <h2>Service Needed</h2>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="appraisal-type">Appraisal Type <span class="required">*</span></label>
+                <select id="appraisal-type" name="appraisalType" required>
+                  <option value="">Select appraisal type...</option>
+                  <option value="Private Appraisal - Current Value">Private Appraisal - Current Value</option>
+                  <option value="Divorce Appraisal">Divorce Appraisal</option>
+                  <option value="Estate Appraisal">Estate Appraisal</option>
+                  <option value="Retrospective Appraisal">Retrospective Appraisal</option>
+                  <option value="New Construction Appraisal">New Construction Appraisal</option>
+                  <option value="FHA Appraisal">FHA Appraisal</option>
+                  <option value="Green Home Appraisal">Green Home Appraisal</option>
+                  <option value="Mass Appraisal Consulting">Mass Appraisal Consulting</option>
+                  <option value="Other/Not Sure">Other/Not Sure</option>
+                </select>
+                <div class="error-message">Please select an appraisal type</div>
+              </div>
+            </div>
+
+            <!-- Conditional: Retrospective Appraisal -->
+            <div class="form-row full conditional-field" id="retrospective-field">
+              <div class="form-group">
+                <label for="effective-date">Effective Date Needed</label>
+                <input type="date" id="effective-date" name="effectiveDate">
+              </div>
+            </div>
+
+            <!-- Conditional: Estate Appraisal -->
+            <div class="form-row full conditional-field" id="estate-field">
+              <div class="form-group">
+                <label for="death-date">Date of Death</label>
+                <input type="date" id="death-date" name="deathDate">
+              </div>
+            </div>
+
+            <!-- Conditional: Divorce Appraisal -->
+            <div class="form-row full conditional-field" id="divorce-field">
+              <div class="form-group">
+                <label for="court-deadline">Court Deadline (optional)</label>
+                <input type="date" id="court-deadline" name="courtDeadline">
+              </div>
+            </div>
+
+            <!-- Conditional: Mass Appraisal -->
+            <div class="form-row full conditional-field" id="mass-appraisal-field">
+              <div class="form-group">
+                <label for="num-properties">Number of Properties (approximate)</label>
+                <input type="text" id="num-properties" name="numProperties" placeholder="e.g., 50">
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="purpose">Purpose of Appraisal <span class="required">*</span></label>
+                <textarea id="purpose" name="purpose" placeholder="Brief description of why you need this appraisal..." required></textarea>
+                <div class="error-message">Please describe the purpose of this appraisal</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Property Details -->
+          <div class="form-step" data-step="3">
+            <h2>Property Details</h2>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="address">Property Address <span class="required">*</span></label>
+                <input type="text" id="address" name="address" placeholder="Street address" required>
+                <div class="error-message">Please enter the property address</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">City <span class="required">*</span></label>
+                <input type="text" id="city" name="city" placeholder="City" required>
+                <div class="error-message">Please enter the city</div>
+              </div>
+
+              <div class="form-group">
+                <label for="state">State</label>
+                <select id="state" name="state">
+                  <option value="North Carolina" selected>North Carolina</option>
+                  <option value="South Carolina">South Carolina</option>
+                  <option value="Virginia">Virginia</option>
+                  <option value="Georgia">Georgia</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="zip">ZIP Code <span class="required">*</span></label>
+                <input type="text" id="zip" name="zip" placeholder="ZIP code" required>
+                <div class="error-message">Please enter the ZIP code</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="property-type">Property Type <span class="required">*</span></label>
+                <select id="property-type" name="propertyType" required>
+                  <option value="">Select property type...</option>
+                  <option value="Single Family">Single Family</option>
+                  <option value="Townhouse/Condo">Townhouse/Condo</option>
+                  <option value="Multi-Family (2-4 units)">Multi-Family (2-4 units)</option>
+                  <option value="Vacant Land">Vacant Land</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="error-message">Please select a property type</div>
+              </div>
+
+              <div class="form-group">
+                <label for="sqft">Approximate Square Footage</label>
+                <input type="text" id="sqft" name="sqft" placeholder="e.g., 2500">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="year-built">Year Built (approximate)</label>
+                <input type="text" id="year-built" name="yearBuilt" placeholder="e.g., 2005">
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="special-features">Any special features or conditions?</label>
+                <textarea id="special-features" name="specialFeatures" placeholder="Renovations, unique features, property conditions, etc."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: Timeline & Additional Info -->
+          <div class="form-step" data-step="4">
+            <h2>Timeline & Additional Info</h2>
+
+            <div class="form-row full">
+              <div class="form-group radio-group">
+                <label>Preferred Timeline <span class="required">*</span></label>
+                <div class="radio-option">
+                  <input type="radio" id="timeline-standard" name="timeline" value="Standard (5-10 business days)" required checked>
+                  <label for="timeline-standard">Standard (5-10 business days)</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="timeline-rush" name="timeline" value="Rush (3-5 business days)" required>
+                  <label for="timeline-rush">Rush (3-5 business days)</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="timeline-flexible" name="timeline" value="Flexible" required>
+                  <label for="timeline-flexible">Flexible</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="heard-about">How did you hear about us? <span class="required">*</span></label>
+                <select id="heard-about" name="heardAbout" required>
+                  <option value="">Select an option...</option>
+                  <option value="Google Search">Google Search</option>
+                  <option value="Referral">Referral</option>
+                  <option value="Attorney Referral">Attorney Referral</option>
+                  <option value="Previous Client">Previous Client</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="error-message">Please select an option</div>
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="additional-notes">Additional Notes</label>
+                <textarea id="additional-notes" name="additionalNotes" placeholder="Any other information that would help us serve you better..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-row full">
+              <div class="form-group radio-group">
+                <label>Preferred Contact Method <span class="required">*</span></label>
+                <div class="radio-option">
+                  <input type="radio" id="contact-email" name="contactMethod" value="Email" required checked>
+                  <label for="contact-email">Email</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="contact-phone" name="contactMethod" value="Phone" required>
+                  <label for="contact-phone">Phone</label>
+                </div>
+                <div class="radio-option">
+                  <input type="radio" id="contact-either" name="contactMethod" value="Either" required>
+                  <label for="contact-either">Either</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5: Review & Submit -->
+          <div class="form-step" data-step="5">
+            <h2>Review & Submit</h2>
+
+            <div class="success-message" id="success-message">
+              <div class="success-icon">✓</div>
+              <h2>Quote Request Submitted!</h2>
+              <p>Thank you for choosing Designer Homes. We've received your request and will review it promptly.</p>
+              <div class="success-details">
+                <p><strong>Reference:</strong> <span id="reference-number"></span></p>
+                <p>We typically respond within one business day. You'll receive a detailed quote with pricing and timeline at <strong><span id="confirm-email"></span></strong></p>
+              </div>
+            </div>
+
+            <div id="review-content">
+              <div class="review-section">
+                <h3>About You</h3>
+                <div class="review-item">
+                  <span class="review-label">Name</span>
+                  <span class="review-value" id="review-name">-</span>
+                  <button type="button" class="review-edit-btn" onclick="goToStep(1)">Edit</button>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Email</span>
+                  <span class="review-value" id="review-email">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Phone</span>
+                  <span class="review-value" id="review-phone">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Role</span>
+                  <span class="review-value" id="review-role">-</span>
+                </div>
+              </div>
+
+              <div class="review-section">
+                <h3>Service Needed</h3>
+                <div class="review-item">
+                  <span class="review-label">Appraisal Type</span>
+                  <span class="review-value" id="review-appraisal-type">-</span>
+                  <button type="button" class="review-edit-btn" onclick="goToStep(2)">Edit</button>
+                </div>
+                <div class="review-item" id="review-effective-date-item" style="display:none;">
+                  <span class="review-label">Effective Date</span>
+                  <span class="review-value" id="review-effective-date">-</span>
+                </div>
+                <div class="review-item" id="review-death-date-item" style="display:none;">
+                  <span class="review-label">Date of Death</span>
+                  <span class="review-value" id="review-death-date">-</span>
+                </div>
+                <div class="review-item" id="review-court-deadline-item" style="display:none;">
+                  <span class="review-label">Court Deadline</span>
+                  <span class="review-value" id="review-court-deadline">-</span>
+                </div>
+                <div class="review-item" id="review-num-properties-item" style="display:none;">
+                  <span class="review-label">Number of Properties</span>
+                  <span class="review-value" id="review-num-properties">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Purpose</span>
+                  <span class="review-value" id="review-purpose">-</span>
+                </div>
+              </div>
+
+              <div class="review-section">
+                <h3>Property Details</h3>
+                <div class="review-item">
+                  <span class="review-label">Address</span>
+                  <span class="review-value" id="review-address">-</span>
+                  <button type="button" class="review-edit-btn" onclick="goToStep(3)">Edit</button>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">City, State, ZIP</span>
+                  <span class="review-value" id="review-location">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Property Type</span>
+                  <span class="review-value" id="review-property-type">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Square Footage</span>
+                  <span class="review-value" id="review-sqft">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Year Built</span>
+                  <span class="review-value" id="review-year-built">-</span>
+                </div>
+                <div class="review-item" id="review-special-features-item" style="display:none;">
+                  <span class="review-label">Special Features</span>
+                  <span class="review-value" id="review-special-features">-</span>
+                </div>
+              </div>
+
+              <div class="review-section">
+                <h3>Timeline & Additional Info</h3>
+                <div class="review-item">
+                  <span class="review-label">Preferred Timeline</span>
+                  <span class="review-value" id="review-timeline">-</span>
+                  <button type="button" class="review-edit-btn" onclick="goToStep(4)">Edit</button>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">How You Heard About Us</span>
+                  <span class="review-value" id="review-heard-about">-</span>
+                </div>
+                <div class="review-item" id="review-additional-notes-item" style="display:none;">
+                  <span class="review-label">Additional Notes</span>
+                  <span class="review-value" id="review-additional-notes">-</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Contact Method</span>
+                  <span class="review-value" id="review-contact-method">-</span>
+                </div>
+              </div>
+
+              <div style="background-color: var(--color-light-bg); padding: var(--spacing-lg); border-radius: var(--radius-md); margin-top: var(--spacing-lg);">
+                <p style="margin: 0; color: var(--color-medium-text); font-size: var(--font-size-sm);">
+                  <strong>By submitting this form</strong>, you agree to be contacted regarding your appraisal request. We typically respond within one business day.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Navigation Buttons -->
+          <div class="form-buttons">
+            <button type="button" class="btn-prev" id="prev-btn" onclick="previousStep()" style="display:none;">← Previous</button>
+            <button type="button" class="btn-next" id="next-btn" onclick="nextStep()">Next →</button>
+            <button type="submit" class="btn-submit" id="submit-btn" style="display:none;">Submit Quote Request</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="quote-container">
+      <div class="quote-info-section">
+        <h3>What to Expect After Submitting</h3>
+        <ol class="info-steps">
+          <li>
+            <p><strong>We review your request</strong> — Our team evaluates all the details you provided within 1 business day.</p>
+          </li>
+          <li>
+            <p><strong>You receive a detailed quote</strong> — We'll send you exact pricing and a realistic timeline for your appraisal.</p>
+          </li>
+          <li>
+            <p><strong>Upon approval, we schedule the inspection</strong> — Once you approve, we'll coordinate a convenient time to inspect the property.</p>
+          </li>
+          <li>
+            <p><strong>Track progress through our client portal</strong> — Real-time updates keep you informed every step of the way.</p>
+          </li>
+        </ol>
+
+        <div class="contact-alternative">
+          <h4>Prefer to Discuss Your Needs?</h4>
+          <p><strong>Call us at <a href="tel:+19195555555">(919) 555-5555</a></strong></p>
+          <p style="margin-bottom: 0;">or email <strong><a href="mailto:info@designerhomesre.com">info@designerhomesre.com</a></strong></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===============================================
+       FOOTER
+       =============================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <!-- Column 1: Logo & Description -->
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo">
+              <span class="logo-text">DESIGNER HOMES</span>
+              <span class="logo-subtext">REAL ESTATE SERVICES</span>
+            </div>
+          </div>
+          <p class="footer-description">Professional appraisal services delivering accuracy, expertise, and modern technology for every valuation scenario across the Triangle.</p>
+          <a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="services.html" class="footer-link">Services</a></li>
+            <li><a href="service-area.html" class="footer-link">Service Area</a></li>
+            <li><a href="reviews.html" class="footer-link">Reviews</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="services.html#mass-appraisal" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <div class="footer-contact">
+            <p><strong>Designer Homes Real Estate Services</strong></p>
+            <p>Durham, NC<br>USA</p>
+            <p><strong>Phone:</strong><br><a href="tel:+19195555555" class="footer-link">(919) 555-5555</a></p>
+            <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-links">
+          <span>&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</span>
+          <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===============================================
+       JAVASCRIPT - MULTI-STEP FORM LOGIC
+       =============================================== -->
+  <script>
+    'use strict';
+
+    // ===== Form Management =====
+    const form = document.getElementById('quote-form');
+    const formSteps = document.querySelectorAll('.form-step');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const currentStepDisplay = document.getElementById('current-step');
+    const reviewContent = document.getElementById('review-content');
+    const successMessage = document.getElementById('success-message');
+
+    let currentStep = 1;
+
+    // ===== Initialize Form =====
+    function initForm() {
+      showStep(1);
+      attachConditionalFieldListeners();
+      form.addEventListener('submit', handleSubmit);
+    }
+
+    // ===== Show Specific Step =====
+    function showStep(step) {
+      if (step < 1 || step > 5) return;
+
+      currentStep = step;
+
+      // Hide all steps
+      formSteps.forEach(s => s.classList.remove('active'));
+      progressSteps.forEach(p => p.classList.remove('active'));
+
+      // Show current step
+      document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+      document.querySelector(`.progress-step[data-step="${step}"]`).classList.add('active');
+
+      // Update progress indicator
+      currentStepDisplay.textContent = step;
+
+      // Update button visibility
+      prevBtn.style.display = step === 1 ? 'none' : 'block';
+      nextBtn.style.display = step === 5 ? 'none' : 'block';
+      submitBtn.style.display = step === 5 ? 'block' : 'none';
+
+      // Mark completed steps
+      progressSteps.forEach((p, i) => {
+        if (i + 1 < step) {
+          p.classList.add('completed');
+        } else {
+          p.classList.remove('completed');
+        }
+      });
+
+      // Update review section if on step 5
+      if (step === 5) {
+        updateReview();
+      }
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== Navigate Steps =====
+    function nextStep() {
+      if (validateStep(currentStep)) {
+        showStep(currentStep + 1);
+      }
+    }
+
+    function previousStep() {
+      showStep(currentStep - 1);
+    }
+
+    function goToStep(step) {
+      if (step < currentStep || validateStep(currentStep)) {
+        showStep(step);
+      }
+    }
+
+    // ===== Form Validation =====
+    function validateStep(step) {
+      const currentStepElement = document.querySelector(`.form-step[data-step="${step}"]`);
+      const inputs = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
+
+      let isValid = true;
+
+      inputs.forEach(input => {
+        if (!validateInput(input)) {
+          isValid = false;
+        }
+      });
+
+      return isValid;
+    }
+
+    function validateInput(input) {
+      const value = input.value.trim();
+      let isValid = true;
+
+      // Clear previous error state
+      input.classList.remove('error');
+
+      // Validate based on input type
+      if (input.type === 'email') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        isValid = emailRegex.test(value);
+      } else if (input.required && !value) {
+        isValid = false;
+      }
+
+      // Show error state
+      if (!isValid) {
+        input.classList.add('error');
+      }
+
+      return isValid;
+    }
+
+    // ===== Conditional Field Logic =====
+    function attachConditionalFieldListeners() {
+      const appraisalTypeSelect = document.getElementById('appraisal-type');
+
+      appraisalTypeSelect.addEventListener('change', function() {
+        const value = this.value;
+
+        // Hide all conditional fields
+        document.getElementById('retrospective-field').classList.remove('show');
+        document.getElementById('estate-field').classList.remove('show');
+        document.getElementById('divorce-field').classList.remove('show');
+        document.getElementById('mass-appraisal-field').classList.remove('show');
+
+        // Show relevant field based on selection
+        if (value === 'Retrospective Appraisal') {
+          document.getElementById('retrospective-field').classList.add('show');
+        } else if (value === 'Estate Appraisal') {
+          document.getElementById('estate-field').classList.add('show');
+        } else if (value === 'Divorce Appraisal') {
+          document.getElementById('divorce-field').classList.add('show');
+        } else if (value === 'Mass Appraisal Consulting') {
+          document.getElementById('mass-appraisal-field').classList.add('show');
+        }
+      });
+    }
+
+    // ===== Update Review Section =====
+    function updateReview() {
+      // About You
+      document.getElementById('review-name').textContent = document.getElementById('name').value || '-';
+      document.getElementById('review-email').textContent = document.getElementById('email').value || '-';
+      document.getElementById('review-phone').textContent = document.getElementById('phone').value || '-';
+      document.getElementById('review-role').textContent = document.getElementById('role').value || '-';
+
+      // Service Needed
+      const appraisalType = document.getElementById('appraisal-type').value;
+      document.getElementById('review-appraisal-type').textContent = appraisalType || '-';
+
+      const effectiveDate = document.getElementById('effective-date').value;
+      if (effectiveDate) {
+        document.getElementById('review-effective-date-item').style.display = 'flex';
+        document.getElementById('review-effective-date').textContent = new Date(effectiveDate).toLocaleDateString();
+      } else {
+        document.getElementById('review-effective-date-item').style.display = 'none';
+      }
+
+      const deathDate = document.getElementById('death-date').value;
+      if (deathDate) {
+        document.getElementById('review-death-date-item').style.display = 'flex';
+        document.getElementById('review-death-date').textContent = new Date(deathDate).toLocaleDateString();
+      } else {
+        document.getElementById('review-death-date-item').style.display = 'none';
+      }
+
+      const courtDeadline = document.getElementById('court-deadline').value;
+      if (courtDeadline) {
+        document.getElementById('review-court-deadline-item').style.display = 'flex';
+        document.getElementById('review-court-deadline').textContent = new Date(courtDeadline).toLocaleDateString();
+      } else {
+        document.getElementById('review-court-deadline-item').style.display = 'none';
+      }
+
+      const numProperties = document.getElementById('num-properties').value;
+      if (numProperties) {
+        document.getElementById('review-num-properties-item').style.display = 'flex';
+        document.getElementById('review-num-properties').textContent = numProperties;
+      } else {
+        document.getElementById('review-num-properties-item').style.display = 'none';
+      }
+
+      document.getElementById('review-purpose').textContent = document.getElementById('purpose').value || '-';
+
+      // Property Details
+      document.getElementById('review-address').textContent = document.getElementById('address').value || '-';
+      const city = document.getElementById('city').value || '-';
+      const state = document.getElementById('state').value || 'NC';
+      const zip = document.getElementById('zip').value || '-';
+      document.getElementById('review-location').textContent = `${city}, ${state} ${zip}`;
+      document.getElementById('review-property-type').textContent = document.getElementById('property-type').value || '-';
+      document.getElementById('review-sqft').textContent = document.getElementById('sqft').value || '-';
+      document.getElementById('review-year-built').textContent = document.getElementById('year-built').value || '-';
+
+      const specialFeatures = document.getElementById('special-features').value;
+      if (specialFeatures) {
+        document.getElementById('review-special-features-item').style.display = 'flex';
+        document.getElementById('review-special-features').textContent = specialFeatures;
+      } else {
+        document.getElementById('review-special-features-item').style.display = 'none';
+      }
+
+      // Timeline & Additional Info
+      document.getElementById('review-timeline').textContent = document.querySelector('input[name="timeline"]:checked').value || '-';
+      document.getElementById('review-heard-about').textContent = document.getElementById('heard-about').value || '-';
+
+      const additionalNotes = document.getElementById('additional-notes').value;
+      if (additionalNotes) {
+        document.getElementById('review-additional-notes-item').style.display = 'flex';
+        document.getElementById('review-additional-notes').textContent = additionalNotes;
+      } else {
+        document.getElementById('review-additional-notes-item').style.display = 'none';
+      }
+
+      document.getElementById('review-contact-method').textContent = document.querySelector('input[name="contactMethod"]:checked').value || '-';
+    }
+
+    // ===== Form Submission =====
+    function handleSubmit(e) {
+      e.preventDefault();
+
+      // Generate reference number
+      const refNumber = 'QR' + Date.now().toString().slice(-8).toUpperCase();
+      document.getElementById('reference-number').textContent = refNumber;
+      document.getElementById('confirm-email').textContent = document.getElementById('email').value;
+
+      // Show success message
+      reviewContent.style.display = 'none';
+      successMessage.classList.add('show');
+
+      // Submit form to Netlify
+      const formData = new FormData(form);
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      })
+      .then(() => console.log('Form submitted successfully'))
+      .catch(err => console.error('Form submission error:', err));
+
+      // Scroll to success message
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
+
+    // ===== Mobile Navigation Toggle =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+
+    if (hamburger) {
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+      });
+    }
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (hamburger) hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== Dropdown Menu Toggle (Mobile) =====
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      if (toggle) {
+        toggle.addEventListener('click', (e) => {
+          if (window.innerWidth <= 768) {
+            e.preventDefault();
+            dropdown.classList.toggle('active');
+          }
+        });
+      }
+    });
+
+    // ===== Navbar Background on Scroll =====
+    const header = document.querySelector('header');
+    const initialOffset = window.innerHeight * 0.5;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > initialOffset) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ===== Close mobile menu on outside click =====
+    document.addEventListener('click', (e) => {
+      if (header && !header.contains(e.target)) {
+        if (hamburger) hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== Initialize on Page Load =====
+    document.addEventListener('DOMContentLoaded', initForm);
+  </script>
+</body>
+</html>

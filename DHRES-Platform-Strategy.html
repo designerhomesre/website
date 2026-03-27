@@ -1,0 +1,2510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Homes Real Estate Services — Business Operations Platform Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1B2A4A;
+            --gold: #C9A84C;
+            --white: #FFFFFF;
+            --light-gray: #F7F8FA;
+            --dark-gray: #4A5568;
+            --border-gray: #E2E8F0;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-gray);
+            background-color: var(--light-gray);
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--navy) 0%, #0f1a2e 100%);
+            padding: 40px 20px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo small {
+            display: block;
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 12px;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 16px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: rgba(201, 168, 76, 0.1);
+            color: var(--gold);
+            border-left-color: var(--gold);
+        }
+
+        .sidebar-nav a.active {
+            background-color: rgba(201, 168, 76, 0.2);
+            color: var(--gold);
+            border-left-color: var(--gold);
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            background-color: var(--light-gray);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #0f1a2e 100%);
+            color: var(--white);
+            padding: 80px 60px;
+            text-align: center;
+            border-bottom: 4px solid var(--gold);
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 8px;
+        }
+
+        .header .date {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* SECTION STYLES */
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            scroll-margin-top: 100px;
+        }
+
+        .section-number {
+            display: inline-block;
+            background-color: var(--gold);
+            color: var(--navy);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-top: 28px;
+            margin-bottom: 16px;
+        }
+
+        .section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .section p {
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .section ul, .section ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* HIGHLIGHTS & CALLOUTS */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(201,168,76,0.1) 0%, rgba(201,168,76,0.05) 100%);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 24px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--navy);
+        }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            border: none;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        tr:hover {
+            background-color: var(--light-gray);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cost-item {
+            font-weight: 500;
+        }
+
+        .cost-free {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .cost-paid {
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        /* WORKFLOW DIAGRAM */
+        .workflow {
+            background: var(--light-gray);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 24px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            line-height: 1.8;
+            color: var(--navy);
+            border: 1px solid var(--border-gray);
+        }
+
+        .component-diagram {
+            background: var(--light-gray);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 24px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            line-height: 1.6;
+            color: var(--navy);
+            border: 1px solid var(--border-gray);
+        }
+
+        /* FEATURE LISTS */
+        .feature-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .feature-item {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .feature-item strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .feature-item p {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        /* WIREFRAMES */
+        .wireframe {
+            background: var(--light-gray);
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .wireframe-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .wireframe-box {
+            background: var(--white);
+            border: 1px dashed var(--border-gray);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--dark-gray);
+        }
+
+        .wireframe-box:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ROADMAP */
+        .roadmap-phase {
+            background: var(--light-gray);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+        }
+
+        .roadmap-phase h4 {
+            color: var(--navy);
+            margin-top: 0;
+        }
+
+        /* CODE BLOCKS */
+        code {
+            background: var(--light-gray);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            color: #e94b3c;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .badge-primary {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 40px 60px;
+            color: var(--dark-gray);
+            font-size: 13px;
+            border-top: 1px solid var(--border-gray);
+        }
+
+        .footer-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin: 24px auto;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .main {
+                margin-left: 250px;
+                width: calc(100% - 250px);
+            }
+
+            .content {
+                padding: 40px;
+            }
+
+            .section {
+                padding: 30px;
+            }
+
+            .header {
+                padding: 40px 30px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .section h2 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            Designer Homes<small>Real Estate Services</small>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#executive-summary" onclick="scrollToSection(event)">Executive Summary</a></li>
+            <li><a href="#architecture" onclick="scrollToSection(event)">Platform Architecture</a></li>
+            <li><a href="#payment-processor" onclick="scrollToSection(event)">Payment Processor</a></li>
+            <li><a href="#accounting" onclick="scrollToSection(event)">Accounting & Finance</a></li>
+            <li><a href="#mileage" onclick="scrollToSection(event)">Mileage Tracking</a></li>
+            <li><a href="#admin-dashboard" onclick="scrollToSection(event)">Admin Dashboard</a></li>
+            <li><a href="#payment-workflow" onclick="scrollToSection(event)">Payment Workflow</a></li>
+            <li><a href="#automation" onclick="scrollToSection(event)">AI & Automation</a></li>
+            <li><a href="#security" onclick="scrollToSection(event)">Security</a></li>
+            <li><a href="#lender-workflow" onclick="scrollToSection(event)">Lender Workflow</a></li>
+            <li><a href="#cost-breakdown" onclick="scrollToSection(event)">Cost Breakdown</a></li>
+            <li><a href="#roadmap" onclick="scrollToSection(event)">Build Roadmap</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+        <!-- COVER -->
+        <div class="header">
+            <h1>Designer Homes Real Estate Services</h1>
+            <p><strong>Business Operations Platform Strategy</strong></p>
+            <div style="margin-top: 24px; opacity: 0.9;">
+                <p style="margin-bottom: 8px;">Prepared for Keith Manning Jr., Principal</p>
+                <p class="date">March 2026</p>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- SECTION 1: EXECUTIVE SUMMARY -->
+            <div class="section" id="executive-summary">
+                <div class="section-number">1</div>
+                <h2>Executive Summary</h2>
+                <p>Designer Homes Real Estate Services requires a comprehensive business management platform that integrates seamlessly with the public website. This platform will streamline operations from initial lead intake through final report delivery and payment collection—all while maintaining a target operating cost as close to $0/month as possible.</p>
+
+                <h3>What's Being Built</h3>
+                <p>A complete, integrated system consisting of:</p>
+                <ul>
+                    <li><strong>Public Website</strong> — Static HTML site hosted free on Netlify, optimized for lead generation and lender inquiries</li>
+                    <li><strong>Admin Dashboard</strong> — Self-contained HTML/JavaScript application for managing assignments, invoicing, and reporting</li>
+                    <li><strong>Client Portal</strong> — Authenticated portal for clients to access reports and make payments</li>
+                    <li><strong>Payment Processing</strong> — Stripe integration for professional payment collection with zero monthly fees</li>
+                    <li><strong>Email Automation</strong> — Zapier + Google Workspace for workflow automation</li>
+                </ul>
+
+                <h3>Core Workflow</h3>
+                <p>The platform automates the complete business lifecycle:</p>
+                <div class="workflow">
+Lead Intake (Web Form)
+    ↓
+Quote & Assignment Creation
+    ↓
+Inspection Scheduling & Completion
+    ↓
+Report Writing & Finalization
+    ↓
+Invoice Generation & Payment Link
+    ↓
+Client Payment Via Stripe
+    ↓
+Report Release to Client Portal
+    ↓
+Review Request (7-day automation)
+                </div>
+
+                <h3>Budget Target</h3>
+                <div class="highlight-box">
+                    <p><strong>Baseline Monthly Cost: ~$7/month</strong> (Google Workspace for business email)</p>
+                    <p style="margin-bottom: 0;">Variable Costs: Stripe transaction fees (2.9% + $0.30 per card transaction, 0.8% for ACH transfers)</p>
+                </div>
+                <p>All other infrastructure is provided at no cost through free tiers of Netlify, Supabase, HubSpot, Zapier, and Google Analytics.</p>
+
+                <h3>Scalability Path</h3>
+                <p>The architecture is designed to scale from MVP to enterprise without architecture changes. When volume justifies it, the system can be upgraded to Supabase's paid tier (unlimited database and file storage) or integrated with professional accounting software (Wave, QuickBooks).</p>
+            </div>
+
+            <!-- SECTION 2: PLATFORM ARCHITECTURE -->
+            <div class="section" id="architecture">
+                <div class="section-number">2</div>
+                <h2>Platform Architecture</h2>
+                <p>The Designer Homes platform is built on a modern, scalable microservices-inspired architecture that leverages free and low-cost services. Each component is independently functional but tightly integrated.</p>
+
+                <h3>System Components</h3>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>Public Website</strong>
+                        <p>Static HTML/CSS/JS hosted on Netlify. Includes lead intake forms, lender inquiry forms, and company information.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Admin Dashboard</strong>
+                        <p>Self-contained HTML/JS application. Stores data in localStorage for MVP, upgradeable to Supabase.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Client Portal</strong>
+                        <p>Authenticated portal powered by Supabase Auth. Clients access reports securely with email/password login.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Payment Processing</strong>
+                        <p>Stripe payment links. No PCI compliance burden. Professional invoices. Mobile-friendly checkout.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Email Automation</strong>
+                        <p>Zapier free tier (5 zaps) + Google Workspace. Automated notifications and follow-ups.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>CRM & Contacts</strong>
+                        <p>HubSpot free tier for contact management, deal tracking, and email templates.</p>
+                    </div>
+                </div>
+
+                <h3>Architecture Diagram</h3>
+                <div class="component-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│  PUBLIC WEBSITE (Netlify)                                   │
+│  - Homepage, About, Services                                │
+│  - Lead Intake Form (Netlify Forms)                          │
+│  - Lender Inquiry Form (Netlify Forms)                       │
+│  - Company Information, License Display                      │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ├─→ Form Submission
+                       │
+┌──────────────────────v──────────────────────────────────────┐
+│  ADMIN DASHBOARD (Self-Hosted HTML/JS)                      │
+│  - Assignment Management                                    │
+│  - Quote & Invoice Creation                                 │
+│  - Mileage Tracking                                          │
+│  - Payment Status Tracking                                  │
+│  - Report Delivery                                           │
+│  - Client Management                                         │
+│  Storage: localStorage (MVP) → Supabase (Scale)             │
+└──────────────┬────────────────────┬────────────────────────┘
+               │                    │
+               ├─→ Payment Links ───┐
+               │                    │
+               v                    v
+┌──────────────────────┐    ┌──────────────────────────┐
+│  STRIPE             │    │  CLIENT PORTAL            │
+│  - Payment Links    │    │  (Supabase Auth + React) │
+│  - Invoices         │    │  - Report Download       │
+│  - Webhooks         │    │  - Payment Status        │
+│  - Transaction Log  │    │  - Notifications         │
+└──────────┬───────────┘    └──────────────────────────┘
+           │
+           v
+    ┌─────────────────┐
+    │  ZAPIER         │
+    │  - Webhooks     │
+    │  - Automations  │
+    │  - Email Notify │
+    └─────────────────┘
+                </div>
+
+                <h3>Data Flow</h3>
+                <ol>
+                    <li><strong>Lead Intake:</strong> Client submits form on public website → Netlify Forms receives submission</li>
+                    <li><strong>Notification:</strong> Zapier webhook triggers → Keith receives email alert</li>
+                    <li><strong>Admin Action:</strong> Keith logs into admin dashboard → Creates assignment from lead</li>
+                    <li><strong>Inspection:</strong> Admin updates assignment status as inspection is completed</li>
+                    <li><strong>Invoice:</strong> Admin generates invoice → Stripe payment link created</li>
+                    <li><strong>Client Notification:</strong> Zapier sends payment link to client email</li>
+                    <li><strong>Payment:</strong> Client pays via Stripe → Webhook confirms payment</li>
+                    <li><strong>Report Release:</strong> Admin releases report to client portal → Report appears in client's secure access</li>
+                    <li><strong>Follow-up:</strong> Zapier automation sends review request 7 days post-delivery</li>
+                </ol>
+
+                <h3>Future Upgrade Path</h3>
+                <p>The MVP uses localStorage for admin dashboard data. When you're ready to scale (or if you want automatic backups and multi-device access), migration to Supabase is straightforward:</p>
+                <div class="highlight-box">
+                    <p><strong>Supabase Free Tier Limits:</strong></p>
+                    <ul style="margin-bottom: 0;">
+                        <li>500MB database storage</li>
+                        <li>1GB file storage (for reports)</li>
+                        <li>50K monthly active users</li>
+                        <li>100 concurrent connections</li>
+                    </ul>
+                </div>
+                <p>For Designer Homes' scale (10–50 assignments/month), the free tier will handle years of growth.</p>
+            </div>
+
+            <!-- SECTION 3: PAYMENT PROCESSOR RECOMMENDATION -->
+            <div class="section" id="payment-processor">
+                <div class="section-number">3</div>
+                <h2>Payment Processor Recommendation</h2>
+                <p>Selecting the right payment processor is critical for client convenience, professional operations, and cost efficiency. Three options have been evaluated.</p>
+
+                <h3>Option 1: Stripe (RECOMMENDED)</h3>
+                <div class="highlight-box">
+                    <strong style="display: block; margin-bottom: 8px;">Primary Recommendation</strong>
+                    Stripe is the best choice for growth and professionalism, with zero monthly fees and transaction-only costs.
+                </div>
+
+                <h4>Pricing</h4>
+                <ul>
+                    <li><strong>Card Transactions:</strong> 2.9% + $0.30 per transaction</li>
+                    <li><strong>ACH/Bank Transfers:</strong> 0.8% (capped at $5 per transaction)</li>
+                    <li><strong>Monthly Fee:</strong> $0</li>
+                </ul>
+
+                <h4>Key Features</h4>
+                <ul>
+                    <li><strong>Stripe Checkout:</strong> Hosted payment page—no PCI compliance burden on you</li>
+                    <li><strong>Professional Payment Links:</strong> Send branded payment link via email to clients</li>
+                    <li><strong>Invoice Generation:</strong> Built-in invoice creation and numbering</li>
+                    <li><strong>Recurring Billing:</strong> Support for subscription-based services in future</li>
+                    <li><strong>Mobile-Friendly:</strong> Works perfectly on phones and tablets</li>
+                    <li><strong>Webhooks:</strong> Automatic payment confirmation notifications</li>
+                    <li><strong>Detailed Reporting:</strong> Transaction history, dispute tracking, settlement info</li>
+                    <li><strong>Zapier Integration:</strong> Native integration for automation</li>
+                </ul>
+
+                <h4>Example: $3,000 Appraisal Report</h4>
+                <table>
+                    <tr>
+                        <th>Payment Method</th>
+                        <th>Stripe Fee</th>
+                        <th>Amount You Receive</th>
+                    </tr>
+                    <tr>
+                        <td>Credit Card</td>
+                        <td>$0.97 (2.9% + $0.30)</td>
+                        <td>$2,999.03</td>
+                    </tr>
+                    <tr>
+                        <td>Bank Transfer (ACH)</td>
+                        <td>$5.00 (0.8% capped)</td>
+                        <td>$2,995.00</td>
+                    </tr>
+                </table>
+
+                <h3>Option 2: Square Invoices (Alternative)</h3>
+                <h4>Pricing</h4>
+                <ul>
+                    <li><strong>Card Transactions:</strong> 2.9% + $0.30</li>
+                    <li><strong>ACH/Bank Transfers:</strong> 1% (minimum $1)</li>
+                    <li><strong>Monthly Fee:</strong> $0</li>
+                </ul>
+
+                <h4>Comparison to Stripe</h4>
+                <ul>
+                    <li>Slightly higher ACH fees (1% vs. 0.8%)</li>
+                    <li>Excellent invoice reminders (automatic follow-ups)</li>
+                    <li>Slightly simpler interface</li>
+                    <li>No Zapier integration (less automation potential)</li>
+                </ul>
+
+                <p><strong>Verdict:</strong> Stripe is superior due to lower ACH costs, Zapier integration, and more professional appearance.</p>
+
+                <h3>Option 3: Zelle (Current)</h3>
+                <h4>Pricing</h4>
+                <ul>
+                    <li><strong>All Transactions:</strong> $0</li>
+                    <li><strong>Monthly Fee:</strong> $0</li>
+                </ul>
+
+                <h4>Pros</h4>
+                <ul>
+                    <li>Zero fees (best for you)</li>
+                    <li>Instant bank-to-bank transfer</li>
+                </ul>
+
+                <h4>Cons</h4>
+                <ul>
+                    <li>No invoice generation or professional appearance</li>
+                    <li>No payment tracking or automation</li>
+                    <li>No mobile checkout experience</li>
+                    <li>No Zapier integration</li>
+                    <li>Clients must manually input payment details</li>
+                    <li>No transaction history or reporting</li>
+                </ul>
+
+                <h3>Recommended Strategy</h3>
+                <div class="highlight-box">
+                    <strong>Primary:</strong> Use Stripe as primary payment processor (professional, automated, trackable)
+                    <br><br>
+                    <strong>Secondary:</strong> Keep Zelle as fallback option for clients who prefer direct bank transfers
+                    <br><br>
+                    <strong>Benefit:</strong> Stripe captures 90% of clients (card payers + convenience seekers), Zelle handles the remaining 10% (privacy-conscious clients)
+                </div>
+
+                <h3>Implementation Steps</h3>
+                <ol>
+                    <li>Create Stripe account (5-minute signup at stripe.com)</li>
+                    <li>Verify business information</li>
+                    <li>Connect bank account for payouts</li>
+                    <li>Generate first payment link from admin dashboard</li>
+                    <li>Send payment link to client via email</li>
+                    <li>Configure Zapier webhook to notify you of payments</li>
+                </ol>
+            </div>
+
+            <!-- SECTION 4: ACCOUNTING & FINANCIAL MANAGEMENT -->
+            <div class="section" id="accounting">
+                <div class="section-number">4</div>
+                <h2>Accounting & Financial Management</h2>
+                <p>Professional financial tracking is essential for tax filing, business decisions, and growth planning. The strategy balances simplicity with sufficient detail for proper bookkeeping.</p>
+
+                <h3>Phase 1: Lightweight Internal Dashboard (Now)</h3>
+                <p>The admin dashboard includes a built-in financial reporting section with no additional cost:</p>
+
+                <h4>Dashboard Metrics</h4>
+                <ul>
+                    <li><strong>Monthly Revenue:</strong> Total paid invoices by month</li>
+                    <li><strong>Quarterly/Annual Revenue:</strong> Rolling totals and projections</li>
+                    <li><strong>Invoice Status:</strong> Paid, unpaid, overdue categorization</li>
+                    <li><strong>Average Invoice Value:</strong> Helps forecast growth</li>
+                    <li><strong>Days Sales Outstanding (DSO):</strong> Average time to collect payment</li>
+                </ul>
+
+                <h4>Expense Tracking</h4>
+                <ul>
+                    <li><strong>Mileage Deduction:</strong> Automatic calculation at IRS rate ($0.70/mile for 2025–2026, verify annually)</li>
+                    <li><strong>Data Fees:</strong> MLS, appraisal software subscriptions</li>
+                    <li><strong>Software & Tools:</strong> Google Workspace, paid Zapier tier, etc.</li>
+                    <li><strong>Business Expenses:</strong> Office supplies, client entertainment, professional development</li>
+                </ul>
+
+                <h4>Financial Reporting</h4>
+                <p>Generate simple P&L view:</p>
+                <div class="workflow">
+Total Revenue (Paid Invoices)
+  - Mileage Expense (Miles × $0.70)
+  - Software Costs
+  - Other Business Expenses
+─────────────────────────────────
+Net Profit (for tax purposes)
+                </div>
+
+                <h4>CSV Export Capability</h4>
+                <p>Export financial data by date range for your accountant or tax preparation software. Includes:</p>
+                <ul>
+                    <li>Invoice register (date, amount, client, status)</li>
+                    <li>Mileage log (date, miles, purpose, deduction amount)</li>
+                    <li>Expense log (date, category, amount)</li>
+                </ul>
+
+                <h3>Phase 2: Professional Accounting Software (Month 2–3)</h3>
+                <p>As revenue grows, integrate with one of these free or low-cost platforms:</p>
+
+                <table>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Cost</th>
+                        <th>Best For</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Wave Accounting</strong></td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Complete free accounting, invoicing, expense tracking. Best for cash-basis accounting.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QuickBooks Self-Employed</strong></td>
+                        <td class="cost-paid">$15/month</td>
+                        <td>Simple accounting + self-employment tax estimates. Good if you have other 1099 income.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FreshBooks</strong></td>
+                        <td class="cost-paid">$17/month</td>
+                        <td>Invoice + expense management with time tracking. Good if you'll bill hourly consultations.</td>
+                    </tr>
+                </table>
+
+                <h3>Tax Planning Considerations</h3>
+                <div class="highlight-box">
+                    <p><strong>Quarterly Estimated Taxes:</strong> Based on your total revenue, you may need to pay estimated quarterly taxes. Use the P&L dashboard to estimate quarterly income.</p>
+                    <p><strong>Mileage Deduction:</strong> Track religiously. At $0.70/mile, 50 miles/week = ~$1,800 annual deduction.</p>
+                    <p style="margin-bottom: 0;"><strong>Business Structure:</strong> Consult with a CPA, but if you haven't already, consider S-Corp election if annual net profit exceeds $60K (saves ~15% on self-employment taxes).</p>
+                </div>
+
+                <h3>Annual Reconciliation</h3>
+                <ol>
+                    <li>Export all financial data from admin dashboard</li>
+                    <li>Reconcile against bank deposits (compare Stripe deposits to invoices marked paid)</li>
+                    <li>Verify all mileage entries are linked to assignments</li>
+                    <li>Review expense categories for accuracy</li>
+                    <li>Send cleaned data to accountant for tax return preparation</li>
+                </ol>
+
+                <p><strong>Timeline:</strong> Start keeping daily notes. By end of Q4 2026, you'll have 9 months of clean data that will make tax prep effortless.</p>
+            </div>
+
+            <!-- SECTION 5: MILEAGE TRACKER -->
+            <div class="section" id="mileage">
+                <div class="section-number">5</div>
+                <h2>Mileage Tracker Architecture</h2>
+                <p>Mileage is often the largest deductible business expense for appraisers. The IRS allows $0.70/mile for 2025–2026 (verify annually). Proper tracking is essential for maximizing your tax deduction and defending against audits.</p>
+
+                <h3>IRS Requirements</h3>
+                <p>To claim mileage deductions, you must be able to document:</p>
+                <ul>
+                    <li><strong>Date</strong> of trip</li>
+                    <li><strong>Business Purpose</strong> (e.g., "Appraisal inspection of 123 Main St, including 4 comparable property inspections")</li>
+                    <li><strong>Start and End Locations</strong> (e.g., office → subject property → comp 1 → comp 2 → back to office)</li>
+                    <li><strong>Total Miles</strong></li>
+                </ul>
+
+                <h3>Mileage Logging Workflow</h3>
+                <p>Admin dashboard provides simple workflow:</p>
+
+                <ol>
+                    <li><strong>Open Assignment</strong> — Click "Log Mileage" from assignment detail view</li>
+                    <li><strong>Enter Trip Date</strong> — Pre-filled with today's date</li>
+                    <li><strong>Subject Property Address</strong> — Automatically linked to assignment</li>
+                    <li><strong>Log Comparable Properties</strong> — List each comp property visited
+                        <ul>
+                            <li>Address field</li>
+                            <li>Checkbox: "Visited this property"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Calculate Mileage</strong> — System estimates route:
+                        <ul>
+                            <li><strong>MVP Formula:</strong> Configurable base distance (office to subject) + increment per comp visited</li>
+                            <li><strong>Default:</strong> 15 miles (office to subject) + 5 miles per comp property</li>
+                            <li><strong>Example:</strong> 1 subject + 4 comps = 15 + (4 × 5) = 35 miles</li>
+                        </ul>
+                    </li>
+                    <li><strong>Manual Override</strong> — Override calculated miles if you use actual GPS data</li>
+                    <li><strong>Save Trip</strong> — Trip recorded and linked to assignment</li>
+                </ol>
+
+                <h3>Future Enhancement: Google Maps Integration</h3>
+                <p>When you're ready to improve accuracy, integrate Google Maps Distance Matrix API:</p>
+                <ul>
+                    <li><strong>Cost:</strong> $5 per 1,000 requests (~$25–50/month for 50+ assignments/month)</li>
+                    <li><strong>Benefit:</strong> Real driving distance instead of estimates</li>
+                    <li><strong>Implementation:</strong> Simple API call from admin dashboard</li>
+                </ul>
+
+                <p>For now, the estimate formula is accurate enough for tax purposes and can be verified with spot-checks using Google Maps.</p>
+
+                <h3>Reporting & Export</h3>
+
+                <h4>Dashboard View</h4>
+                <ul>
+                    <li><strong>Weekly Total:</strong> Miles and deduction amount for current week</li>
+                    <li><strong>Monthly Total:</strong> Cumulative miles and annual projection</li>
+                    <li><strong>Quarterly Total:</strong> Tax planning view</li>
+                    <li><strong>Year-to-Date Total:</strong> Rolling annual deduction amount</li>
+                </ul>
+
+                <h4>Export Formats</h4>
+
+                <table>
+                    <tr>
+                        <th>Export Type</th>
+                        <th>Format</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Daily Log</td>
+                        <td>CSV</td>
+                        <td>Personal record keeping, spot-checks</td>
+                    </tr>
+                    <tr>
+                        <td>Tax-Ready Report</td>
+                        <td>PDF</td>
+                        <td>Provide to CPA or accountant at year-end</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly Summary</td>
+                        <td>PDF</td>
+                        <td>Business records, deduction verification</td>
+                    </tr>
+                </table>
+
+                <h4>Tax-Ready Export Fields</h4>
+                <div class="workflow">
+Date     | Purpose               | Start Location | End Location    | Miles | Deduction
+---------|----------------------|-----------------|-----------------|-------|----------
+03-15-26 | Appraisal 123 Main  | Office (HQ)    | Subject + 4 Cs | 35    | $24.50
+03-16-26 | Appraisal 456 Oak   | Office (HQ)    | Subject + 3 Cs | 28    | $19.60
+03-17-26 | Appraisal 789 Pine  | Office (HQ)    | Subject + 5 Cs | 42    | $29.40
+                </div>
+
+                <h3>Integration with Financial Reporting</h3>
+                <p>Mileage totals automatically feed into the accounting dashboard:</p>
+                <ul>
+                    <li>Total miles × $0.70 = mileage deduction</li>
+                    <li>Deduction included in P&L calculations</li>
+                    <li>CSV export includes mileage for tax prep</li>
+                </ul>
+
+                <h3>Audit Defense</h3>
+                <p>Maintain these records indefinitely:</p>
+                <ul>
+                    <li>Daily mileage logs (linked to assignments)</li>
+                    <li>Assignment records (with dates and scope)</li>
+                    <li>Annual summaries for tax years</li>
+                </ul>
+
+                <p>If IRS ever audits, you can show: "On 3/15/2026, I completed appraisal of 123 Main St, visited 4 comparable properties, drove 35 miles per GPS/trip planning." This documentation is IRS-acceptable.</p>
+            </div>
+
+            <!-- SECTION 6: ADMIN DASHBOARD LAYOUT -->
+            <div class="section" id="admin-dashboard">
+                <div class="section-number">6</div>
+                <h2>Admin Dashboard Layout</h2>
+                <p>The admin dashboard is the operational nerve center—a self-contained application where Keith manages all business operations. It's a single-page app with collapsible sidebar navigation and responsive layout.</p>
+
+                <h3>Dashboard Overview</h3>
+                <p>The dashboard is organized into 10 main sections, accessible via the collapsible sidebar:</p>
+
+                <h4>Left Sidebar Navigation (Collapsible)</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Navigation</div>
+                    <div class="wireframe-box" style="background: #1B2A4A; color: white;">
+                        <strong style="display: block; margin-bottom: 8px;">Designer Homes Admin</strong>
+                        Dashboard <br/>
+                        Leads & Quotes <br/>
+                        Active Assignments <br/>
+                        Completed <br/>
+                        Invoices & Payments <br/>
+                        Mileage Tracker <br/>
+                        Clients <br/>
+                        Reports & Delivery <br/>
+                        Lender Inquiries <br/>
+                        Settings
+                    </div>
+                </div>
+
+                <h3>Section-by-Section Layout</h3>
+
+                <h4>1. Dashboard Home</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Dashboard Home</div>
+                    <div class="wireframe-box">
+                        <strong>Quick Stats Cards</strong> (4 columns)
+                        <ul>
+                            <li>This Month Revenue: $12,500</li>
+                            <li>Pending Payments: $3,200</li>
+                            <li>Active Assignments: 5</li>
+                            <li>Miles This Week: 187 (Deduction: $130.90)</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Activity Feed</strong> (Timeline)
+                        <ul>
+                            <li>Today 2:30 PM — Assignment completed: 456 Oak St</li>
+                            <li>Today 10:15 AM — Payment received: $2,500 from John Smith</li>
+                            <li>Yesterday 5:00 PM — Report delivered to Smith-456Oak</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Revenue Chart</strong> (Last 12 months)
+                        <ul>
+                            <li>Line chart showing revenue trend</li>
+                            <li>Hover to see month details</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>2. Leads & Quotes</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Leads & Quotes Management</div>
+                    <div class="wireframe-box">
+                        <strong>Lead List Table</strong>
+                        <ul>
+                            <li>Client Name | Property Address | Request Date | Status (New, Quoted, Accepted, Declined) | Actions (View, Quote, Convert to Assignment)</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Quote Template Editor</strong>
+                        <ul>
+                            <li>Pre-fill client name, property address</li>
+                            <li>Select service type (residential appraisal, desk review, etc.)</li>
+                            <li>Set price</li>
+                            <li>Send quote email to client</li>
+                            <li>Track quote response</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>3. Active Assignments</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Active Assignments</div>
+                    <div class="wireframe-box">
+                        <strong>Kanban Board</strong> (or List)
+                        <ul>
+                            <li>Column 1: Assigned (5 assignments)</li>
+                            <li>Column 2: In Progress (3 assignments)</li>
+                            <li>Column 3: Report Written (2 assignments)</li>
+                            <li>Column 4: Awaiting Payment (1 assignment)</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Assignment Detail Modal</strong> (Click to expand)
+                        <ul>
+                            <li>Client info</li>
+                            <li>Property details</li>
+                            <li>Assignment dates (assigned, inspection, due)</li>
+                            <li>Status pipeline</li>
+                            <li>Notes</li>
+                            <li>Mileage log (Log Mileage button)</li>
+                            <li>Invoice link</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>4. Completed Assignments</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Completed Assignments</div>
+                    <div class="wireframe-box">
+                        <strong>Historical Assignment List</strong>
+                        <ul>
+                            <li>Date Range Filter (last 30 days, quarter, year)</li>
+                            <li>Client Name | Property | Completion Date | Revenue | Status (Paid, Unpaid)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>5. Invoices & Payments</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Invoicing & Payment Dashboard</div>
+                    <div class="wireframe-box">
+                        <strong>Invoice List</strong>
+                        <ul>
+                            <li>Invoice # | Client | Amount | Date Issued | Due Date | Status (Draft, Sent, Paid, Overdue)</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Create Invoice</strong> (Form)
+                        <ul>
+                            <li>Link to assignment (auto-populates client, property)</li>
+                            <li>Description of services</li>
+                            <li>Amount</li>
+                            <li>Generate Stripe payment link (auto-generates)</li>
+                            <li>Send invoice email to client</li>
+                            <li>Download as PDF</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Payment Tracking</strong>
+                        <ul>
+                            <li>Paid invoices: Confirmation date, amount received, Stripe fee</li>
+                            <li>Unpaid invoices: Days overdue, reminder button</li>
+                            <li>Webhook integration: Payment status updates automatically</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>6. Mileage Tracker</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Mileage Tracker</div>
+                    <div class="wireframe-box">
+                        <strong>Quick Stats</strong>
+                        <ul>
+                            <li>This Week: 187 miles = $130.90 deduction</li>
+                            <li>This Month: 742 miles = $519.40 deduction</li>
+                            <li>Year-to-Date: 3,542 miles = $2,479.40 deduction</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Mileage Log</strong>
+                        <ul>
+                            <li>Date | Assignment | Comps Visited | Miles | Deduction | Actions (Edit, Delete)</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Export Options</strong>
+                        <ul>
+                            <li>Export by date range (CSV)</li>
+                            <li>Print tax-ready report (PDF)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>7. Clients</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Client Management</div>
+                    <div class="wireframe-box">
+                        <strong>Client Directory</strong>
+                        <ul>
+                            <li>Client Name | Contact | Total Revenue | # of Assignments | Last Assignment Date | Actions</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Client Detail</strong> (Click to view)
+                        <ul>
+                            <li>Contact information (name, email, phone, company)</li>
+                            <li>Assignment history</li>
+                            <li>Total revenue from client</li>
+                            <li>Notes / relationship info</li>
+                            <li>Add to Lender list (if applicable)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>8. Reports & Delivery</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Report Management</div>
+                    <div class="wireframe-box">
+                        <strong>Report Status Dashboard</strong>
+                        <ul>
+                            <li>Assignment | Status (In Progress, Ready for Review, Released, Delivered) | Client | Release Date</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Release Report to Portal</strong>
+                        <ul>
+                            <li>Only available AFTER payment confirmed</li>
+                            <li>Select report file (upload PDF)</li>
+                            <li>Confirm release → Report appears in client portal</li>
+                            <li>Send "Report Ready" notification email</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Review Request Automation</strong>
+                        <ul>
+                            <li>7 days after delivery: Auto-send review request link</li>
+                            <li>Track review status</li>
+                            <li>Display review on website testimonials (with permission)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>9. Lender Inquiries</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Lender Inquiry Management</div>
+                    <div class="wireframe-box">
+                        <strong>Inquiry List</strong>
+                        <ul>
+                            <li>Lender Company | Contact | Date | Status (New, Contacted, Accepted, Declined) | Actions</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Inquiry Detail</strong>
+                        <ul>
+                            <li>Lender info (company, contact person, email)</li>
+                            <li>Coverage areas requested</li>
+                            <li>Fee schedule inquiry</li>
+                            <li>Response template (with pre-filled fee schedule)</li>
+                            <li>Add to active lenders list</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>10. Settings</h4>
+                <div class="wireframe">
+                    <div class="wireframe-label">Admin Settings</div>
+                    <div class="wireframe-box">
+                        <strong>Business Info</strong>
+                        <ul>
+                            <li>Company name, license #</li>
+                            <li>Office address</li>
+                            <li>Email address</li>
+                            <li>Default invoice template settings</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Mileage Settings</strong>
+                        <ul>
+                            <li>IRS rate per mile (default: $0.70)</li>
+                            <li>Base distance office→subject (default: 15 miles)</li>
+                            <li>Per-comp increment (default: 5 miles)</li>
+                        </ul>
+                    </div>
+                    <div class="wireframe-box">
+                        <strong>Data Management</strong>
+                        <ul>
+                            <li>Export all data (CSV)</li>
+                            <li>Backup data</li>
+                            <li>Change password</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Responsive Design</h3>
+                <p>The dashboard is fully responsive:</p>
+                <ul>
+                    <li><strong>Desktop (1200px+):</strong> Full sidebar, two-column layout for data</li>
+                    <li><strong>Tablet (768–1200px):</strong> Collapsible sidebar, single-column layout</li>
+                    <li><strong>Mobile (<768px):</strong> Hamburger menu, optimized card layout</li>
+                </ul>
+
+                <h3>Data Storage (MVP)</h3>
+                <p>For the MVP, data is stored in browser localStorage:</p>
+                <ul>
+                    <li><strong>Pros:</strong> No backend required, instant access, works offline</li>
+                    <li><strong>Cons:</strong> Tied to single browser, no automatic backup</li>
+                    <li><strong>Mitigation:</strong> CSV export feature allows manual backups</li>
+                </ul>
+
+                <p><strong>Future Upgrade:</strong> Migrate to Supabase for cloud sync, multi-device access, and automatic backups.</p>
+            </div>
+
+            <!-- SECTION 7: PAYMENT WORKFLOW -->
+            <div class="section" id="payment-workflow">
+                <div class="section-number">7</div>
+                <h2>Payment Workflow (Detailed)</h2>
+                <p>The payment workflow is the critical path that turns work into revenue. It's designed to be frictionless for clients while ensuring payment before report release.</p>
+
+                <h3>Complete End-to-End Flow</h3>
+
+                <table>
+                    <tr>
+                        <th>Step</th>
+                        <th>Actor</th>
+                        <th>Action</th>
+                        <th>System Response</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>Client</td>
+                        <td>Submits quote request via designerhomesre.com/quote-form.html</td>
+                        <td>Form stored in Netlify Forms</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Zapier</td>
+                        <td>Webhook triggered on form submission</td>
+                        <td>Email notification sent to Keith + dashboard alert</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Zapier</td>
+                        <td>Auto-confirmation email sent to client</td>
+                        <td>"Thank you for your request. We'll respond within 24 hours."</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Keith</td>
+                        <td>Reviews lead in admin dashboard</td>
+                        <td>Decides: quote or decline</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Keith</td>
+                        <td>Creates quote, sends to client</td>
+                        <td>Quote email sent (template: price, timeline, services)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Client</td>
+                        <td>Reviews quote, agrees to terms</td>
+                        <td>Typically via email reply or phone call</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Keith</td>
+                        <td>Converts lead to assignment in dashboard</td>
+                        <td>Assignment created, status: "Assigned"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>Keith</td>
+                        <td>Schedules inspection, confirms date with client</td>
+                        <td>Assignment status updated: "Scheduled"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>Keith</td>
+                        <td>Completes inspection, logs mileage</td>
+                        <td>Assignment status: "Inspection Complete"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Keith</td>
+                        <td>Writes and finalizes report</td>
+                        <td>Assignment status: "Report Finalized"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td>Keith</td>
+                        <td>Creates invoice in admin dashboard</td>
+                        <td>Invoice generated with unique ID</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12</strong></td>
+                        <td>Admin Dashboard</td>
+                        <td>Generates Stripe payment link (auto)</td>
+                        <td>Professional payment page created</td>
+                    </tr>
+                    <tr>
+                        <td><strong>13</strong></td>
+                        <td>Zapier</td>
+                        <td>Sends payment link to client email</td>
+                        <td>Client receives: "Your appraisal is complete. Payment link: [Stripe URL]"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>14</strong></td>
+                        <td>Client</td>
+                        <td>Clicks payment link, chooses payment method</td>
+                        <td>Stripe Checkout page loads (mobile-friendly)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>15</strong></td>
+                        <td>Client</td>
+                        <td>Enters card or ACH details, completes payment</td>
+                        <td>Stripe processes transaction, generates receipt</td>
+                    </tr>
+                    <tr>
+                        <td><strong>16</strong></td>
+                        <td>Stripe</td>
+                        <td>Sends payment confirmed webhook</td>
+                        <td>Payment recorded in admin dashboard, invoice marked "Paid"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>17</strong></td>
+                        <td>Keith</td>
+                        <td>Verifies payment in dashboard (or automatic trigger)</td>
+                        <td>Releases report to client portal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>18</strong></td>
+                        <td>Admin Dashboard</td>
+                        <td>Uploads report PDF to Supabase Storage</td>
+                        <td>Report accessible in client's secure portal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>19</strong></td>
+                        <td>Zapier</td>
+                        <td>Sends "Report Ready" notification to client</td>
+                        <td>Client receives: "Your appraisal report is ready to download."</td>
+                    </tr>
+                    <tr>
+                        <td><strong>20</strong></td>
+                        <td>Client</td>
+                        <td>Logs into portal, downloads report</td>
+                        <td>Report PDF downloaded securely</td>
+                    </tr>
+                    <tr>
+                        <td><strong>21</strong></td>
+                        <td>Zapier (7 days later)</td>
+                        <td>Sends review request email</td>
+                        <td>Client receives: "Would you mind leaving a review? [Link to Google review]"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>22</strong></td>
+                        <td>Keith</td>
+                        <td>Marks assignment complete, archives</td>
+                        <td>Assignment moved to "Completed" section, metrics updated</td>
+                    </tr>
+                </table>
+
+                <h3>Payment Enforcement: Report Gate</h3>
+                <div class="highlight-box">
+                    <strong>Critical Rule:</strong> Reports CANNOT be released until payment is confirmed.
+                    <br><br>
+                    <strong>Implementation:</strong> In the admin dashboard, the "Release Report" button is disabled until the invoice is marked as "Paid." This prevents accidental release before payment.
+                </div>
+
+                <h3>Payment Timeline Expectations</h3>
+                <ul>
+                    <li><strong>Same-day completion:</strong> Client receives payment link within hours of report completion</li>
+                    <li><strong>Fast payment:</strong> Card payments process instantly; ACH transfers typically 1–2 business days</li>
+                    <li><strong>Report access:</strong> Client access granted within minutes of payment confirmation</li>
+                    <li><strong>Stripe settlement:</strong> Funds appear in your bank account within 1–2 business days</li>
+                </ul>
+
+                <h3>Fallback Options</h3>
+                <p>If a client prefers not to use Stripe:</p>
+                <ul>
+                    <li><strong>Zelle Transfer:</strong> Client can transfer directly to your bank. Admin notes manual payment confirmation, then releases report.</li>
+                    <li><strong>Check:</strong> For lenders or corporate clients. Admin waits for check to clear before releasing report.</li>
+                    <li><strong>ACH via Stripe:</strong> Client can enter bank details on Stripe checkout page (lower fees)</li>
+                </ul>
+
+                <h3>Overdue Payment Handling</h3>
+                <p>If invoice remains unpaid after 7 days:</p>
+                <ol>
+                    <li>Admin dashboard displays "Overdue" badge</li>
+                    <li>Keith receives email reminder</li>
+                    <li>Optional: Send automated friendly reminder email to client</li>
+                    <li>Report remains unreleased until payment received</li>
+                </ol>
+
+                <h3>Discount & Proration Rules</h3>
+                <p>The system supports:</p>
+                <ul>
+                    <li><strong>Fixed price:</strong> Standard $X per appraisal</li>
+                    <li><strong>Custom pricing:</strong> Rush fee (+$100), additional comps (+$25 each), etc.</li>
+                    <li><strong>Manual adjustments:</strong> Keith can adjust invoice amount before sending payment link (e.g., client discount)</li>
+                </ul>
+
+                <p>Changes to invoice amount trigger new Stripe payment link; customer doesn't see stale links.</p>
+            </div>
+
+            <!-- SECTION 8: AI & AUTOMATION STRATEGY -->
+            <div class="section" id="automation">
+                <div class="section-number">8</div>
+                <h2>AI & Automation Strategy</h2>
+                <p>Automation multiplies your capacity without hiring staff. The strategy prioritizes high-ROI automations that require minimal setup and cost.</p>
+
+                <h3>Tier 1: Free Automation (Implement Now)</h3>
+                <p>These automations require zero cost and can be set up in a few hours.</p>
+
+                <h4>Zapier Free Tier (5 Zaps Max)</h4>
+                <p>Zapier is the automation backbone. The free tier allows 5 active automations:</p>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>Zap 1: Quote Form → Keith Notification</strong>
+                        <p><strong>Trigger:</strong> New form submission on Netlify Forms <br> <strong>Action:</strong> Send email to keith@designerhomesre.com with form details</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Zap 2: Form Submission → Client Confirmation</strong>
+                        <p><strong>Trigger:</strong> New form submission <br> <strong>Action:</strong> Send auto-response email to client ("We'll respond within 24 hours")</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Zap 3: Invoice Created → Payment Link Email</strong>
+                        <p><strong>Trigger:</strong> New invoice in admin dashboard <br> <strong>Action:</strong> Send Stripe payment link to client</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Zap 4: Payment Received → Report Release Alert</strong>
+                        <p><strong>Trigger:</strong> Stripe payment webhook <br> <strong>Action:</strong> Notify Keith to release report, update invoice status</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Zap 5: Report Delivered → Review Request (7 days)</strong>
+                        <p><strong>Trigger:</strong> Report released to client <br> <strong>Action:</strong> Schedule review request email for 7 days later</p>
+                    </div>
+                </div>
+
+                <h4>HubSpot Free CRM</h4>
+                <ul>
+                    <li><strong>Contact Management:</strong> Store client info, all interactions in one place</li>
+                    <li><strong>Deal Pipeline:</strong> Track quotes through to completion</li>
+                    <li><strong>Email Templates:</strong> Pre-written quote templates, follow-up sequences</li>
+                    <li><strong>Calendar:</strong> Schedule inspections, sync with Google Calendar</li>
+                    <li><strong>Reports:</strong> Simple sales metrics dashboard</li>
+                </ul>
+
+                <h4>Google Workspace (Existing)</h4>
+                <ul>
+                    <li><strong>Gmail:</strong> Professional email (info@designerhomesre.com)</li>
+                    <li><strong>Google Drive:</strong> Document storage, templates</li>
+                    <li><strong>Google Calendar:</strong> Schedule inspections, share with clients if needed</li>
+                    <li><strong>Google Forms:</strong> Backup for client intake</li>
+                </ul>
+
+                <p><strong>Cost:</strong> $7/month (existing)</p>
+
+                <h3>Tier 2: Low-Cost Automation (Month 2)</h3>
+                <p>As the business scales, add these affordable automations.</p>
+
+                <h4>Zapier Starter Plan ($20/month)</h4>
+                <p>Upgrade to add more complex automations:</p>
+                <ul>
+                    <li><strong>Multi-step zaps:</strong> If X happens, then do Y, then do Z (e.g., "If payment received and amount matches, THEN release report AND send confirmation email")</li>
+                    <li><strong>Conditional logic:</strong> Zaps that branch based on data (e.g., "If service type = desk review, send different email template")</li>
+                    <li><strong>Delay actions:</strong> Zaps that wait X days before triggering (e.g., "Wait 7 days after report delivery, then send review request")</li>
+                    <li><strong>Unlimited zaps:</strong> No longer limited to 5</li>
+                </ul>
+
+                <h4>Calendly Free</h4>
+                <p>If you want clients to self-schedule inspections:</p>
+                <ul>
+                    <li>Shared scheduling link on website</li>
+                    <li>Auto-syncs with your Google Calendar</li>
+                    <li>Prevents double-booking</li>
+                    <li>Sends confirmation emails automatically</li>
+                </ul>
+
+                <h4>Google Business Profile (Free)</h4>
+                <ul>
+                    <li>Google review requests automation</li>
+                    <li>Business profile appears in local search results</li>
+                    <li>Reviews boost local SEO</li>
+                </ul>
+
+                <h3>Tier 3: AI Enhancements (Future)</h3>
+                <p>When revenue justifies it, consider AI-powered tools:</p>
+
+                <h4>AI-Powered Intake</h4>
+                <ul>
+                    <li><strong>Tool:</strong> Typeform with conditional logic + Zapier → ChatGPT (via plugin)</li>
+                    <li><strong>Benefit:</strong> "Smart" form that adapts questions based on answers. For example, if "residential appraisal" is selected, ask about # of bedrooms. If "commercial" is selected, ask about property type and square footage.</li>
+                    <li><strong>Cost:</strong> Typeform free tier + Zapier $20/mo</li>
+                </ul>
+
+                <h4>Lead Scoring</h4>
+                <ul>
+                    <li><strong>Tool:</strong> HubSpot + Zapier</li>
+                    <li><strong>Benefit:</strong> Automatically prioritize leads based on service type, property value, location. High-value residential appraisals = priority "hot lead," desk reviews = lower priority.</li>
+                    <li><strong>Cost:</strong> Free (HubSpot free tier includes basic scoring)</li>
+                </ul>
+
+                <h4>Draft Email Responses</h4>
+                <ul>
+                    <li><strong>Tool:</strong> HubSpot email templates + merge fields</li>
+                    <li><strong>Benefit:</strong> Pre-written responses for common questions. Template system fills in client name, property address, quote amount automatically.</li>
+                    <li><strong>Cost:</strong> Free</li>
+                </ul>
+
+                <h4>Sentiment Analysis on Reviews</h4>
+                <ul>
+                    <li><strong>Tool:</strong> Google Business Profile + Zapier → sentiment analysis API</li>
+                    <li><strong>Benefit:</strong> Monitor Google reviews for negative feedback, alert you to issues</li>
+                    <li><strong>Cost:</strong> Zapier $20/mo + API cost (~$5/mo for low volume)</li>
+                </ul>
+
+                <h3>Cost-Effective AI Philosophy</h3>
+                <div class="highlight-box">
+                    <p><strong>Key Insight:</strong> At Designer Homes' scale (10–50 assignments/month), most "AI" features are better served by smart automation (conditional logic, templates, scheduled sequences) rather than actual AI models.</p>
+                    <p style="margin-bottom: 0;"><strong>Result:</strong> 90% of the benefit at 10% of the cost. Spend money only when automation + templates hit their limit.</p>
+                </div>
+
+                <h3>Implementation Timeline</h3>
+                <table>
+                    <tr>
+                        <th>Week</th>
+                        <th>Action</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Week 1</strong></td>
+                        <td>Set up Zapier 5 zaps (form notification, confirmation, payment, review request)</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Week 2</strong></td>
+                        <td>Set up HubSpot CRM, create email templates</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Month 2</strong></td>
+                        <td>Upgrade Zapier to Starter ($20/mo), add complex automations</td>
+                        <td>+$20/mo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Month 3</strong></td>
+                        <td>Optional: Calendly for self-scheduling, Google Business Profile optimization</td>
+                        <td>$0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- SECTION 9: SECURITY ARCHITECTURE -->
+            <div class="section" id="security">
+                <div class="section-number">9</div>
+                <h2>Security Architecture</h2>
+                <p>Protecting client data and financial information is non-negotiable. The security model is designed to be robust without sacrificing simplicity.</p>
+
+                <h3>Infrastructure Security</h3>
+
+                <h4>HTTPS Everywhere</h4>
+                <ul>
+                    <li><strong>Netlify:</strong> Auto-SSL certificate for public site</li>
+                    <li><strong>All endpoints:</strong> Force HTTPS, no unencrypted connections</li>
+                </ul>
+
+                <h4>DNS & Domain</h4>
+                <ul>
+                    <li><strong>Cloudflare (Free):</strong> Manage DNS, basic DDoS protection</li>
+                    <li><strong>CAA Records:</strong> Restrict certificate issuance (prevent unauthorized SSL certs)</li>
+                </ul>
+
+                <h3>Authentication & Access Control</h3>
+
+                <h4>Admin Dashboard</h4>
+                <ul>
+                    <li><strong>Single User:</strong> Keith's personal dashboard, password-protected</li>
+                    <li><strong>Strong Password:</strong> Minimum 12 characters, stored hashed in localStorage (MVP) or Supabase Auth (future)</li>
+                    <li><strong>Session Timeout:</strong> 30 minutes inactivity → automatic logout</li>
+                    <li><strong>No Multi-User Support (MVP):</strong> If future staff needs access, upgrade to Supabase Auth with role-based access control</li>
+                </ul>
+
+                <h4>Client Portal</h4>
+                <ul>
+                    <li><strong>Supabase Auth:</strong> Email + password login, JWT tokens</li>
+                    <li><strong>Row-Level Security (RLS):</strong> Each client can only access their own reports</li>
+                    <li><strong>Password Reset:</strong> Email-based reset link (expires after 1 hour)</li>
+                    <li><strong>Session Management:</strong> JWT tokens expire after 24 hours</li>
+                </ul>
+
+                <h3>Data Protection</h3>
+
+                <h4>File Storage</h4>
+                <ul>
+                    <li><strong>Supabase Storage:</strong> Encrypted at rest with AES-256</li>
+                    <li><strong>File Access:</strong> Only authenticated clients can download their reports</li>
+                    <li><strong>File Types Restricted:</strong> Accept PDF and DOCX only, block executables</li>
+                    <li><strong>File Size Limit:</strong> 25MB max per report (prevents abuse)</li>
+                </ul>
+
+                <h4>Database</h4>
+                <ul>
+                    <li><strong>Supabase PostgreSQL:</strong> Encrypted in transit and at rest</li>
+                    <li><strong>Automatic Backups:</strong> Daily snapshots (Supabase free tier includes 7-day backup history)</li>
+                    <li><strong>Row-Level Security:</strong> Policies prevent unauthorized data access</li>
+                </ul>
+
+                <h4>Sensitive Information</h4>
+                <ul>
+                    <li><strong>Never Store:</strong> Credit card numbers, bank routing numbers, SSNs</li>
+                    <li><strong>Stripe Handles Cards:</strong> Stripe's PCI-compliant system, not your servers</li>
+                    <li><strong>Admin Notes:</strong> Keep client notes minimal, no sensitive data in descriptions</li>
+                </ul>
+
+                <h3>Application Security</h3>
+
+                <h4>CORS Configuration</h4>
+                <ul>
+                    <li><strong>Allow Only:</strong> designerhomesre.com, subdomain.designerhomesre.com</li>
+                    <li><strong>Block:</strong> Cross-origin requests from other domains</li>
+                </ul>
+
+                <h4>Content Security Policy (CSP)</h4>
+                <ul>
+                    <li><strong>Headers:</strong> Restrict inline scripts, external sources</li>
+                    <li><strong>Prevent:</strong> XSS (cross-site scripting) attacks, injection attacks</li>
+                </ul>
+
+                <h4>API Security</h4>
+                <ul>
+                    <li><strong>Stripe API Keys:</strong> Keep secret keys in environment variables, never in client code</li>
+                    <li><strong>Webhook Verification:</strong> Verify Stripe webhook signatures before processing</li>
+                    <li><strong>Rate Limiting:</strong> Limit API requests to prevent brute-force attacks</li>
+                </ul>
+
+                <h3>Data Breach Response Plan</h3>
+                <ol>
+                    <li><strong>Detect:</strong> Monitor logs for unusual activity, Supabase alerts for anomalies</li>
+                    <li><strong>Contain:</strong> Disable compromised account, rotate API keys</li>
+                    <li><strong>Notify:</strong> Contact affected clients within 24 hours (email, phone)</li>
+                    <li><strong>Investigate:</strong> Review logs, determine scope of exposure</li>
+                    <li><strong>Remediate:</strong> Patch vulnerabilities, update security measures</li>
+                    <li><strong>Document:</strong> Keep records for legal/compliance purposes</li>
+                </ol>
+
+                <h3>Regular Security Checks</h3>
+                <ul>
+                    <li><strong>Monthly:</strong> Review admin access logs for unauthorized login attempts</li>
+                    <li><strong>Quarterly:</strong> Test password reset flows, verify SSL certificates</li>
+                    <li><strong>Annually:</strong> Full security audit, update dependencies, penetration test if budget allows</li>
+                </ul>
+
+                <h3>Compliance & Regulations</h3>
+
+                <h4>GLBA (Gramm-Leach-Bliley Act)</h4>
+                <p>Financial institutions are subject to GLBA. As an appraiser, you likely interact with banks' lending process. Best practices:</p>
+                <ul>
+                    <li>Keep client data private (don't share with third parties without consent)</li>
+                    <li>Use secure channels for communication</li>
+                    <li>Maintain audit trail of data access</li>
+                </ul>
+
+                <h4>HIPAA (If Applicable)</h4>
+                <p>If you ever work with health-related properties (hospitals, clinics), HIPAA may apply. For now, assumed non-applicable, but monitor if scope expands.</p>
+
+                <h4>State Licensing Requirements</h4>
+                <p>Some states require appraisers to maintain client confidentiality. Verify with your state board and ensure your data handling complies.</p>
+            </div>
+
+            <!-- SECTION 10: LENDER/PANEL INQUIRY WORKFLOW -->
+            <div class="section" id="lender-workflow">
+                <div class="section-number">10</div>
+                <h2>Lender/Panel Inquiry Workflow</h2>
+                <p>Lenders (mortgage companies, banks, title companies) often need to establish appraisers on their panels. Designer Homes needs a streamlined intake for these inquiries.</p>
+
+                <h3>Workflow Overview</h3>
+
+                <ol>
+                    <li><strong>Lender Discovery:</strong> Lender finds designerhomesre.com/lender-inquiry.html</li>
+                    <li><strong>Inquiry Submission:</strong> Lender completes form with company info, coverage needs, fee expectations</li>
+                    <li><strong>Notification:</strong> Keith receives email notification + entry in admin dashboard</li>
+                    <li><strong>Response:</strong> Keith responds with fee schedule, coverage confirmation, licensing info</li>
+                    <li><strong>Panel Acceptance:</strong> If interested, lender adds Designer Homes to their panel</li>
+                    <li><strong>Ongoing Management:</strong> Keith tracks active lenders, manages assignment flow from each panel</li>
+                </ol>
+
+                <h3>Lender Inquiry Form</h3>
+                <p>The form is hosted at <code>designerhomesre.com/lender-inquiry.html</code> and collects:</p>
+
+                <table>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Lender Company Name</td>
+                        <td>Text</td>
+                        <td>Company name</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Name</td>
+                        <td>Text</td>
+                        <td>Point of contact</td>
+                    </tr>
+                    <tr>
+                        <td>Contact Email</td>
+                        <td>Email</td>
+                        <td>Primary communication</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>Phone</td>
+                        <td>Backup contact</td>
+                    </tr>
+                    <tr>
+                        <td>Coverage Areas (Checkboxes)</td>
+                        <td>Multi-select</td>
+                        <td>Service areas (Residential, Commercial, Vacant Land, Farm/Ranch)</td>
+                    </tr>
+                    <tr>
+                        <td>Additional Notes</td>
+                        <td>Textarea</td>
+                        <td>Fee structure questions, timeline, special requirements</td>
+                    </tr>
+                </table>
+
+                <h3>Admin Dashboard: Lender Inquiries Section</h3>
+                <p>In the admin dashboard, Keith sees a dedicated "Lender Inquiries" section:</p>
+
+                <ul>
+                    <li><strong>Inquiry List:</strong> All lenders who have submitted inquiries, status (New, Contacted, Accepted, Declined)</li>
+                    <li><strong>Inquiry Detail:</strong> Full inquiry info + Keith's response notes</li>
+                    <li><strong>Response Template:</strong> Pre-filled response email with Designer Homes' fee schedule, license #, coverage areas</li>
+                    <li><strong>Add to Active Lenders:</strong> Once accepted, move lender to active list for ongoing management</li>
+                </ul>
+
+                <h3>Fee Schedule & License Information</h3>
+                <p>The lender inquiry form and Keith's responses prominently display:</p>
+
+                <div class="highlight-box">
+                    <p><strong>Designer Homes Real Estate Services</strong></p>
+                    <p><strong>License #:</strong> A9156</p>
+                    <p><strong>Service Areas:</strong> Residential, Commercial, Vacant Land</p>
+                    <p style="margin-bottom: 0;"><strong>Standard Fees:</strong> [Customizable per lender] Typically $350–$500 depending on property type and complexity</p>
+                </div>
+
+                <h3>License Display on Website</h3>
+                <p>The lender inquiry page includes:</p>
+                <ul>
+                    <li>Prominent license number display (A9156)</li>
+                    <li>License verification link (link to state appraiser board if available)</li>
+                    <li>Years in business, professional affiliations</li>
+                    <li>Testimonials from existing lender clients (if available)</li>
+                </ul>
+
+                <h3>Ongoing Lender Management</h3>
+
+                <h4>Active Lender List</h4>
+                <p>Once a lender is accepted, Keith tracks:</p>
+                <ul>
+                    <li>Lender name, contact, fee agreement</li>
+                    <li>Coverage areas they assign work from</li>
+                    <li>Number of assignments received, frequency</li>
+                    <li>Payment terms (when they pay Designer Homes)</li>
+                    <li>Quality feedback, issues, improvements</li>
+                </ul>
+
+                <h4>Assignment Workflow from Lender Panel</h4>
+                <ol>
+                    <li>Lender emails or calls assignment request</li>
+                    <li>Keith logs assignment in admin dashboard (links to lender)</li>
+                    <li>Assignment proceeds through normal workflow (inspection, report, payment)</li>
+                    <li>Payment collected from client OR directly from lender (depending on agreement)</li>
+                </ol>
+
+                <h3>Lender Response Email Template</h3>
+                <p>Keith has a pre-written template that's auto-populated when responding to inquiry:</p>
+
+                <div class="workflow">
+Subject: Designer Homes Real Estate Services — Panel Inquiry Response
+
+Dear [Lender Contact Name],
+
+Thank you for your interest in working with Designer Homes Real Estate Services!
+
+We specialize in residential and commercial appraisals throughout [coverage area]. Our
+appraisers are licensed, experienced, and committed to fast turnaround and quality reports.
+
+Service Details:
+• Residential Appraisals: $[fee]
+• Commercial Appraisals: $[fee]
+• Turnaround: 3–5 business days
+• Coverage Areas: [selected areas]
+
+Licensing Information:
+• License #: A9156
+• State Board: [link]
+• Years in Business: [X years]
+
+Next Steps:
+If you'd like to add us to your appraiser panel, please reply with your panel setup
+instructions, fee adjustment requests (if any), and any specific requirements.
+
+Looking forward to working together!
+
+Best regards,
+Keith Manning Jr.
+Designer Homes Real Estate Services
+                </div>
+            </div>
+
+            <!-- SECTION 11: COST BREAKDOWN -->
+            <div class="section" id="cost-breakdown">
+                <div class="section-number">11</div>
+                <h2>Complete Cost Breakdown</h2>
+                <p>Transparency on operating costs is essential for business planning. Here's the complete cost structure.</p>
+
+                <h3>Monthly Recurring Costs</h3>
+
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Cost</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Google Workspace</td>
+                        <td class="cost-paid">$7/month</td>
+                        <td>Business email (info@designerhomesre.com), Drive, Calendar, Docs. Essential for professional operations.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Netlify Hosting</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free tier covers public website (100GB bandwidth). Upgrade to Pro ($20/mo) only if traffic exceeds 100GB/month (unlikely for appraisal business).</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Netlify Forms</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free tier: 100 form submissions/month. Upgrade to $20/mo for unlimited submissions if business scales significantly.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">HubSpot CRM</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free tier includes contacts, deals, email templates, basic reporting. No cost to use.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Supabase (Client Portal)</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free tier: 500MB database, 1GB storage, 50K monthly active users, 100 concurrent connections. Sufficient for MVP and early growth.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Stripe</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>No monthly fee. Pay only per transaction (2.9% + $0.30 per card, 0.8% for ACH). See variable costs below.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Zapier</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free tier: 5 active automations. Upgrade to $20/month (Starter) for unlimited automations in Month 2 if needed.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Cloudflare DNS</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free tier provides DNS management, basic DDoS protection. Pro tier ($20/mo) not needed at this stage.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Google Analytics</td>
+                        <td class="cost-free">$0/month</td>
+                        <td>Free analytics for website traffic, user behavior, conversion tracking.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item" style="border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy);"><strong>TOTAL (Fixed)</strong></td>
+                        <td class="cost-paid" style="border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy);"><strong>$7/month</strong></td>
+                        <td style="border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy);"></td>
+                    </tr>
+                </table>
+
+                <h3>Variable Costs (Per Assignment)</h3>
+
+                <h4>Payment Processing Fees</h4>
+                <p>These fees apply only when you collect payment and depend on payment method:</p>
+
+                <table>
+                    <tr>
+                        <th>Payment Method</th>
+                        <th>Fee</th>
+                        <th>Example ($3,000 Appraisal)</th>
+                    </tr>
+                    <tr>
+                        <td>Credit Card</td>
+                        <td>2.9% + $0.30</td>
+                        <td>$0.97 fee → You receive $2,999.03</td>
+                    </tr>
+                    <tr>
+                        <td>Bank Transfer (ACH)</td>
+                        <td>0.8% (capped at $5)</td>
+                        <td>$5.00 fee (capped) → You receive $2,995.00</td>
+                    </tr>
+                    <tr>
+                        <td>Zelle (No Stripe)</td>
+                        <td>$0</td>
+                        <td>$0 fee → You receive $3,000.00</td>
+                    </tr>
+                </table>
+
+                <p><strong>Recommendation:</strong> Offer Stripe as primary, Zelle as secondary. Stripe's fees are worth the professional appearance and automation benefits.</p>
+
+                <h3>Annual Recurring Costs</h3>
+
+                <table>
+                    <tr>
+                        <th>Item</th>
+                        <th>Cost</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">Domain Registration</td>
+                        <td class="cost-paid">~$15/year</td>
+                        <td>designerhomesre.com via GoDaddy (or your registrar). Renews annually.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item">SSL Certificate</td>
+                        <td class="cost-free">$0/year</td>
+                        <td>Netlify provides free auto-renewing SSL certificate. No additional cost.</td>
+                    </tr>
+                    <tr>
+                        <td class="cost-item" style="border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy);"><strong>TOTAL (Annual)</strong></td>
+                        <td class="cost-paid" style="border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy);"><strong>~$15/year</strong></td>
+                        <td style="border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy);"></td>
+                    </tr>
+                </table>
+
+                <h3>Cost Summary</h3>
+
+                <div class="highlight-box">
+                    <p><strong>Baseline Monthly Cost:</strong> $7/month (Google Workspace only)</p>
+                    <p><strong>Everything Else:</strong> Free tier services (Netlify, HubSpot, Supabase, Zapier, Cloudflare, Google Analytics)</p>
+                    <p><strong>Variable Costs:</strong> Stripe fees (~$30–50/month for 10–20 assignments/month at average $3K per assignment)</p>
+                    <p style="margin-bottom: 0;"><strong>Total Monthly Cost (15 assignments/month):</strong> ~$45/month ($7 fixed + ~$38 in Stripe fees)</p>
+                </div>
+
+                <h3>Optional Upgrades (When Revenue Justifies)</h3>
+
+                <table>
+                    <tr>
+                        <th>Service</th>
+                        <th>Cost</th>
+                        <th>When to Upgrade</th>
+                    </tr>
+                    <tr>
+                        <td>Zapier Starter</td>
+                        <td>+$20/month</td>
+                        <td>Month 2–3, when you want more complex automations</td>
+                    </tr>
+                    <tr>
+                        <td>Google Maps Distance API</td>
+                        <td>~$25–50/month</td>
+                        <td>When you want accurate mileage instead of estimates (optional)</td>
+                    </tr>
+                    <tr>
+                        <td>Wave Accounting</td>
+                        <td>$0/month</td>
+                        <td>Month 3–4, for professional accounting records</td>
+                    </tr>
+                    <tr>
+                        <td>QuickBooks Self-Employed</td>
+                        <td>$15/month</td>
+                        <td>If filing business taxes and want integrated tax estimates</td>
+                    </tr>
+                    <tr>
+                        <td>FreshBooks</td>
+                        <td>$17/month</td>
+                        <td>If you expand to hourly consulting work</td>
+                    </tr>
+                    <tr>
+                        <td>Supabase Paid Tier</td>
+                        <td>$25/month</td>
+                        <td>If you scale beyond free tier limits (unlikely in Year 1)</td>
+                    </tr>
+                </table>
+
+                <h3>Cost Control Strategies</h3>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>Prefer ACH Payments</strong>
+                        <p>Encourage clients to pay via bank transfer (ACH) instead of cards. Save 2.1% per transaction.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Volume Discounts</strong>
+                        <p>Stripe offers volume discounts at scale. Contact their sales team if processing >$20K/month.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Free Tier Maximization</strong>
+                        <p>Use free tiers until they genuinely become a bottleneck. Upgrade only for specific needs.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Avoid Subscription Creep</strong>
+                        <p>Every $20/month add-on is $240/year. Audit quarterly and cut services that aren't ROI-positive.</p>
+                    </div>
+                </div>
+
+                <h3>Pricing Strategy for Clients</h3>
+                <p>To cover costs and ensure profitability:</p>
+
+                <table>
+                    <tr>
+                        <th>Service</th>
+                        <th>Recommended Price</th>
+                        <th>Stripe Fee (Card)</th>
+                        <th>Net to You</th>
+                    </tr>
+                    <tr>
+                        <td>Residential Appraisal</td>
+                        <td>$400–$500</td>
+                        <td>~$12</td>
+                        <td>~$388–$488</td>
+                    </tr>
+                    <tr>
+                        <td>Commercial Appraisal</td>
+                        <td>$600–$900</td>
+                        <td>~$18–27</td>
+                        <td>~$573–$882</td>
+                    </tr>
+                    <tr>
+                        <td>Desk Review</td>
+                        <td>$200–$300</td>
+                        <td>~$6–9</td>
+                        <td>~$194–$294</td>
+                    </tr>
+                </table>
+
+                <p><strong>Gross Margin:</strong> At $400 appraisal with $12 Stripe fee, your gross is ~97%, leaving room for mileage, software, and profit.</p>
+            </div>
+
+            <!-- SECTION 12: BUILD ROADMAP -->
+            <div class="section" id="roadmap">
+                <div class="section-number">12</div>
+                <h2>Build Roadmap (Revised)</h2>
+                <p>A phased implementation plan that builds the platform incrementally, allowing you to start operating immediately while adding features over 8–10 weeks.</p>
+
+                <h3>Phase 1: Foundation & Launch (Week 1–2)</h3>
+                <p>Get the website live and basic admin dashboard operational. Goal: Accept first lead and invoice.</p>
+
+                <div class="roadmap-phase">
+                    <h4>Website & Hosting</h4>
+                    <ul>
+                        <li>Deploy static HTML site to Netlify</li>
+                        <li>Configure DNS (designerhomesre.com → Netlify)</li>
+                        <li>Set up Google Analytics</li>
+                        <li>Create lead intake form (Netlify Forms)</li>
+                        <li>Create lender inquiry form (Netlify Forms)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Admin Dashboard (MVP)</h4>
+                    <ul>
+                        <li>Create self-contained HTML/JS dashboard</li>
+                        <li>Implement localStorage for data persistence</li>
+                        <li>Build assignment CRUD (Create, Read, Update, Delete)</li>
+                        <li>Build invoice generator (simple form → PDF download)</li>
+                        <li>Basic dashboard metrics (total revenue, pending payments)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Email & Notifications</h4>
+                    <ul>
+                        <li>Set up Google Workspace (business email)</li>
+                        <li>Configure Zapier Account</li>
+                        <li>Create Zap 1: Form submission → Keith notification</li>
+                        <li>Create Zap 2: Form submission → Client confirmation</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Testing & Launch</h4>
+                    <ul>
+                        <li>Test entire lead → invoice workflow manually</li>
+                        <li>Test form submissions, Zapier automation</li>
+                        <li>Deploy to production</li>
+                    </ul>
+                </div>
+
+                <p><strong>Estimated Time:</strong> 60 hours of development. Can be done in 2 weeks with focused effort.</p>
+
+                <h3>Phase 2: Payment Processing (Week 2–3)</h3>
+                <p>Integrate Stripe payment links. Goal: Collect first payment electronically.</p>
+
+                <div class="roadmap-phase">
+                    <h4>Stripe Setup</h4>
+                    <ul>
+                        <li>Create Stripe account at stripe.com</li>
+                        <li>Verify business information</li>
+                        <li>Connect bank account for payouts</li>
+                        <li>Generate API keys (publishable + secret)</li>
+                        <li>Enable webhook notifications</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Payment Integration</h4>
+                    <ul>
+                        <li>Add "Generate Payment Link" button in admin dashboard</li>
+                        <li>Implement Stripe Payment Links API</li>
+                        <li>Store payment link URL in invoice record</li>
+                        <li>Create "Copy Payment Link" button (for email sending)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Webhook Handling</h4>
+                    <ul>
+                        <li>Set up webhook receiver (simple endpoint)</li>
+                        <li>Verify Stripe webhook signatures</li>
+                        <li>Update invoice status to "Paid" on successful payment</li>
+                        <li>Trigger "Payment Received" email notification</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Automation (Zapier Zap 3)</h4>
+                    <ul>
+                        <li>Create Zapier Zap: Invoice created → Send payment link to client email</li>
+                        <li>Test full workflow: Create invoice → Payment link email → Client pays → Confirmation</li>
+                    </ul>
+                </div>
+
+                <p><strong>Estimated Time:</strong> 40 hours. Stripe integration is straightforward.</p>
+
+                <h3>Phase 3: Client Portal & Report Delivery (Week 3–4)</h3>
+                <p>Build secure authenticated portal where clients access reports. Goal: Release first report securely.</p>
+
+                <div class="roadmap-phase">
+                    <h4>Supabase Setup</h4>
+                    <ul>
+                        <li>Create Supabase project (free tier)</li>
+                        <li>Create PostgreSQL database schema</li>
+                        <li>Create file storage bucket for reports</li>
+                        <li>Enable Row-Level Security</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Client Authentication</h4>
+                    <ul>
+                        <li>Implement Supabase Auth (email + password)</li>
+                        <li>Create signup flow (admin invites client, sends signup link)</li>
+                        <li>Create login flow (client accesses portal)</li>
+                        <li>Implement JWT token management</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Report Portal</h4>
+                    <ul>
+                        <li>Build client dashboard (list of assignments/reports)</li>
+                        <li>Implement file upload (admin uploads report PDF)</li>
+                        <li>Implement file download (client downloads report)</li>
+                        <li>Add access control (client can only access own reports)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Integration</h4>
+                    <ul>
+                        <li>Link admin dashboard "Release Report" button to Supabase upload</li>
+                        <li>Generate secure download link for client</li>
+                        <li>Create Zapier Zap: Report released → Send "Report Ready" email to client</li>
+                    </ul>
+                </div>
+
+                <p><strong>Estimated Time:</strong> 80 hours. This is the most complex phase.</p>
+
+                <h3>Phase 4: Mileage Tracker & CRM (Week 4–5)</h3>
+                <p>Add mileage logging to admin dashboard. Integrate HubSpot for contact management.</p>
+
+                <div class="roadmap-phase">
+                    <h4>Mileage Tracker</h4>
+                    <ul>
+                        <li>Create mileage log form in admin dashboard</li>
+                        <li>Implement mileage calculation (base + per-comp formula)</li>
+                        <li>Store mileage entries in localStorage (linked to assignments)</li>
+                        <li>Create mileage dashboard (weekly/monthly/YTD totals)</li>
+                        <li>Implement CSV export for tax purposes</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>HubSpot CRM</h4>
+                    <ul>
+                        <li>Create HubSpot account (free tier)</li>
+                        <li>Create contact record for each client</li>
+                        <li>Create "Deal" for each assignment (tracks pipeline)</li>
+                        <li>Create email templates for quotes and follow-ups</li>
+                        <li>Configure basic workflow automation (optional at this stage)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Estimated Time:</strong> 40 hours.</p>
+
+                <h3>Phase 5: Optimization & Polish (Week 5–6)</h3>
+                <p>Refine workflows, improve UX, add analytics. Goal: Smooth, professional operations.</p>
+
+                <div class="roadmap-phase">
+                    <h4>Admin Dashboard Refinements</h4>
+                    <ul>
+                        <li>Add revenue charts (revenue by month, client, service type)</li>
+                        <li>Implement data validation (prevent invalid entries)</li>
+                        <li>Add search and filtering (find assignments by client, date, status)</li>
+                        <li>Implement undo/redo for critical actions</li>
+                        <li>Add keyboard shortcuts for power users</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Automation Expansion</h4>
+                    <ul>
+                        <li>Create Zapier Zap 4: Payment received → Report release notification</li>
+                        <li>Create Zapier Zap 5: Report delivered → Review request (7-day delay)</li>
+                        <li>Test all 5 zaps end-to-end</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Documentation & Training</h4>
+                    <ul>
+                        <li>Create admin dashboard user guide (for future staff training)</li>
+                        <li>Document Zapier workflows</li>
+                        <li>Create runbook for common operations (create invoice, release report, add client)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Estimated Time:</strong> 30 hours.</p>
+
+                <h3>Phase 6: Monitoring & Maintenance (Week 6+, Ongoing)</h3>
+                <p>Monitor system health, gather metrics, plan for scale.</p>
+
+                <div class="roadmap-phase">
+                    <h4>Metrics & Monitoring</h4>
+                    <ul>
+                        <li>Monitor website traffic (Google Analytics)</li>
+                        <li>Track conversion rate (leads → assignments)</li>
+                        <li>Track payment success rate (invoices → paid)</li>
+                        <li>Monitor email deliverability (Zapier logs)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Operational Improvements</h4>
+                    <ul>
+                        <li>Weekly: Review admin dashboard metrics</li>
+                        <li>Monthly: Analyze revenue, identify patterns</li>
+                        <li>Quarterly: User feedback, gather feature requests</li>
+                        <li>Quarterly: Security audit, data backup verification</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <h4>Future Roadmap (Months 3+)</h4>
+                    <ul>
+                        <li><strong>Supabase Migration:</strong> Migrate admin dashboard from localStorage to Supabase (enables multi-device, auto-backup)</li>
+                        <li><strong>Advanced Automation:</strong> Upgrade Zapier to Starter plan, add complex workflows</li>
+                        <li><strong>Accounting Integration:</strong> Integrate Wave Accounting for professional bookkeeping</li>
+                        <li><strong>Google Maps API:</strong> Integrate for accurate mileage calculation</li>
+                        <li><strong>Staff Portal:</strong> If hiring appraisers, create staff-specific dashboard</li>
+                        <li><strong>Mobile App:</strong> Native iOS/Android app for field inspections (future)</li>
+                    </ul>
+                </div>
+
+                <h3>Total Project Timeline</h3>
+
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Duration</th>
+                        <th>Hours</th>
+                        <th>Key Deliverable</th>
+                    </tr>
+                    <tr>
+                        <td>Phase 1: Foundation</td>
+                        <td>Week 1–2</td>
+                        <td>60h</td>
+                        <td>Live website + basic admin dashboard</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 2: Payments</td>
+                        <td>Week 2–3</td>
+                        <td>40h</td>
+                        <td>Stripe integration, first payment processed</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 3: Client Portal</td>
+                        <td>Week 3–4</td>
+                        <td>80h</td>
+                        <td>Secure report delivery</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 4: Mileage & CRM</td>
+                        <td>Week 4–5</td>
+                        <td>40h</td>
+                        <td>Mileage tracking + HubSpot integration</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 5: Optimization</td>
+                        <td>Week 5–6</td>
+                        <td>30h</td>
+                        <td>Polished, professional platform</td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 2px solid var(--navy);"><strong>TOTAL</strong></td>
+                        <td style="border-top: 2px solid var(--navy);"><strong>6 weeks</strong></td>
+                        <td style="border-top: 2px solid var(--navy);"><strong>250 hours</strong></td>
+                        <td style="border-top: 2px solid var(--navy);"><strong>Production-ready platform</strong></td>
+                    </tr>
+                </table>
+
+                <h3>Development Resources</h3>
+
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Recommended Approach</th>
+                    </tr>
+                    <tr>
+                        <td>Phase 1–2</td>
+                        <td>Junior developer or freelancer on Upwork/Fiverr ($20–30/hr). Clear specs provided.</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 3</td>
+                        <td>Senior full-stack developer ($40–60/hr). Supabase integration is complex.</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 4–5</td>
+                        <td>Same developer from Phase 3 (knows codebase). Or junior developer with clear tasks.</td>
+                    </tr>
+                    <tr>
+                        <td>Ongoing</td>
+                        <td>Retainer developer ($500–1000/month) for bug fixes, feature requests, monitoring.</td>
+                    </tr>
+                </table>
+
+                <p><strong>Estimated Investment:</strong> $5,000–$8,000 in developer time for complete platform. ROI achieved by Month 2 if processing 10+ assignments/month.</p>
+
+                <h3>Risk Mitigation</h3>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <strong>Scope Creep</strong>
+                        <p>Stick to the MVP in Phase 1–2. Advanced features (mobile app, AI intake) can wait.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Integration Delays</strong>
+                        <p>Stripe + Zapier are well-documented. Supabase has excellent tutorials. Plan 20% buffer for unexpected issues.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Data Loss</strong>
+                        <p>Export localStorage to CSV weekly. Once in Phase 4 (Supabase), automatic backups kick in.</p>
+                    </div>
+                    <div class="feature-item">
+                        <strong>Key Person Dependency</strong>
+                        <p>Document all workflows. Write runbooks. Train backup person or hire assistant in Month 2.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLOSING -->
+            <div class="section" style="background: linear-gradient(135deg, rgba(27, 42, 74, 0.05) 0%, rgba(201, 168, 76, 0.05) 100%); border-left: 4px solid var(--gold);">
+                <h2 style="color: var(--navy); margin-bottom: 16px;">Next Steps</h2>
+                <ol style="margin-bottom: 0;">
+                    <li><strong>Approve Strategy:</strong> Review this document, provide feedback on priorities or changes</li>
+                    <li><strong>Engage Developer:</strong> Post RFP on Upwork for Phase 1–2 (website + admin dashboard)</li>
+                    <li><strong>Prepare Specifications:</strong> Define exact admin dashboard features, form fields, invoice template</li>
+                    <li><strong>Set Up Services:</strong> Create Stripe account, HubSpot account, Zapier account during development</li>
+                    <li><strong>Launch Beta:</strong> Deploy Phase 1 to production, test with first 2–3 assignments</li>
+                    <li><strong>Iterate & Scale:</strong> Gather feedback, plan Phase 2–3, scale payment processing and client portal</li>
+                </ol>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p style="margin-bottom: 16px;">Designer Homes Real Estate Services — Business Operations Platform Strategy</p>
+            <div class="footer-divider"></div>
+            <p>Prepared March 2026 | Confidential | For Internal Use Only</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Sidebar navigation scrolling
+        function scrollToSection(event) {
+            event.preventDefault();
+            const href = event.target.getAttribute('href');
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                updateActiveNav(href);
+            }
+        }
+
+        // Update active nav item
+        function updateActiveNav(id) {
+            document.querySelectorAll('.sidebar-nav a').forEach(a => {
+                a.classList.remove('active');
+            });
+            const activeLink = document.querySelector(`.sidebar-nav a[href="${id}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        // Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const scrollPosition = window.scrollY + 150;
+
+            sections.forEach(section => {
+                const { offsetTop, offsetHeight } = section;
+                if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                    const id = section.id;
+                    updateActiveNav(`#${id}`);
+                }
+            });
+        });
+
+        // Initialize
+        updateActiveNav('#executive-summary');
+    </script>
+</body>
+</html>

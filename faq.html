@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>FAQ | Designer Homes Real Estate Services</title>
+  <meta name="description" content="Frequently asked questions about appraisal services, costs, timelines, and how to request a quote from Designer Homes.">
+  <meta name="keywords" content="FAQ, appraisal questions, appraisal cost, timeline, how appraisals work">
+  <meta name="author" content="Designer Homes Real Estate Services">
+  <meta name="theme-color" content="#1B2A4A">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://designerhomesre.com/faq.html">
+  <meta property="og:title" content="FAQ - Designer Homes Real Estate Services">
+  <meta property="og:description" content="Answers to common questions about appraisal services.">
+  <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .faq-question {
+      background-color: var(--color-light-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all var(--transition-fast);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-dark-text);
+    }
+
+    .faq-question:hover {
+      background-color: var(--color-white);
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      color: var(--color-accent);
+      transition: transform var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    details[open] .faq-question {
+      background-color: var(--color-white);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-color: var(--color-accent);
+    }
+
+    details[open] .faq-toggle {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-accent);
+      border-top: none;
+      border-bottom-left-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+      padding: var(--spacing-2xl);
+      color: var(--color-medium-text);
+      line-height: var(--line-height-relaxed);
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .faq-answer p {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .faq-answer p:last-child {
+      margin-bottom: 0;
+    }
+
+    .faq-answer ul {
+      margin-left: 1.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .faq-answer li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- ===============================================
+       HEADER / NAVIGATION
+       =============================================== -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-text">DESIGNER HOMES</span>
+        <span class="logo-subtext">REAL ESTATE SERVICES</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html" class="nav-link">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
+          <ul class="dropdown-menu">
+            <li><a href="services.html#appraisals" class="dropdown-item">Appraisal Services</a></li>
+            <li><a href="mass-appraisal.html" class="dropdown-item">Mass Appraisal Consulting</a></li>
+            <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="service-area.html" class="nav-link">Service Area</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a href="faq.html" class="nav-link">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html#request-quote" class="btn btn-primary">Request a Quote</a>
+        </li>
+      </ul>
+
+      <button class="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===============================================
+       MAIN CONTENT
+       =============================================== -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Frequently Asked Questions</h1>
+        <p class="hero-subtitle">Answers to common questions about our appraisal services.</p>
+        <div class="hero-ctas">
+          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="contact.html" class="btn btn-secondary btn-lg">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section-spacing">
+      <div class="container">
+        <div class="faq-container">
+          <!-- FAQ Item 1 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>What is a real estate appraisal?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>A real estate appraisal is an independent, professional opinion of a property's market value. Appraisals are conducted by licensed or certified appraisers who analyze the property, local market conditions, and comparable sales to arrive at a supported value conclusion.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 2 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>How long does an appraisal take?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Most residential appraisals are completed within 5-10 business days from the date of the property inspection. Complex assignments, such as retrospective or estate appraisals, may require additional time. We provide an estimated timeline with every quote.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 3 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>How much does an appraisal cost?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Appraisal fees vary based on the property type, complexity, purpose, and scope of work. We provide detailed quotes before every assignment. Request a quote through our online form for a prompt response.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 4 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>What types of appraisals do you offer?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>We offer private appraisals, divorce appraisals, estate appraisals, retrospective appraisals, new construction appraisals, FHA appraisals, green home appraisals, and mass appraisal consulting services.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 5 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>What areas do you serve?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>We primarily serve the Triangle region of North Carolina, including Durham, Raleigh, Chapel Hill, Cary, Apex, and surrounding communities in Durham, Wake, Orange, and neighboring counties. Visit our <a href="service-area.html" style="color: var(--color-accent); font-weight: var(--font-weight-semibold);">Service Area page</a> for the complete list of communities and counties we serve.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 6 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>How do I request a quote?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>You can request a quote through our online form, call us directly, or email info@designerhomesre.com. We typically respond within one business day.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 7 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>What is a retrospective appraisal?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>A retrospective appraisal determines the value of a property as of a past date. These are commonly needed for estate settlements (date-of-death valuations), tax appeals, litigation, and financial reporting.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 8 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>Do you offer a client portal?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Yes. Our secure client portal allows you to track your assignment status, receive updates, and download completed reports at your convenience. <a href="portal.html" style="color: var(--color-accent); font-weight: var(--font-weight-semibold);">Learn more about our client portal</a>.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 9 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>What is mass appraisal consulting?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Mass appraisal is the valuation of multiple properties using standardized methods and statistical analysis. We provide consulting services to government agencies, tax offices, and jurisdictions for reappraisal and assessment purposes. <a href="mass-appraisal.html" style="color: var(--color-accent); font-weight: var(--font-weight-semibold);">Learn more about mass appraisal consulting</a>.</p>
+            </div>
+          </details>
+
+          <!-- FAQ Item 10 -->
+          <details class="faq-item fade-in-up">
+            <summary class="faq-question">
+              <span>Are your appraisals accepted by courts and lenders?</span>
+              <span class="faq-toggle">▼</span>
+            </summary>
+            <div class="faq-answer">
+              <p>Yes. Our appraisals are prepared in compliance with the Uniform Standards of Professional Appraisal Practice (USPAP) and are accepted by courts, lenders, attorneys, and government agencies.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="section-spacing bg-light" style="background-color: var(--color-light-bg);">
+      <div class="container" style="max-width: 700px;">
+        <div style="text-align: center;">
+          <h2 style="margin-bottom: var(--spacing-lg);">Still Have Questions?</h2>
+          <p style="color: var(--color-medium-text); margin-bottom: var(--spacing-2xl); font-size: var(--font-size-lg);">
+            We're here to help. Reach out to our team with any questions about our services or to request a quote.
+          </p>
+          <div style="display: flex; gap: var(--spacing-lg); justify-content: center; flex-wrap: wrap;">
+            <a href="contact.html" class="btn btn-primary btn-lg">Contact Us</a>
+            <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Ready to Request an Appraisal?</h2>
+        <p class="cta-subtitle">Get started with a quote request today and experience professional appraisal services.</p>
+        <div class="cta-buttons">
+          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===============================================
+       FOOTER
+       =============================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <!-- Column 1: Logo & Description -->
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo">
+              <span class="logo-text">DESIGNER HOMES</span>
+              <span class="logo-subtext">REAL ESTATE SERVICES</span>
+            </div>
+          </div>
+          <p class="footer-description">Professional appraisal services delivering accuracy, expertise, and modern technology for every valuation scenario across the Triangle.</p>
+          <a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="services.html" class="footer-link">Services</a></li>
+            <li><a href="service-area.html" class="footer-link">Service Area</a></li>
+            <li><a href="reviews.html" class="footer-link">Reviews</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="mass-appraisal.html" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <div class="footer-contact">
+            <p><strong>Designer Homes Real Estate Services</strong></p>
+            <p>Durham, NC<br>USA</p>
+            <p><strong>Phone:</strong><br><a href="tel:+19195555555" class="footer-link">(919) 555-5555</a></p>
+            <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-links">
+          <span>&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</span>
+          <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===============================================
+       SCHEMA.ORG JSON-LD
+       =============================================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a real estate appraisal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A real estate appraisal is an independent, professional opinion of a property's market value. Appraisals are conducted by licensed or certified appraisers who analyze the property, local market conditions, and comparable sales to arrive at a supported value conclusion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does an appraisal take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most residential appraisals are completed within 5-10 business days from the date of the property inspection. Complex assignments may require additional time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What types of appraisals do you offer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We offer private appraisals, divorce appraisals, estate appraisals, retrospective appraisals, new construction appraisals, FHA appraisals, green home appraisals, and mass appraisal consulting services."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===============================================
+       JAVASCRIPT
+       =============================================== -->
+  <script>
+    'use strict';
+
+    // ===== Smooth Scroll for Anchor Links =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || !document.querySelector(href)) return;
+
+        e.preventDefault();
+        const target = document.querySelector(href);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ===== Mobile Navigation Toggle =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    // Close menu when a link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== Dropdown Menu Toggle (Mobile) =====
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      toggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+
+    // ===== Navbar Background on Scroll =====
+    const header = document.querySelector('header');
+    const initialOffset = window.innerHeight * 0.5;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > initialOffset) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ===== Scroll-Triggered Fade-In Animations =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== FAQ Details Element Smooth Animation =====
+    const details = document.querySelectorAll('details');
+    details.forEach(detail => {
+      detail.addEventListener('toggle', () => {
+        if (detail.open) {
+          const summary = detail.querySelector('summary');
+          setTimeout(() => {
+            summary.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        }
+      });
+    });
+
+    // ===== Close mobile menu on outside click =====
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== Page Load Animation =====
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+
+    body {
+      opacity: 0.99;
+      transition: opacity 0.3s ease-in;
+    }
+  </script>
+</body>
+</html>

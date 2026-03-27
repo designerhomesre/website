@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — Designer Homes Real Estate Services</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="login-screen active">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-text">DESIGNER HOMES</div>
+        <div class="logo-subtext">REAL ESTATE SERVICES</div>
+        <div class="logo-portal">Admin Portal</div>
+      </div>
+      <form id="login-form" class="login-form">
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter admin password">
+        </div>
+        <div id="login-error" class="login-error" style="display:none;"></div>
+        <button type="submit" class="btn-primary btn-block">Sign In</button>
+        <div class="login-note">Contact administrator for credentials</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- APP SHELL -->
+  <div id="app" class="app-container">
+    <!-- HEADER BAR -->
+    <header class="header-bar">
+      <div class="header-left">
+        <button class="hamburger-toggle" onclick="AdminApp.toggleSidebar()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="header-logo">DESIGNER HOMES</div>
+        <span class="header-badge">Admin Portal</span>
+      </div>
+
+      <div class="header-center">
+        <div class="search-box search-wrapper">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" id="global-search" placeholder="Search leads, assignments, clients..." onkeyup="AdminApp.globalSearch(this.value)">
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="notification-bell">
+          <button class="bell-btn" onclick="AdminApp.openNotifications()">&#128276;</button>
+          <span class="notification-badge" id="notification-count">3</span>
+        </div>
+        <div class="user-info">
+          <span class="user-name">Keith M.</span>
+          <button class="btn-logout" onclick="AdminApp.handleLogout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-link active" data-section="dashboard" onclick="AdminApp.switchSection('dashboard', event)">
+          <span class="sidebar-icon">&#128202;</span>
+          <span class="sidebar-label">Dashboard</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="leads" onclick="AdminApp.switchSection('leads', event)">
+          <span class="sidebar-icon">&#128172;</span>
+          <span class="sidebar-label">Leads & Quotes</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="assignments" onclick="AdminApp.switchSection('assignments', event)">
+          <span class="sidebar-icon">&#128203;</span>
+          <span class="sidebar-label">Active Assignments</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="completed" onclick="AdminApp.switchSection('completed', event)">
+          <span class="sidebar-icon">&#9989;</span>
+          <span class="sidebar-label">Completed</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="invoices" onclick="AdminApp.switchSection('invoices', event)">
+          <span class="sidebar-icon">&#128176;</span>
+          <span class="sidebar-label">Invoices & Payments</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="mileage" onclick="AdminApp.switchSection('mileage', event)">
+          <span class="sidebar-icon">&#128663;</span>
+          <span class="sidebar-label">Mileage Tracker</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="clients" onclick="AdminApp.switchSection('clients', event)">
+          <span class="sidebar-icon">&#128101;</span>
+          <span class="sidebar-label">Clients</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="reports" onclick="AdminApp.switchSection('reports', event)">
+          <span class="sidebar-icon">&#128196;</span>
+          <span class="sidebar-label">Reports & Delivery</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="lender" onclick="AdminApp.switchSection('lender', event)">
+          <span class="sidebar-icon">&#127970;</span>
+          <span class="sidebar-label">Lender Inquiries</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="settings" onclick="AdminApp.switchSection('settings', event)">
+          <span class="sidebar-icon">&#9881;</span>
+          <span class="sidebar-label">Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-automations">
+        <div class="automations-header">Automations</div>
+        <div class="automation-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Auto-acknowledgment</span>
+        </div>
+        <div class="automation-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Payment reminders</span>
+        </div>
+        <div class="automation-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Review requests</span>
+        </div>
+        <div class="automations-count">2 automations active</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content" id="main-content">
+
+      <!-- DASHBOARD SECTION -->
+      <div id="section-dashboard" class="content-section active">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value" id="metric-new-leads-value">0</div>
+            <div class="metric-label">New Leads</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-active-value">0</div>
+            <div class="metric-label">Active Assignments</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-completed-month-value">0</div>
+            <div class="metric-label">Completed This Month</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-unpaid-value">$0</div>
+            <div class="metric-label">Unpaid Invoices</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-paid-month-value">$0</div>
+            <div class="metric-label">Paid This Month</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-reports-ready-value">0</div>
+            <div class="metric-label">Reports Ready</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-revenue-month-value">$0</div>
+            <div class="metric-label">Revenue This Month</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-mileage-month-value">0</div>
+            <div class="metric-label">Miles This Month</div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="quick-action-btn" onclick="AdminApp.quickAction('new-lead')">+ New Lead</button>
+          <button class="quick-action-btn" onclick="AdminApp.quickAction('new-assignment')">+ New Assignment</button>
+          <button class="quick-action-btn" onclick="AdminApp.quickAction('create-invoice')">+ Create Invoice</button>
+          <button class="quick-action-btn" onclick="AdminApp.quickAction('log-mileage')">+ Log Mileage</button>
+        </div>
+
+        <div class="dashboard-columns">
+          <div class="dashboard-col">
+            <h3>Recent Activity</h3>
+            <div id="activity-feed"></div>
+          </div>
+          <div class="dashboard-col">
+            <h3>Pending Actions</h3>
+            <div id="pending-actions"></div>
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <h3>Monthly Revenue</h3>
+          <div id="revenue-chart" class="bar-chart"></div>
+        </div>
+      </div>
+
+      <!-- LEADS SECTION -->
+      <div id="section-leads" class="content-section">
+        <div class="section-header">
+          <h2>Leads & Quotes</h2>
+          <div class="section-actions">
+            <select id="leads-filter-status" class="filter-select">
+              <option value="all">All Status</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Quoted">Quoted</option>
+              <option value="Converted">Converted</option>
+              <option value="Lost">Lost</option>
+            </select>
+            <select id="leads-filter-type" class="filter-select">
+              <option value="all">All Types</option>
+              <option value="Current Value">Current Value</option>
+              <option value="Divorce">Divorce</option>
+              <option value="Estate">Estate</option>
+              <option value="Retrospective">Retrospective</option>
+              <option value="New Construction">New Construction</option>
+              <option value="FHA">FHA</option>
+              <option value="Green Home">Green Home</option>
+              <option value="Other">Other</option>
+            </select>
+            <button class="btn-primary" onclick="LeadsModule.showAddModal()">+ New Lead</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="leads-table">
+            <thead>
+              <tr>
+                <th data-sort="date">Date</th>
+                <th data-sort="name">Client</th>
+                <th data-sort="email">Email</th>
+                <th data-sort="phone">Phone</th>
+                <th data-sort="type">Service Type</th>
+                <th data-sort="address">Property</th>
+                <th data-sort="status">Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENTS SECTION -->
+      <div id="section-assignments" class="content-section">
+        <div class="section-header">
+          <h2>Active Assignments</h2>
+          <div class="section-actions">
+            <select id="assignments-filter-status" class="filter-select">
+              <option value="all">All Status</option>
+              <option value="Accepted">Accepted</option>
+              <option value="Scheduled">Scheduled</option>
+              <option value="Inspected">Inspected</option>
+              <option value="In Review">In Review</option>
+              <option value="Report Complete">Report Complete</option>
+              <option value="Awaiting Payment">Awaiting Payment</option>
+            </select>
+            <button class="btn-primary" onclick="AssignmentsModule.showAddModal()">+ New Assignment</button>
+          </div>
+        </div>
+        <div id="assignments-list"></div>
+      </div>
+
+      <!-- COMPLETED SECTION -->
+      <div id="section-completed" class="content-section">
+        <div class="section-header">
+          <h2>Completed Assignments</h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="completed-table">
+            <thead>
+              <tr>
+                <th>Assignment #</th>
+                <th>Client</th>
+                <th>Property</th>
+                <th>Completed</th>
+                <th>Fee</th>
+                <th>Payment</th>
+                <th>Report</th>
+                <th>Review</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="completed-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INVOICES SECTION -->
+      <div id="section-invoices" class="content-section">
+        <div class="section-header">
+          <h2>Invoices & Payments</h2>
+          <div class="section-actions">
+            <button class="tab-btn active" onclick="InvoicesModule.showTab('invoices')">Invoices</button>
+            <button class="tab-btn" onclick="InvoicesModule.showTab('overview')">Payment Overview</button>
+            <button class="btn-primary" onclick="InvoicesModule.showCreateModal()">+ Create Invoice</button>
+          </div>
+        </div>
+        <div id="invoices-tab" class="tab-content active">
+          <div class="table-container">
+            <table class="data-table" id="invoices-table">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Date</th>
+                  <th>Client</th>
+                  <th>Assignment</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Due Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invoices-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="overview-tab" class="tab-content">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-value" id="ov-total-revenue">$0</div>
+              <div class="metric-label">Total Revenue (All Time)</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="ov-year-revenue">$0</div>
+              <div class="metric-label">This Year</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="ov-month-revenue">$0</div>
+              <div class="metric-label">This Month</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="ov-unpaid">$0</div>
+              <div class="metric-label">Unpaid</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="ov-overdue">$0</div>
+              <div class="metric-label">Overdue</div>
+            </div>
+          </div>
+          <div class="chart-section">
+            <h3>Revenue by Month</h3>
+            <div id="revenue-overview-chart" class="bar-chart"></div>
+          </div>
+          <div class="section-actions" style="margin-top:1rem;">
+            <button class="btn-secondary" onclick="InvoicesModule.exportCSV()">Export CSV</button>
+            <button class="btn-secondary" onclick="InvoicesModule.printReport()">Print Report</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MILEAGE SECTION -->
+      <div id="section-mileage" class="content-section">
+        <div class="section-header">
+          <h2>Mileage Tracker</h2>
+          <div class="section-actions">
+            <select id="mileage-period" class="filter-select">
+              <option value="week">This Week</option>
+              <option value="month" selected>This Month</option>
+              <option value="quarter">This Quarter</option>
+              <option value="year">This Year</option>
+              <option value="all">All Time</option>
+            </select>
+            <button class="btn-primary" onclick="MileageModule.showLogModal()">+ Log Trip</button>
+          </div>
+        </div>
+        <div class="metrics-grid" id="mileage-summary">
+          <div class="metric-card">
+            <div class="metric-value" id="mi-total-miles">0</div>
+            <div class="metric-label">Total Miles</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="mi-total-deduction">$0</div>
+            <div class="metric-label">Tax Deduction</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="mi-trip-count">0</div>
+            <div class="metric-label">Trips</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="mi-avg-miles">0</div>
+            <div class="metric-label">Avg Miles/Trip</div>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="mileage-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Assignment</th>
+                <th>Subject Property</th>
+                <th>Stops</th>
+                <th>Miles</th>
+                <th>Deduction</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="mileage-tbody"></tbody>
+          </table>
+        </div>
+        <div class="section-actions" style="margin-top:1rem;">
+          <button class="btn-secondary" onclick="MileageModule.exportCSV()">Export CSV</button>
+          <button class="btn-secondary" onclick="MileageModule.printLog()">Print Mileage Log</button>
+        </div>
+      </div>
+
+      <!-- CLIENTS SECTION -->
+      <div id="section-clients" class="content-section">
+        <div class="section-header">
+          <h2>Clients</h2>
+          <div class="section-actions">
+            <select id="clients-filter-type" class="filter-select">
+              <option value="all">All Types</option>
+              <option value="Attorney">Attorney</option>
+              <option value="Homeowner">Homeowner</option>
+              <option value="Estate Rep">Estate Rep</option>
+              <option value="CPA">CPA</option>
+              <option value="Lender">Lender</option>
+              <option value="Investor">Investor</option>
+              <option value="Developer">Developer</option>
+              <option value="Government">Government</option>
+              <option value="Other">Other</option>
+            </select>
+            <button class="btn-primary" onclick="ClientsModule.showAddModal()">+ Add Client</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="clients-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Type</th>
+                <th>Assignments</th>
+                <th>Revenue</th>
+                <th>Last Activity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="clients-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REPORTS SECTION -->
+      <div id="section-reports" class="content-section">
+        <div class="section-header">
+          <h2>Reports & Delivery</h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="reports-table">
+            <thead>
+              <tr>
+                <th>Assignment #</th>
+                <th>Client</th>
+                <th>Property</th>
+                <th>Report Status</th>
+                <th>Payment Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="reports-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LENDER INQUIRIES SECTION -->
+      <div id="section-lender" class="content-section">
+        <div class="section-header">
+          <h2>Lender Inquiries</h2>
+          <div class="section-actions">
+            <button class="btn-primary" onclick="LenderModule.showAddModal()">+ Add Inquiry</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table" id="lender-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="lender-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS SECTION -->
+      <div id="section-settings" class="content-section">
+        <div class="section-header">
+          <h2>Settings</h2>
+        </div>
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>Security</h3>
+            <div class="form-group">
+              <label>Change Admin Password</label>
+              <input type="password" id="new-password" placeholder="New password">
+              <button class="btn-secondary" onclick="SettingsModule.changePassword()">Update Password</button>
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3>Mileage Settings</h3>
+            <div class="form-group">
+              <label>Default Starting Location</label>
+              <input type="text" id="setting-start-location" value="Durham, NC">
+            </div>
+            <div class="form-group">
+              <label>IRS Mileage Rate ($/mile)</label>
+              <input type="number" id="setting-irs-rate" value="0.70" step="0.005">
+            </div>
+            <div class="form-group">
+              <label>Base Miles (office to subject estimate)</label>
+              <input type="number" id="setting-base-miles" value="15">
+            </div>
+            <div class="form-group">
+              <label>Miles Per Additional Stop</label>
+              <input type="number" id="setting-per-stop-miles" value="5">
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3>Invoice Settings</h3>
+            <div class="form-group">
+              <label>Default Due Days</label>
+              <input type="number" id="setting-due-days" value="15">
+            </div>
+            <div class="form-group">
+              <label>Default Payment Instructions</label>
+              <textarea id="setting-payment-instructions" rows="3">Payment required before report release. Pay online via the link provided or contact us for alternative arrangements.</textarea>
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3>Business Info</h3>
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" id="setting-biz-name" value="Designer Homes Real Estate Services">
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="text" id="setting-biz-phone" value="(919) 555-0100">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="text" id="setting-biz-email" value="info@designerhomesre.com">
+            </div>
+            <div class="form-group">
+              <label>License #</label>
+              <input type="text" id="setting-license" value="A9156">
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3>Data Management</h3>
+            <button class="btn-secondary" onclick="SettingsModule.exportAllData()">Export All Data (JSON)</button>
+            <button class="btn-secondary" onclick="SettingsModule.importData()">Import Data</button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="SettingsModule.handleImport(event)">
+            <button class="btn-danger" onclick="SettingsModule.clearAllData()">Clear All Data</button>
+            <button class="btn-secondary" onclick="SettingsModule.saveSettings()">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL OVERLAY (reusable) -->
+  <div id="modal-overlay" class="modal-overlay" onclick="AdminApp.closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modal-title">Modal Title</h3>
+        <button class="modal-close" onclick="AdminApp.closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANEL (slide in from right) -->
+  <div id="detail-panel" class="detail-panel">
+    <div class="detail-header">
+      <h3 id="detail-title">Details</h3>
+      <button class="modal-close" onclick="AdminApp.closeDetail()">&times;</button>
+    </div>
+    <div class="detail-body" id="detail-body"></div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/admin-core.js"></script>
+  <script src="js/admin-modules.js"></script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Client Reviews | Designer Homes Real Estate Services</title>
+  <meta name="description" content="Read reviews from attorneys, homeowners, accountants, and other professionals who have worked with Designer Homes for appraisal services.">
+  <meta name="keywords" content="reviews, testimonials, appraisal services, client feedback">
+  <meta name="author" content="Designer Homes Real Estate Services">
+  <meta name="theme-color" content="#1B2A4A">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://designerhomesre.com/reviews.html">
+  <meta property="og:title" content="Client Reviews - Designer Homes Real Estate Services">
+  <meta property="og:description" content="Hear from professionals and homeowners we've had the privilege of serving.">
+  <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .review-card {
+      background-color: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      transition: all var(--transition-base);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .review-card:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+
+    .review-stars {
+      color: #FFB81C;
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-md);
+      letter-spacing: 0.25rem;
+    }
+
+    .review-text {
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-relaxed);
+      color: var(--color-dark-text);
+      margin-bottom: var(--spacing-lg);
+      flex: 1;
+      font-style: italic;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .review-text::before {
+      content: '"';
+      position: absolute;
+      left: 0;
+      font-size: 2rem;
+      color: var(--color-accent);
+      opacity: 0.3;
+      line-height: 1;
+    }
+
+    .review-author {
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+      font-size: var(--font-size-base);
+    }
+
+    .review-role {
+      font-size: var(--font-size-sm);
+      color: var(--color-medium-text);
+    }
+
+    .leave-review-section {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      color: var(--color-white);
+      padding: var(--spacing-3xl);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .leave-review-section h3 {
+      color: var(--color-white);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .review-links {
+      display: flex;
+      gap: var(--spacing-lg);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .review-link-btn {
+      display: inline-block;
+      padding: 0.875rem 1.75rem;
+      background-color: var(--color-accent);
+      color: var(--color-primary);
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      font-weight: var(--font-weight-semibold);
+      transition: all var(--transition-fast);
+    }
+
+    .review-link-btn:hover {
+      background-color: var(--color-accent-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- ===============================================
+       HEADER / NAVIGATION
+       =============================================== -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span class="logo-text">DESIGNER HOMES</span>
+        <span class="logo-subtext">REAL ESTATE SERVICES</span>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="index.html" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="about.html" class="nav-link">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
+          <ul class="dropdown-menu">
+            <li><a href="services.html#appraisals" class="dropdown-item">Appraisal Services</a></li>
+            <li><a href="mass-appraisal.html" class="dropdown-item">Mass Appraisal Consulting</a></li>
+            <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="service-area.html" class="nav-link">Service Area</a>
+        </li>
+        <li class="nav-item">
+          <a href="reviews.html" class="nav-link">Reviews</a>
+        </li>
+        <li class="nav-item">
+          <a href="faq.html" class="nav-link">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="contact.html#request-quote" class="btn btn-primary">Request a Quote</a>
+        </li>
+      </ul>
+
+      <button class="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===============================================
+       MAIN CONTENT
+       =============================================== -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Client Reviews</h1>
+        <p class="hero-subtitle">Hear from the professionals and homeowners we've had the privilege of serving.</p>
+        <div class="hero-ctas">
+          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="contact.html" class="btn btn-secondary btn-lg">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Reviews Grid -->
+    <section class="section-spacing">
+      <div class="container">
+        <div class="grid grid-2" style="gap: var(--spacing-2xl);">
+          <!-- Review 1 -->
+          <div class="review-card fade-in-up">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Keith's appraisal was thorough, well-documented, and delivered ahead of schedule. His report held up perfectly during our proceedings.</p>
+            <div class="review-author">Sarah M.</div>
+            <div class="review-role">Family Law Attorney, Durham</div>
+          </div>
+
+          <!-- Review 2 -->
+          <div class="review-card fade-in-up">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">The entire process was handled digitally — I submitted my request online, received updates, and downloaded my report from the portal. Incredibly convenient.</p>
+            <div class="review-author">James T.</div>
+            <div class="review-role">Homeowner, Raleigh</div>
+          </div>
+
+          <!-- Review 3 -->
+          <div class="review-card fade-in-up">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">We've worked with Keith on multiple estate valuations. His attention to detail and understanding of complex scenarios is exceptional.</p>
+            <div class="review-author">Robert K.</div>
+            <div class="review-role">CPA, Chapel Hill</div>
+          </div>
+
+          <!-- Review 4 -->
+          <div class="review-card fade-in-up">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">As a lender, I need appraisers who are responsive, accurate, and meet deadlines. Keith consistently delivers on all three.</p>
+            <div class="review-author">Linda P.</div>
+            <div class="review-role">Loan Officer, Cary</div>
+          </div>
+
+          <!-- Review 5 -->
+          <div class="review-card fade-in-up">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Keith's expertise in both private and mass appraisal gives him a perspective that most appraisers simply don't have.</p>
+            <div class="review-author">David W.</div>
+            <div class="review-role">Real Estate Investor, Durham</div>
+          </div>
+
+          <!-- Review 6 -->
+          <div class="review-card fade-in-up">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Professional, communicative, and tech-savvy. The client portal made tracking my appraisal status effortless.</p>
+            <div class="review-author">Michelle R.</div>
+            <div class="review-role">Homeowner, Apex</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Clients Choose Us -->
+    <section class="section-spacing bg-light" style="background-color: var(--color-light-bg);">
+      <div class="container">
+        <h2 class="section-title">Why Clients Work With Designer Homes</h2>
+
+        <div class="grid grid-3">
+          <div class="card fade-in-up">
+            <h3>Professional Expertise</h3>
+            <p>State-certified appraisers who understand complex scenarios and deliver defensible, well-documented conclusions.</p>
+          </div>
+
+          <div class="card fade-in-up">
+            <h3>Modern Technology</h3>
+            <p>Digital processes, client portal access, and efficient communication make every engagement seamless and transparent.</p>
+          </div>
+
+          <div class="card fade-in-up">
+            <h3>Reliable Service</h3>
+            <p>Consistent on-time delivery, clear communication, and attention to detail in every single assignment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leave a Review Section -->
+    <section class="section-spacing">
+      <div class="container">
+        <div class="leave-review-section">
+          <h3>Share Your Experience</h3>
+          <p style="color: rgba(255, 255, 255, 0.95); margin-bottom: var(--spacing-2xl); font-size: var(--font-size-lg);">
+            We'd love to hear about your experience with Designer Homes Real Estate Services.
+          </p>
+          <div class="review-links">
+            <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" class="review-link-btn">
+              Leave a Google Review
+            </a>
+            <a href="contact.html" class="review-link-btn" style="background-color: transparent; color: var(--color-accent); border: 2px solid var(--color-accent);">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Ready to Experience Designer Homes?</h2>
+        <p class="cta-subtitle">Join our satisfied clients and request your appraisal today.</p>
+        <div class="cta-buttons">
+          <a href="contact.html#request-quote" class="btn btn-primary btn-lg">Request a Quote</a>
+          <a href="tel:+19195555555" class="btn btn-secondary btn-lg">Call (919) 555-5555</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===============================================
+       FOOTER
+       =============================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <!-- Column 1: Logo & Description -->
+        <div class="footer-column">
+          <div class="footer-logo">
+            <div class="logo">
+              <span class="logo-text">DESIGNER HOMES</span>
+              <span class="logo-subtext">REAL ESTATE SERVICES</span>
+            </div>
+          </div>
+          <p class="footer-description">Professional appraisal services delivering accuracy, expertise, and modern technology for every valuation scenario across the Triangle.</p>
+          <a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="about.html" class="footer-link">About</a></li>
+            <li><a href="services.html" class="footer-link">Services</a></li>
+            <li><a href="service-area.html" class="footer-link">Service Area</a></li>
+            <li><a href="reviews.html" class="footer-link">Reviews</a></li>
+            <li><a href="contact.html" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="mass-appraisal.html" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="footer-column">
+          <h3>Contact</h3>
+          <div class="footer-contact">
+            <p><strong>Designer Homes Real Estate Services</strong></p>
+            <p>Durham, NC<br>USA</p>
+            <p><strong>Phone:</strong><br><a href="tel:+19195555555" class="footer-link">(919) 555-5555</a></p>
+            <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <div class="footer-bottom-links">
+          <span>&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</span>
+          <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+          <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===============================================
+       SCHEMA.ORG JSON-LD
+       =============================================== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "LocalBusiness",
+    "name": "Designer Homes Real Estate Services",
+    "image": "https://designerhomesre.com/logo.png",
+    "description": "Professional appraisal services in Durham, Raleigh, Chapel Hill, and surrounding areas.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Durham",
+      "addressRegion": "NC",
+      "postalCode": "27701",
+      "addressCountry": "US"
+    },
+    "telephone": "+19195555555",
+    "email": "info@designerhomesre.com",
+    "url": "https://designerhomesre.com/reviews.html",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "6"
+    }
+  }
+  </script>
+
+  <!-- ===============================================
+       JAVASCRIPT
+       =============================================== -->
+  <script>
+    'use strict';
+
+    // ===== Smooth Scroll for Anchor Links =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === '#' || !document.querySelector(href)) return;
+
+        e.preventDefault();
+        const target = document.querySelector(href);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ===== Mobile Navigation Toggle =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link:not(.dropdown-toggle)');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    // Close menu when a link is clicked
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ===== Dropdown Menu Toggle (Mobile) =====
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      toggle.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+
+    // ===== Navbar Background on Scroll =====
+    const header = document.querySelector('header');
+    const initialOffset = window.innerHeight * 0.5;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > initialOffset) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ===== Scroll-Triggered Fade-In Animations =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== Close mobile menu on outside click =====
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      }
+    });
+
+    // ===== Page Load Animation =====
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+
+    body {
+      opacity: 0.99;
+      transition: opacity 0.3s ease-in;
+    }
+  </script>
+</body>
+</html>

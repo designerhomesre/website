@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Homes Real Estate Services - Strategic Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1B2A4A;
+            --gold: #C9A84C;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-charcoal: #2D2D2D;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--dark-charcoal);
+            background-color: var(--white);
+            line-height: 1.7;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 280px;
+            background: var(--navy);
+            color: var(--white);
+            padding: 40px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        .sidebar ul li a:hover {
+            background: rgba(201, 168, 76, 0.2);
+            color: var(--gold);
+            padding-left: 18px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            background: var(--white);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, #0F1A2E 100%);
+            color: var(--white);
+            padding: 60px 50px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 5px;
+        }
+
+        .header .date {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        .content {
+            padding: 50px;
+            max-width: 1200px;
+        }
+
+        section {
+            margin-bottom: 70px;
+        }
+
+        section h2 {
+            font-size: 32px;
+            color: var(--navy);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--gold);
+            font-weight: 700;
+        }
+
+        section h3 {
+            font-size: 18px;
+            color: var(--dark-charcoal);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        section p {
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        /* WIREFRAME STYLES */
+        .wireframe {
+            background: var(--light-gray);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            overflow-x: auto;
+            color: var(--dark-charcoal);
+        }
+
+        .sitemap-box {
+            background: var(--light-gray);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .sitemap-box strong {
+            color: var(--navy);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .color-swatch {
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: var(--white);
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-navy {
+            background: var(--navy);
+        }
+
+        .color-gold {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .color-white {
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            color: var(--navy);
+        }
+
+        .color-gray {
+            background: var(--light-gray);
+            border: 2px solid var(--border-color);
+            color: var(--navy);
+        }
+
+        .color-charcoal {
+            background: var(--dark-charcoal);
+        }
+
+        .tech-stack {
+            background: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .tech-stack h4 {
+            color: var(--navy);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .tech-stack p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .highlight {
+            background: rgba(201, 168, 76, 0.15);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .budget-box {
+            background: linear-gradient(135deg, rgba(27, 42, 74, 0.05), rgba(201, 168, 76, 0.1));
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .budget-box h3 {
+            color: var(--navy);
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        th {
+            background: var(--navy);
+            color: var(--white);
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            background: var(--light-gray);
+        }
+
+        .keyword-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .keyword-item {
+            background: var(--light-gray);
+            border-left: 4px solid var(--gold);
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .keyword-item strong {
+            color: var(--navy);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .roadmap {
+            margin: 20px 0;
+        }
+
+        .phase {
+            background: var(--light-gray);
+            border-left: 6px solid var(--gold);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .phase h4 {
+            color: var(--navy);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .phase ul {
+            margin-left: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .phase ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            background: var(--navy);
+            color: var(--white);
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .footer p {
+            margin: 0;
+            color: var(--white);
+        }
+
+        @media print {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            section {
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .content {
+                padding: 30px 20px;
+            }
+            .header {
+                padding: 40px 20px;
+            }
+            .header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <h2>STRATEGY GUIDE</h2>
+            <ul>
+                <li><a href="#sitemap">1. Sitemap</a></li>
+                <li><a href="#wireframe">2. Homepage Wireframe</a></li>
+                <li><a href="#copy-direction">3. Copy Direction</a></li>
+                <li><a href="#design-direction">4. Design Direction</a></li>
+                <li><a href="#tech-stack">5. Tech Stack</a></li>
+                <li><a href="#hosting">6. Hosting & Domain</a></li>
+                <li><a href="#email-crm">7. Email & CRM Setup</a></li>
+                <li><a href="#client-portal">8. Client Portal</a></li>
+                <li><a href="#ai-automation">9. AI Automation</a></li>
+                <li><a href="#seo">10. SEO Strategy</a></li>
+                <li><a href="#roadmap">11. Build Roadmap</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Designer Homes Real Estate Services</h1>
+                <p>Strategic Website & Operations Plan</p>
+                <p>Triangle Area, North Carolina</p>
+                <div class="date">Prepared March 2026 | Budget: Under $100/month</div>
+            </div>
+
+            <div class="content">
+                <!-- SECTION 1: SITEMAP -->
+                <section id="sitemap">
+                    <h2>1. Full Sitemap</h2>
+                    <p>Visual hierarchy of all pages and structural organization:</p>
+
+                    <div class="sitemap-box">
+                        <strong>HOME (Root)</strong>
+                        Hero section, value proposition, service overview, CTA, testimonials
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── ABOUT</strong>
+                        Company history, Keith Manning Jr. bio, credentials, mission statement
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── APPRAISAL SERVICES</strong>
+                        Core services (residential, commercial, FHA, divorce, estate, etc.)
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── MASS APPRAISAL CONSULTING</strong>
+                        Consulting services, methodology, case studies, ROI benefits
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── SERVICE AREA</strong>
+                        Map, coverage zone, counties served (Durham, Wake, Orange, etc.)
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── REVIEWS</strong>
+                        Google/Yelp/BBB reviews aggregated, star ratings, testimonials
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── REQUEST A QUOTE / INTAKE FORM</strong>
+                        Smart form (Typeform/Tally), property details, service type selection, instant confirmation
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── CLIENT PORTAL</strong>
+                        Login/register, view order status, download reports, message threads
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>├── FAQ</strong>
+                        Common questions about appraisals, process, timeline, costs
+                    </div>
+
+                    <div class="sitemap-box">
+                        <strong>└── CONTACT</strong>
+                        Contact form, phone, email, address, hours, embedded map
+                    </div>
+                </section>
+
+                <!-- SECTION 2: HOMEPAGE WIREFRAME -->
+                <section id="wireframe">
+                    <h2>2. Homepage Wireframe</h2>
+                    <p>Visual layout and content sections for the landing page:</p>
+
+                    <div class="wireframe">
+╔════════════════════════════════════════════════════════════════╗
+║                        HEADER / NAV                             ║
+║   Logo | HOME | SERVICES | ABOUT | SERVICE AREA | CONTACT      ║
+╠════════════════════════════════════════════════════════════════╣
+║                                                                 ║
+║  ┌─────────────────────────────────────────────────────────┐   ║
+║  │            HERO SECTION                                 │   ║
+║  │  Headline: "Expert Appraisals for Triangle NC"         │   ║
+║  │  Subheading: "Fast, Accurate, Professional"            │   ║
+║  │                                                         │   ║
+║  │  [CTA Button: REQUEST A QUOTE]  [Learn More]           │   ║
+║  └─────────────────────────────────────────────────────────┘   ║
+║                                                                 ║
+║  ┌──────────────┬──────────────┬──────────────┐                ║
+║  │ SERVICE 1    │ SERVICE 2    │ SERVICE 3    │                ║
+║  │ Residential  │ Commercial   │ Consulting   │                ║
+║  │ Appraisals   │ Appraisals   │ Services     │                ║
+║  └──────────────┴──────────────┴──────────────┘                ║
+║                                                                 ║
+║  ┌─────────────────────────────────────────────────────────┐   ║
+║  │            WHY CHOOSE US                                │   ║
+║  │  • Certified Appraisers                                 │   ║
+║  │  • Fast Turnaround (24-48 hours)                       │   ║
+║  │  • Transparent Pricing                                  │   ║
+║  │  • Triangle Area Specialists                            │   ║
+║  └─────────────────────────────────────────────────────────┘   ║
+║                                                                 ║
+║  ┌─────────────────────────────────────────────────────────┐   ║
+║  │            CLIENT TESTIMONIALS                          │   ║
+║  │  ★★★★★ "Professional & Efficient" - Client Name        │   ║
+║  │  ★★★★★ "Highly Recommended" - Client Name             │   ║
+║  │  ★★★★★ "Fast & Reliable" - Client Name                │   ║
+║  └─────────────────────────────────────────────────────────┘   ║
+║                                                                 ║
+║  ┌─────────────────────────────────────────────────────────┐   ║
+║  │         SERVICE AREA MAP                                │   ║
+║  │    [Interactive Google Map - Triangle NC Highlight]     │   ║
+║  └─────────────────────────────────────────────────────────┘   ║
+║                                                                 ║
+║  ┌─────────────────────────────────────────────────────────┐   ║
+║  │       FOOTER: Contact Info | Social | Links | Copyright │   ║
+║  └─────────────────────────────────────────────────────────┘   ║
+║                                                                 ║
+╚════════════════════════════════════════════════════════════════╝
+                    </div>
+                </section>
+
+                <!-- SECTION 3: COPY DIRECTION -->
+                <section id="copy-direction">
+                    <h2>3. Full Copy Direction</h2>
+                    <p>Strategic messaging for each page (detailed copy is developed during build phase):</p>
+
+                    <h3>HOME</h3>
+                    <p><span class="highlight">Tone:</span> Professional, trustworthy, approachable. <span class="highlight">Goal:</span> Immediate clarity of services + call to action. Lead with speed, accuracy, expertise. Hero CTA: "Request a Quote" or "Get Started."</p>
+
+                    <h3>ABOUT</h3>
+                    <p><span class="highlight">Tone:</span> Personal, credible, established. <span class="highlight">Goal:</span> Build trust through credentials and experience. Include Keith Manning Jr.'s background, certifications (MAI, CRE, etc.), years of experience, company mission. Story-driven.</p>
+
+                    <h3>APPRAISAL SERVICES</h3>
+                    <p><span class="highlight">Tone:</span> Informative, detailed, authoritative. <span class="highlight">Goal:</span> Educate on service types. Service cards for Residential, Commercial, FHA, Divorce, Estate, Retrospective, Green Home, etc. Include process steps, typical timeline, typical cost ranges.</p>
+
+                    <h3>MASS APPRAISAL CONSULTING</h3>
+                    <p><span class="highlight">Tone:</span> B2B expert, data-driven, strategic. <span class="highlight">Goal:</span> Position as consultant to municipalities/governments. Highlight ROI, methodology, case studies. CTA: "Schedule Consultation."</p>
+
+                    <h3>SERVICE AREA</h3>
+                    <p><span class="highlight">Tone:</span> Clear, factual. <span class="highlight">Goal:</span> Show geographic coverage. Interactive map showing Durham, Wake, Orange, Chatham counties. List specific cities (Raleigh, Durham, Chapel Hill, Carrboro, etc.).</p>
+
+                    <h3>REVIEWS</h3>
+                    <p><span class="highlight">Tone:</span> Social proof, authentic. <span class="highlight">Goal:</span> Display trust signals. Aggregate Google, Yelp, BBB, Angi reviews. Show star ratings, snippets, link to full reviews on platforms.</p>
+
+                    <h3>REQUEST A QUOTE / INTAKE</h3>
+                    <p><span class="highlight">Tone:</span> Efficient, reassuring. <span class="highlight">Goal:</span> Minimize friction. Smart form with conditional logic. Service type selector, property address, client type (individual/attorney/realtor), timeline urgency. Instant confirmation email.</p>
+
+                    <h3>CLIENT PORTAL</h3>
+                    <p><span class="highlight">Tone:</span> Functional, clean. <span class="highlight">Goal:</span> Real-time transparency. Headline: "Track Your Order." Show status (pending/in-progress/complete), download reports, view invoices, message support.</p>
+
+                    <h3>FAQ</h3>
+                    <p><span class="highlight">Tone:</span> Helpful, accessible. <span class="highlight">Goal:</span> Reduce inquiries. Cover: "What is an appraisal?", "How long does it take?", "How much does it cost?", "What do you need from me?", "Are you licensed?", "What areas do you serve?", "Can I dispute an appraisal?"</p>
+
+                    <h3>CONTACT</h3>
+                    <p><span class="highlight">Tone:</span> Welcoming, accessible. <span class="highlight">Goal:</span> Multiple contact paths. Phone, email (info@designerhomesre.com), address, hours, embedded Google Map, contact form.</p>
+                </section>
+
+                <!-- SECTION 4: DESIGN DIRECTION -->
+                <section id="design-direction">
+                    <h2>4. Design Direction</h2>
+                    <p>Premium consulting firm aesthetic with modern, clean execution:</p>
+
+                    <h3>Color Palette</h3>
+                    <div class="color-palette">
+                        <div class="color-swatch color-navy">
+                            <div>Deep Navy</div>
+                            <div style="font-size: 12px; margin-top: 8px;">#1B2A4A</div>
+                        </div>
+                        <div class="color-swatch color-gold">
+                            <div>Gold Accent</div>
+                            <div style="font-size: 12px; margin-top: 8px;">#C9A84C</div>
+                        </div>
+                        <div class="color-swatch color-white">
+                            <div>White</div>
+                            <div style="font-size: 12px; margin-top: 8px;">#FFFFFF</div>
+                        </div>
+                        <div class="color-swatch color-gray">
+                            <div>Light Gray</div>
+                            <div style="font-size: 12px; margin-top: 8px;">#F5F5F5</div>
+                        </div>
+                        <div class="color-swatch color-charcoal">
+                            <div>Dark Charcoal</div>
+                            <div style="font-size: 12px; margin-top: 8px;">#2D2D2D</div>
+                        </div>
+                    </div>
+
+                    <h3>Typography</h3>
+                    <p><strong>Headings:</strong> "Inter" font (or Roboto/Poppins as fallback). Bold weights (600-700). Generous letter-spacing for premium feel.</p>
+                    <p><strong>Body:</strong> System sans-serif stack (-apple-system, BlinkMacSystemFont, Segoe UI, Roboto). Regular weight (400), line-height 1.6-1.7.</p>
+                    <p><strong>Accents:</strong> Gold (#C9A84C) for borders, buttons, section dividers. Creates premium, sophisticated look.</p>
+
+                    <h3>Key Design Principles</h3>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 10px;"><strong>Generous Spacing:</strong> Ample white space between sections (40-70px). Premium feel comes from breathing room, not clutter.</li>
+                        <li style="margin-bottom: 10px;"><strong>Clean Components:</strong> Minimal borders, subtle shadows (0 2px 8px rgba). Card-based layouts for services, testimonials.</li>
+                        <li style="margin-bottom: 10px;"><strong>Strong Hierarchy:</strong> Large, confident headings. Clear visual distinction between sections. Navy for primary text, charcoal for secondary.</li>
+                        <li style="margin-bottom: 10px;"><strong>Subtle Animations:</strong> Smooth hover states (0.3s ease transitions). Fade-ins on scroll (optional). No jarring effects—keep it professional.</li>
+                        <li style="margin-bottom: 10px;"><strong>Mobile-First:</strong> Responsive grid layouts. Typography scales. Touch-friendly buttons (48px+ height).</li>
+                        <li style="margin-bottom: 10px;"><strong>Accessibility:</strong> High contrast navy/charcoal text on light backgrounds. WCAG AA compliant colors. Proper heading hierarchy.</li>
+                    </ul>
+                </section>
+
+                <!-- SECTION 5: TECH STACK -->
+                <section id="tech-stack">
+                    <h2>5. Tech Stack Recommendation</h2>
+                    <p>Optimized for speed, affordability, and professional results. Total cost: <strong>$7-15/month</strong></p>
+
+                    <h3>Why Rebuild from WordPress?</h3>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 10px;"><strong>Performance:</strong> Static HTML/CSS loads 3-5x faster than WordPress database queries. Better Core Web Vitals for SEO.</li>
+                        <li style="margin-bottom: 10px;"><strong>Security:</strong> No plugin vulnerabilities, no WordPress/database attacks, no hosting compromises. Static files = zero attack surface.</li>
+                        <li style="margin-bottom: 10px;"><strong>Cost:</strong> Netlify free tier replaces WordPress hosting ($10-20/mo). Google Workspace ($7/mo) stays for email. Total: ~$7/month vs. $25-40/month current.</li>
+                        <li style="margin-bottom: 10px;"><strong>Design Control:</strong> Full creative control over layout, animations, responsiveness. No theme limitations.</li>
+                        <li style="margin-bottom: 10px;"><strong>SEO:</strong> No bloat, no redirects, clean code = better SEO rankings. Schema markup, fast load times, mobile-first = ranking boost.</li>
+                        <li style="margin-bottom: 10px;"><strong>Maintenance:</strong> No updates, no plugin conflicts. Once built, it just works. Minimal ongoing overhead.</li>
+                    </ul>
+
+                    <h3>Frontend Stack</h3>
+                    <div class="tech-stack">
+                        <h4>HTML / CSS / JavaScript (Static Build)</h4>
+                        <p><strong>Cost:</strong> $0</p>
+                        <p>Clean, semantic HTML. Modern CSS (CSS Grid, Flexbox). Vanilla JS for interactivity (form handling, modal toggles, smooth scrolling). No frameworks needed for this scope. Delivers pristine performance.</p>
+                    </div>
+
+                    <h3>Hosting & Deployment</h3>
+                    <div class="tech-stack">
+                        <h4>Netlify (Free Tier)</h4>
+                        <p><strong>Cost:</strong> $0</p>
+                        <p>Deploy directly from Git. Automatic SSL certificates. Global CDN (fast everywhere). Auto-deploy on push. Netlify Forms for contact/quote forms (100 submissions/month free tier). Easy to upgrade later if needed.</p>
+                    </div>
+
+                    <h3>Domain & DNS</h3>
+                    <div class="tech-stack">
+                        <h4>GoDaddy (Keep) + Cloudflare DNS (Free)</h4>
+                        <p><strong>Cost:</strong> ~$15/year (domain renewal)</p>
+                        <p>Keep current domain at GoDaddy. Point nameservers to Cloudflare (free). Cloudflare provides free DNS, caching, WAF benefits. Or migrate domain to Cloudflare ($0.30/year renewal). Netlify SSL handles HTTPS.</p>
+                    </div>
+
+                    <h3>Forms & Data</h3>
+                    <div class="tech-stack">
+                        <h4>Netlify Forms + Typeform (Free Tier)</h4>
+                        <p><strong>Cost:</strong> $0</p>
+                        <p><strong>Typeform:</strong> Smart intake form with conditional logic (show fields based on service type). Embed on "Request Quote" page. Collect property details, client type, urgency. Free tier: up to 100 responses/month.</p>
+                        <p><strong>Netlify Forms:</strong> Contact form submissions routed to Slack/email. Simple setup.</p>
+                    </div>
+
+                    <h3>Email & Marketing Automation</h3>
+                    <div class="tech-stack">
+                        <h4>Google Workspace Business Starter + HubSpot Free CRM</h4>
+                        <p><strong>Cost:</strong> $7/month (Google Workspace)</p>
+                        <p><strong>Google Workspace:</strong> Keep info@designerhomesre.com, support@, etc. Professional email, calendar, Drive for document storage.</p>
+                        <p><strong>HubSpot Free CRM:</strong> Contact management, deal tracking, email templates, workflows. Native integrations with Zapier and email platforms.</p>
+                    </div>
+
+                    <h3>Automation & Integrations</h3>
+                    <div class="tech-stack">
+                        <h4>Zapier (Free Tier) + Supabase (Free Tier)</h4>
+                        <p><strong>Cost:</strong> $0</p>
+                        <p><strong>Zapier:</strong> 5 free zaps per month. Connect Typeform → HubSpot → Gmail. Zap 1: Form submission → create contact in HubSpot. Zap 2: Form submission → send confirmation email. Zap 3: HubSpot deal closed → send Google Review request email (7-day delay).</p>
+                        <p><strong>Supabase:</strong> PostgreSQL database + auth + file storage (free tier). Backend for client portal MVP.</p>
+                    </div>
+
+                    <h3>Analytics & Monitoring</h3>
+                    <div class="tech-stack">
+                        <h4>Google Analytics 4 (Free)</h4>
+                        <p><strong>Cost:</strong> $0</p>
+                        <p>Comprehensive site analytics. Track form submissions, page views, conversion funnel. Integrate with HubSpot for lead source attribution.</p>
+                    </div>
+
+                    <div class="budget-box">
+                        <h3>Total Monthly Cost Breakdown</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Cost</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Google Workspace (Email)</td>
+                                    <td>$7/month</td>
+                                    <td>Business Starter plan</td>
+                                </tr>
+                                <tr>
+                                    <td>Netlify (Hosting)</td>
+                                    <td>$0</td>
+                                    <td>Free tier, forms included</td>
+                                </tr>
+                                <tr>
+                                    <td>Domain (GoDaddy/Cloudflare)</td>
+                                    <td>~$1.25/month</td>
+                                    <td>Amortized annual cost</td>
+                                </tr>
+                                <tr>
+                                    <td>HubSpot CRM</td>
+                                    <td>$0</td>
+                                    <td>Free tier, unlimited contacts</td>
+                                </tr>
+                                <tr>
+                                    <td>Zapier</td>
+                                    <td>$0</td>
+                                    <td>Free tier, 5 zaps</td>
+                                </tr>
+                                <tr>
+                                    <td>Typeform</td>
+                                    <td>$0</td>
+                                    <td>Free tier, 100 responses/month</td>
+                                </tr>
+                                <tr>
+                                    <td>Supabase</td>
+                                    <td>$0</td>
+                                    <td>Free tier for portal MVP</td>
+                                </tr>
+                                <tr>
+                                    <td>Google Analytics 4</td>
+                                    <td>$0</td>
+                                    <td>Free forever</td>
+                                </tr>
+                                <tr style="font-weight: 700; background: rgba(201, 168, 76, 0.2);">
+                                    <td><strong>TOTAL</strong></td>
+                                    <td><strong>$8.25-10/month</strong></td>
+                                    <td><strong>Well under $100/month budget</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: HOSTING & DOMAIN -->
+                <section id="hosting">
+                    <h2>6. Hosting + Domain Recommendations</h2>
+
+                    <h3>Domain Strategy</h3>
+                    <p><strong>Keep current domain:</strong> designerhomesre.com is established and has any existing SEO authority. No need to migrate unless renewing at GoDaddy becomes problematic.</p>
+                    <p><strong>Option A (Simple):</strong> Keep GoDaddy for domain registration (~$15/year). Point nameservers to Cloudflare (free DNS). Cloudflare handles DNS, caching, DDoS protection.</p>
+                    <p><strong>Option B (Optimal):</strong> Migrate domain to Cloudflare (~$0.30/year renewal vs. $15). Cloudflare owns DNS, single dashboard.</p>
+
+                    <h3>Hosting Strategy</h3>
+                    <p><strong>Primary Recommendation: Netlify</strong></p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 10px;">Free tier covers current + future growth (100GB bandwidth, unlimited sites, unlimited builds).</li>
+                        <li style="margin-bottom: 10px;">Automatic SSL/TLS certificates (HTTPS). Renewal automatic, no management needed.</li>
+                        <li style="margin-bottom: 10px;">Global CDN ensures fast load times for visitors across NC and beyond.</li>
+                        <li style="margin-bottom: 10px;">Built-in form handling (Netlify Forms) for contact/quote submissions.</li>
+                        <li style="margin-bottom: 10px;">Deploy via Git (GitHub/GitLab/Bitbucket). Push code = auto-deploy. Zero downtime.</li>
+                        <li style="margin-bottom: 10px;">Serverless functions available free tier (good for future API endpoints).</li>
+                        <li style="margin-bottom: 10px;">Analytics dashboard included.</li>
+                    </ul>
+
+                    <h3>Alternative: Vercel</h3>
+                    <p>Vercel also offers free tier with similar benefits. Slightly more optimized for Next.js, but HTML/CSS/JS works fine. Comparable to Netlify in features and pricing.</p>
+
+                    <h3>DNS Management with Cloudflare (Recommended)</h3>
+                    <div class="tech-stack">
+                        <h4>Why Cloudflare?</h4>
+                        <p><strong>Free features:</strong> DNS management, automatic HTTPS, DDoS protection, caching layer, analytics. Minimal setup needed once nameservers are pointed.</p>
+                        <p><strong>Setup:</strong> Point domain nameservers to Cloudflare → Cloudflare creates CNAME record pointing to Netlify → Netlify hosts site.</p>
+                    </div>
+
+                    <h3>Email DNS Records</h3>
+                    <p>If using Google Workspace email: Cloudflare DNS will handle MX records pointing to Google's servers. One-time setup during Google Workspace onboarding.</p>
+
+                    <h3>SSL/HTTPS</h3>
+                    <p>Netlify provides free SSL certificates (auto-renew). No additional cost or management. All traffic encrypted.</p>
+                </section>
+
+                <!-- SECTION 7: EMAIL & CRM SETUP -->
+                <section id="email-crm">
+                    <h2>7. Email + CRM Setup</h2>
+
+                    <h3>Email Infrastructure</h3>
+                    <div class="tech-stack">
+                        <h4>Google Workspace Business Starter - $7/month</h4>
+                        <p><strong>What you get:</strong> Professional email (info@, support@, etc.), Google Calendar, Drive (1TB storage), Meet (video conferencing).</p>
+                        <p><strong>Setup:</strong> Migrate current email to Google Workspace or keep existing Gmail and add business email alias.</p>
+                        <p><strong>Domains:</strong> Add custom domain (designerhomesre.com) to workspace. Create email addresses: info@designerhomesre.com, support@, etc.</p>
+                        <p><strong>Integration:</strong> Connect to HubSpot for unified inbox + CRM.</p>
+                    </div>
+
+                    <h3>CRM: HubSpot Free Tier</h3>
+                    <div class="tech-stack">
+                        <h4>HubSpot Free CRM - $0</h4>
+                        <p><strong>Core Features:</strong> Unlimited contacts, deal management, task automation, email templates, contact properties.</p>
+                        <p><strong>Setup:</strong> Create HubSpot account. Map Typeform fields to HubSpot properties (Service Type, Property Address, Client Type, Urgency, etc.).</p>
+                        <p><strong>Benefits:</strong> Single source of truth for all lead/client data. Track deal progress (Inquiry → Quote → In Progress → Completed). Email integration for tracking sent messages.</p>
+                    </div>
+
+                    <h3>Workflow & Automation (Zapier Free Tier)</h3>
+                    <p>Connect Typeform → HubSpot → Gmail via Zapier. Max 5 free zaps/month. Suggested automations:</p>
+
+                    <div class="tech-stack">
+                        <h4>Zap 1: Form Submission → HubSpot Contact</h4>
+                        <p>Trigger: New Typeform submission. Action: Create/update HubSpot contact with name, email, phone, service type, property address, etc.</p>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Zap 2: Form Submission → Confirmation Email</h4>
+                        <p>Trigger: New Typeform submission. Action: Send Gmail confirmation email from info@designerhomesre.com. Template: "Thanks for submitting. We'll review and contact you within 24 hours."</p>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Zap 3: HubSpot Deal Closed → Review Request Email</h4>
+                        <p>Trigger: HubSpot deal marked "Closed" (appraisal completed). Action: Wait 7 days, then send Gmail with Google Review request link + Yelp/BBB links.</p>
+                    </div>
+
+                    <h3>Email Templates (HubSpot)</h3>
+                    <p>Create templates in HubSpot for recurring emails:</p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;"><strong>Quote Confirmation:</strong> "Your appraisal order received. Here's what to expect..."</li>
+                        <li style="margin-bottom: 8px;"><strong>In Progress Notification:</strong> "Your appraisal is underway. Expected completion: [date]."</li>
+                        <li style="margin-bottom: 8px;"><strong>Completion Notification:</strong> "Your appraisal is ready! Access via client portal or download link."</li>
+                        <li style="margin-bottom: 8px;"><strong>Review Request:</strong> "We'd love your feedback. Leave a review on Google/Yelp/BBB."</li>
+                        <li style="margin-bottom: 8px;"><strong>Follow-up (no contact):</strong> "Haven't heard from you? Questions about your appraisal?"</li>
+                    </ul>
+
+                    <h3>Integration Dashboard</h3>
+                    <p>Once set up, workflow is: Lead fills Typeform → Zapier auto-creates HubSpot contact + sends confirmation email → Team receives notification in Slack/email → Team updates deal status in HubSpot → Automation emails triggered based on status changes.</p>
+                </section>
+
+                <!-- SECTION 8: CLIENT PORTAL ARCHITECTURE -->
+                <section id="client-portal">
+                    <h2>8. Client Portal Architecture</h2>
+                    <p>Transparent, real-time order tracking for clients. Two-phase rollout.</p>
+
+                    <h3>Phase 1: MVP (Month 1)</h3>
+                    <p><strong>Tech Stack:</strong> Supabase (auth + database + storage) + HTML/CSS/JS frontend. Deploy alongside main site on Netlify.</p>
+
+                    <div class="tech-stack">
+                        <h4>Client-Side Features</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>Login/Register:</strong> Email + password auth via Supabase. First-time: register with email. Subsequent: login with email/password.</li>
+                            <li style="margin-bottom: 8px;"><strong>Dashboard:</strong> List of client's orders with status (Pending → In Progress → Under Review → Complete → Delivered).</li>
+                            <li style="margin-bottom: 8px;"><strong>Order Details:</strong> Property address, service type, order date, expected completion, total cost.</li>
+                            <li style="margin-bottom: 8px;"><strong>Report Download:</strong> Once status = "Delivered," download link appears. PDF stored in Supabase Storage.</li>
+                            <li style="margin-bottom: 8px;"><strong>Status Timeline:</strong> Visual timeline showing progression through stages + timestamp for each.</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Admin-Side Features</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>Order Management:</strong> View all orders. Update status (simple dropdown). Admin URL: /admin/dashboard (protected by admin password).</li>
+                            <li style="margin-bottom: 8px;"><strong>Report Upload:</strong> Drag-drop PDF to attach to specific order. Auto-stores in Supabase Storage.</li>
+                            <li style="margin-bottom: 8px;"><strong>Status Change Emails:</strong> When admin changes status, automatic email sent to client. Example: "Your appraisal is now in progress. Expected completion: [date]."</li>
+                            <li style="margin-bottom: 8px;"><strong>Client List:</strong> View all registered clients, contact info, order history.</li>
+                        </ul>
+                    </div>
+
+                    <h3>Phase 2: Full Dashboard (Month 2-3)</h3>
+                    <p>Expand with:</p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;"><strong>Messaging Thread:</strong> Per-order chat. Client can ask questions → admin replies. Reduces email threads.</li>
+                        <li style="margin-bottom: 8px;"><strong>Invoice/Payment History:</strong> View invoices, payment status, download receipts.</li>
+                        <li style="margin-bottom: 8px;"><strong>Notifications:</strong> Push notifications on status change (if client enables).</li>
+                        <li style="margin-bottom: 8px;"><strong>Admin Notifications:</strong> Email/Slack alerts when new order submitted or message posted.</li>
+                    </ul>
+
+                    <h3>Security & Access Control</h3>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Clients see only their own orders (Supabase RLS policies enforce this).</li>
+                        <li style="margin-bottom: 8px;">Admin section protected by password hash (stored in .env). No usernames/passwords for simplicity in MVP.</li>
+                        <li style="margin-bottom: 8px;">All communication over HTTPS (Netlify SSL).</li>
+                        <li style="margin-bottom: 8px;">PDFs stored in Supabase Storage with restricted access (only owner can download).</li>
+                    </ul>
+
+                    <h3>Integration with HubSpot</h3>
+                    <p>Portal order status syncs with HubSpot deal status. When admin marks order complete in portal, Zapier can trigger HubSpot deal update → review request email sent automatically.</p>
+                </section>
+
+                <!-- SECTION 9: AI AUTOMATION PLAN -->
+                <section id="ai-automation">
+                    <h2>9. AI Automation Plan</h2>
+                    <p>Leverage AI to reduce manual work and improve customer experience. Phased approach.</p>
+
+                    <h3>Smart Intake Form (Immediate)</h3>
+                    <div class="tech-stack">
+                        <h4>Typeform with Conditional Logic</h4>
+                        <p>Acts as "AI-lite" intake. Conditional branching based on responses:</p>
+                        <p><strong>Example flow:</strong></p>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;">Q1: "What service do you need?" (Residential / Commercial / Consulting)</li>
+                            <li style="margin-bottom: 8px;">IF Residential: show "Is this for a purchase, refinance, or divorce?" → branches to different property questions</li>
+                            <li style="margin-bottom: 8px;">IF Commercial: show "Building type? Square footage? Annual NOI?"</li>
+                            <li style="margin-bottom: 8px;">IF Consulting: show "Jurisdiction? Number of properties? Timeline?"</li>
+                        </ul>
+                        <p>Result: More accurate data capture. HubSpot receives pre-categorized leads. Less follow-up questions needed.</p>
+                    </div>
+
+                    <h3>Smart Lead Categorization (HubSpot)</h3>
+                    <div class="tech-stack">
+                        <h4>Automatic Property Mapping</h4>
+                        <p>Zapier maps Typeform answers to HubSpot properties: Service Type → [Residential/Commercial/Consulting]. Urgency Level → [High/Medium/Low]. This auto-populates the CRM, saving manual data entry.</p>
+                    </div>
+
+                    <h3>Auto-Confirmations (Zapier)</h3>
+                    <div class="tech-stack">
+                        <h4>Instant Response on Form Submit</h4>
+                        <p>Form submitted → Zapier triggers Gmail confirmation within seconds. Client gets immediate reassurance that submission received. Sets expectation: "We'll review your request and contact you within 24 hours."</p>
+                    </div>
+
+                    <h3>AI Reply Drafts (Future - ChatGPT API)</h3>
+                    <div class="tech-stack">
+                        <h4>Conversation Summarization</h4>
+                        <p><strong>Future (Phase 4-5):</strong> Use OpenAI API to summarize client inquiry from form/email → generate draft response for team to review/send. Saves time on routine inquiries.</p>
+                        <p><strong>Example:</strong> Client asks "How long for residential appraisal?" → ChatGPT drafts: "Residential appraisals typically 24-48 hours. Scheduling depends on current volume. Here's our timeline..." → Team reviews/sends.</p>
+                    </div>
+
+                    <h3>Automated Review Requests (HubSpot Workflows)</h3>
+                    <div class="tech-stack">
+                        <h4>7-Day Post-Delivery Email Sequence</h4>
+                        <p><strong>Trigger:</strong> Order status = "Delivered" in portal/HubSpot.</p>
+                        <p><strong>Action:</strong> Wait 7 days. Send email with links to Google, Yelp, BBB review forms. Personalized with client name + property address.</p>
+                        <p><strong>Optional 2nd touch:</strong> If no review within 14 days, send follow-up: "We'd still love your feedback..."</p>
+                        <p><strong>Result:</strong> Automated review generation. No manual email sending. More reviews → higher rankings on Google/Yelp.</p>
+                    </div>
+
+                    <h3>Smart Follow-ups (HubSpot Workflows)</h3>
+                    <div class="tech-stack">
+                        <h4>Stale Lead Automation</h4>
+                        <p><strong>Trigger:</strong> No contact in 7 days from form submission.</p>
+                        <p><strong>Action:</strong> Send email: "Hi [Name], Just checking in on your appraisal request for [Property]. Any questions I can answer?"</p>
+                        <p><strong>Result:</strong> Re-engages cold leads without manual outreach.</p>
+                    </div>
+
+                    <h3>Implementation Timeline</h3>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;"><strong>Week 1:</strong> Typeform conditional logic setup. Zapier integrations (form → HubSpot, form → email).</li>
+                        <li style="margin-bottom: 8px;"><strong>Week 2-3:</strong> HubSpot workflows (review requests, stale lead follow-ups).</li>
+                        <li style="margin-bottom: 8px;"><strong>Month 2+:</strong> Consider ChatGPT API integration for reply drafts if volume warrants.</li>
+                    </ul>
+                </section>
+
+                <!-- SECTION 10: SEO STRATEGY -->
+                <section id="seo">
+                    <h2>10. SEO Strategy</h2>
+                    <p>Targeted keyword strategy + technical optimization to rank in Triangle NC search results.</p>
+
+                    <h3>Primary Keywords (High Intent)</h3>
+                    <p>These have dedicated pages or strong content focus:</p>
+                    <div class="keyword-list">
+                        <div class="keyword-item">
+                            <strong>Triangle NC Appraiser</strong>
+                            <p>Focus: Homepage + Service Area page. Target Raleigh, Durham, Chapel Hill searchers.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Durham NC Appraiser</strong>
+                            <p>Focus: Service Area page. Local modifier increases intent. High conversion potential.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Real Estate Appraiser Raleigh NC</strong>
+                            <p>Focus: Homepage + Service Area. Raleigh is largest city in Triangle, high search volume.</p>
+                        </div>
+                    </div>
+
+                    <h3>Secondary Keywords</h3>
+                    <p>Service-specific, moderately competitive:</p>
+                    <div class="keyword-list">
+                        <div class="keyword-item">
+                            <strong>Divorce Appraisal Durham NC</strong>
+                            <p>Dedicated section in Appraisal Services. Long-tail, high intent.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Estate Appraisal Triangle NC</strong>
+                            <p>Dedicated section in Appraisal Services. Targets probate/estate planning professionals.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Retrospective Appraisal NC</strong>
+                            <p>Specialized service. Less competitive. Good for capturing niche searches.</p>
+                        </div>
+                    </div>
+
+                    <h3>Long-Tail Keywords</h3>
+                    <p>Lower competition, specific intent:</p>
+                    <div class="keyword-list">
+                        <div class="keyword-item">
+                            <strong>FHA Appraiser NC</strong>
+                            <p>Targets mortgage lenders / FHA loan seekers. Include on Appraisal Services.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Green Home Appraiser NC</strong>
+                            <p>Sustainable/LEED home niche. Mention in services to capture eco-conscious buyers.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Commercial Property Appraisal Durham</strong>
+                            <p>B2B focus. Target commercial real estate professionals, investors.</p>
+                        </div>
+                        <div class="keyword-item">
+                            <strong>Mass Appraisal Consulting</strong>
+                            <p>B2G (business-to-government) keyword. Target municipalities seeking consultation.</p>
+                        </div>
+                    </div>
+
+                    <h3>Technical SEO (On-Site)</h3>
+                    <div class="tech-stack">
+                        <h4>Schema Markup</h4>
+                        <p>Add JSON-LD schema to pages:</p>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>LocalBusiness:</strong> Homepage. Company name, phone, email, address, service area (multi-city). Helps Google Knowledge Panel.</li>
+                            <li style="margin-bottom: 8px;"><strong>Service:</strong> Each service page. Service name, description, provider, area served.</li>
+                            <li style="margin-bottom: 8px;"><strong>BreadcrumbList:</strong> Navigation path. Improves click-through rate from search results.</li>
+                            <li style="margin-bottom: 8px;"><strong>FAQPage:</strong> FAQ page. Google shows answers directly in search results (featured snippets).</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Performance & Core Web Vitals</h4>
+                        <p>Static HTML = instant performance. Netlify CDN = <100ms global load times. Google PageSpeed Insights will show near-perfect scores. This is a major ranking factor.</p>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Mobile-First Indexing</h4>
+                        <p>Responsive design (built into CSS from start). Mobile version loads as fast as desktop. Google prioritizes mobile experience.</p>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Sitemap & Robots.txt</h4>
+                        <p>Netlify auto-generates sitemap.xml. Create robots.txt to guide crawlers. Submit sitemap to Google Search Console for faster indexing.</p>
+                    </div>
+
+                    <h3>Content Strategy (Future Blog)</h3>
+                    <p><strong>Phase 2+:</strong> Start blog section. Monthly posts on appraisal-related topics:</p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;">"Why Do You Need an Appraisal?" (evergreen, top-of-funnel)</li>
+                        <li style="margin-bottom: 8px;">"Appraisal Timeline: What to Expect" (answers common questions)</li>
+                        <li style="margin-bottom: 8px;">"Divorce Appraisals in NC: Legal Requirements" (targets divorce attorneys)</li>
+                        <li style="margin-bottom: 8px;">"FHA vs. Conventional Appraisals: Key Differences" (targets mortgage lenders)</li>
+                        <li style="margin-bottom: 8px;">"Mass Appraisal Insights: NC Real Estate Market Trends" (thought leadership, targets investors/municipalities)</li>
+                    </ul>
+
+                    <h3>Local SEO</h3>
+                    <p><strong>Google Business Profile (GBP):</strong></p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Create/claim profile for Designer Homes. Add photos, service areas (Raleigh, Durham, Chapel Hill, Carrboro, etc.).</li>
+                        <li style="margin-bottom: 8px;">Post updates regularly (new service highlight, blog posts).</li>
+                        <li style="margin-bottom: 8px;">Encourage clients to leave reviews on GBP, Google, Yelp, BBB.</li>
+                    </ul>
+
+                    <p><strong>Citations:</strong> List business on:</p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Yelp (free listing, verified reviews)</li>
+                        <li style="margin-bottom: 8px;">Better Business Bureau (BBB) - Free or paid profile</li>
+                        <li style="margin-bottom: 8px;">Angi (formerly Angie's List) - Professional services</li>
+                        <li style="margin-bottom: 8px;">Industry directories (NAA - National Association of Appraisers)</li>
+                    </ul>
+
+                    <h3>Link Building (Future)</h3>
+                    <p><strong>Phase 3+:</strong> Reach out to:</p>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;">Local real estate blogs / YouTube channels → guest content or backlinks</li>
+                        <li style="margin-bottom: 8px;">Real estate agent associations → be featured as recommended appraiser</li>
+                        <li style="margin-bottom: 8px;">Mortgage broker networks → referral links</li>
+                    </ul>
+
+                    <h3>Measurement & Analytics</h3>
+                    <p><strong>Google Search Console:</strong> Monitor keyword rankings, click-through rates, indexed pages. Track "Triangle NC appraiser" + other target keywords.</p>
+                    <p><strong>Google Analytics 4:</strong> Track traffic sources, user behavior, form submissions. Set goals for "Request Quote" conversions.</p>
+                </section>
+
+                <!-- SECTION 11: BUILD ROADMAP -->
+                <section id="roadmap">
+                    <h2>11. Build Roadmap</h2>
+                    <p>5-phase implementation plan. Realistic timeline with clear milestones.</p>
+
+                    <div class="phase">
+                        <h4>PHASE 1: Static Website Build & Deploy (Week 1-2)</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>Week 1:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Finalize copy for all 10 pages (Home, About, Services, Consulting, Area, Reviews, Quote, Portal, FAQ, Contact)</li>
+                                    <li>Design comps (Figma mockups) for desktop + mobile</li>
+                                    <li>Asset gathering (photos, logo, service icons)</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Week 2:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>HTML semantic structure + CSS (mobile-first responsive design)</li>
+                                    <li>Navigation, footer, global styles</li>
+                                    <li>Service cards, testimonial sections, hero sections</li>
+                                    <li>Image optimization (WebP, lazy loading)</li>
+                                    <li>Deploy to GitHub, connect to Netlify for auto-deploy</li>
+                                    <li>Point domain DNS to Netlify (or Cloudflare → Netlify)</li>
+                                    <li>Test on mobile, tablet, desktop. Core Web Vitals check.</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Deliverables:</strong> Live website at designerhomesre.com. Fast (~<100ms load), responsive, professional look.</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase">
+                        <h4>PHASE 2: Forms, Email, Analytics (Week 2-3)</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>Week 2:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Set up Typeform with conditional logic (smart intake form)</li>
+                                    <li>Embed Typeform on "Request Quote" page</li>
+                                    <li>Create Netlify contact form on Contact page (simple backup)</li>
+                                    <li>Set up Google Analytics 4 on site. Create goals for form submission, page views, engagement</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Week 3:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Migrate/set up Google Workspace email (info@, support@)</li>
+                                    <li>Verify domain in Google Workspace (MX records via Cloudflare DNS)</li>
+                                    <li>Create Zapier account + 2 initial zaps: Typeform → HubSpot, Typeform → Gmail confirmation</li>
+                                    <li>Test form submissions end-to-end</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Deliverables:</strong> Forms are live and functional. Submissions create HubSpot contacts. Confirmations sent. Analytics tracking in place.</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase">
+                        <h4>PHASE 3: CRM Integration & Automations (Week 3-4)</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>Week 3-4:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Set up HubSpot Free CRM account. Configure contacts, deals, pipelines</li>
+                                    <li>Map Typeform fields to HubSpot properties (Service Type, Urgency, etc.)</li>
+                                    <li>Create HubSpot email templates (confirmation, in-progress, completed, review request)</li>
+                                    <li>Set up HubSpot workflows: Stale lead follow-up (no contact in 7 days), Review request on deal closed (7-day delay)</li>
+                                    <li>Create 3rd Zapier zap: HubSpot deal status change → send notification to Slack or email</li>
+                                    <li>Train Keith on HubSpot CRM usage (importing existing clients, updating deals)</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Deliverables:</strong> HubSpot is source of truth for all leads. Automations running (confirmations, follow-ups, review requests). Team workflow established.</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase">
+                        <h4>PHASE 4: Client Portal MVP (Month 2)</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>Build (Week 1-2 of Month 2):</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Set up Supabase project. Create auth (email/password) + database schema</li>
+                                    <li>Build portal frontend: Login page, client dashboard, order list, order details, report download</li>
+                                    <li>Build admin side: Order management, status update, report upload, email notifications on status change</li>
+                                    <li>Set up Supabase Storage for PDF reports. Create functions to handle uploads/downloads</li>
+                                    <li>Deploy portal to Netlify (separate subdomain: portal.designerhomesre.com or /portal)</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Soft Launch (Week 3):</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Manually create 2-3 test orders in portal. Verify client login, order view, report download works</li>
+                                    <li>Test admin flow: update status, upload PDF, verify email sent to client</li>
+                                    <li>Fix bugs + iterate</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Launch (Week 4):</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Migrate existing client orders to portal (backfill data)</li>
+                                    <li>Start sending new clients login credentials + instructions</li>
+                                    <li>Monitor usage + gather feedback</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Deliverables:</strong> Clients can log in, see order status, download reports. Admins can upload reports + update status. Transparency increases.</li>
+                        </ul>
+                    </div>
+
+                    <div class="phase">
+                        <h4>PHASE 5: SEO Refinement & Advanced Automation (Month 3+)</h4>
+                        <ul style="margin-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 8px;"><strong>SEO Optimization:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Add schema.org markup (LocalBusiness, Service, FAQPage, BreadcrumbList)</li>
+                                    <li>Submit sitemap.xml to Google Search Console</li>
+                                    <li>Create/claim Google Business Profile</li>
+                                    <li>List on Yelp, BBB, Angi (citations)</li>
+                                    <li>Monitor Search Console for keyword rankings + clicks</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Content & Marketing:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Plan blog section. Write 2-3 SEO-focused posts (e.g., "Why You Need an Appraisal," "Divorce Appraisals in NC")</li>
+                                    <li>Optimize existing pages for target keywords</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Advanced Automation:</strong>
+                                <ul style="margin-left: 20px; margin-top: 8px;">
+                                    <li>Evaluate ChatGPT API for auto-reply drafts (if volume warrants)</li>
+                                    <li>Expand Zapier automations (5+ zaps for recurring tasks)</li>
+                                    <li>Set up recurring review request campaigns</li>
+                                </ul>
+                            </li>
+                            <li style="margin-bottom: 8px;"><strong>Deliverables:</strong> Site optimized for search. Organic traffic begins. Advanced automations handling routine tasks. Team focuses on high-value work.</li>
+                        </ul>
+                    </div>
+
+                    <h3>Ongoing (After Launch)</h3>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 8px;"><strong>Weekly:</strong> Monitor form submissions, reply to inquiries, update client portal status.</li>
+                        <li style="margin-bottom: 8px;"><strong>Monthly:</strong> Review analytics, HubSpot metrics (lead sources, conversion rates), Google Search Console rankings.</li>
+                        <li style="margin-bottom: 8px;"><strong>Quarterly:</strong> Blog posts, SEO optimization, review automation effectiveness, feature roadmap planning.</li>
+                        <li style="margin-bottom: 8px;"><strong>As-Needed:</strong> Bug fixes, performance tuning, feature requests from portal users.</li>
+                    </ul>
+                </section>
+
+                <!-- CONCLUSION -->
+                <section>
+                    <h2>Summary & Next Steps</h2>
+                    <p>This strategy transforms Designer Homes into a modern, efficient, digital-first real estate appraisal company while staying well under the $100/month budget.</p>
+
+                    <h3>Key Wins</h3>
+                    <ul style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 10px;"><strong>Cost Reduction:</strong> Migrate from WordPress/GoDaddy hosting (~$25-40/mo) to Netlify free tier. Save $20+/month. Total ops cost: ~$8/month (Google Workspace only).</li>
+                        <li style="margin-bottom: 10px;"><strong>Performance:</strong> Static HTML site loads 3-5x faster than WordPress. Better SEO rankings, higher conversion rates.</li>
+                        <li style="margin-bottom: 10px;"><strong>Automation:</strong> Forms → HubSpot → automations reduce manual data entry by ~80%. Review requests, follow-ups, confirmations run on autopilot.</li>
+                        <li style="margin-bottom: 10px;"><strong>Client Experience:</strong> Portal provides real-time transparency. Clients see order progress without emailing. Trust increases.</li>
+                        <li style="margin-bottom: 10px;"><strong>Growth:</strong> SEO optimization targets high-intent local keywords. Blog positions Designer Homes as thought leader. Organic growth accelerates.</li>
+                    </ul>
+
+                    <h3>Recommended First Steps</h3>
+                    <ol style="margin-left: 20px; color: #555; font-size: 14px;">
+                        <li style="margin-bottom: 10px;">Approve strategy document. Confirm scope (all 10 pages, portal, automations).</li>
+                        <li style="margin-bottom: 10px;">Finalize homepage copy + service descriptions. Gather high-quality photos/branding assets.</li>
+                        <li style="margin-bottom: 10px;">Create design comps (mobile + desktop) for all pages. Get sign-off before dev.</li>
+                        <li style="margin-bottom: 10px;">Begin Phase 1 build (HTML/CSS). Aim for Week 2 soft launch.</li>
+                        <li style="margin-bottom: 10px;">Set up Google Workspace + HubSpot in parallel. Forms + automation ready by Week 3.</li>
+                    </ol>
+
+                    <p style="margin-top: 30px; padding: 20px; background: rgba(201, 168, 76, 0.15); border-radius: 8px;"><strong>Timeline to Full Launch:</strong> 4-6 weeks for core website + forms + basic automations. Client portal + advanced SEO = Month 2-3. By end of Month 3, Designer Homes has a modern, competitive digital presence and significant operational efficiency gains.</p>
+                </section>
+            </div>
+
+            <div class="footer">
+                <p>Designer Homes Real Estate Services — Strategic Plan</p>
+                <p style="margin-top: 10px; font-size: 13px;">Prepared for Keith Manning Jr. | March 2026</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
