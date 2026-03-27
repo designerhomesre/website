@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 48" fill="none">
+  <!-- DH Monogram Mark — standalone icon -->
+  <g>
+    <path d="M4 6h10c8.5 0 15 6.5 15 18s-6.5 18-15 18H4V6z" stroke="#1B2A4A" stroke-width="2.2" fill="none"/>
+    <line x1="35" y1="6" x2="35" y2="42" stroke="#1B2A4A" stroke-width="2.2"/>
+    <line x1="51" y1="6" x2="51" y2="42" stroke="#1B2A4A" stroke-width="2.2"/>
+    <line x1="35" y1="24" x2="51" y2="24" stroke="#C9A84C" stroke-width="2.2"/>
+    <line x1="4" y1="24" x2="25" y2="24" stroke="#C9A84C" stroke-width="1.2" opacity="0.45"/>
+  </g>
+</svg>

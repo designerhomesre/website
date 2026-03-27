@@ -471,8 +471,8 @@ const SettingsModule = {
       perStopMiles: 5,
       dueDays: 15,
       paymentInstructions: 'Payment required before report release.',
-      stripeEnabled: false,
-      stripePublishableKey: '',
+      stripeEnabled: true,
+      stripePublishableKey: 'pk_test_51TFRoVCbr00SFfFgEzUrA2LKuIJgmQWdvVFfCDp3wLs1Joq9Ldv0VOULPNtUutx4llb9wreGCiutsoHeJIMoyMf700zTfxqL8A',
       stripeFunctionsUrl: ''
     };
   },
