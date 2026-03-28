@@ -29,6 +29,11 @@
   <link rel="stylesheet" href="css/styles.css">
 
   <style>
+    body {
+      opacity: 0.99;
+      transition: opacity 0.3s ease-in;
+    }
+
     .contact-wrapper {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -171,47 +176,30 @@
        =============================================== -->
   <header>
     <nav>
-      <div class="logo">
-        <span class="logo-text">DESIGNER HOMES</span>
-        <span class="logo-subtext">REAL ESTATE SERVICES</span>
-      </div>
-
+      <a href="index.html" class="logo" aria-label="Designer Homes Home">
+        <img src="/images/logo-light.svg" alt="Designer Homes Real Estate Services" class="logo-img" width="220" height="48">
+      </a>
       <ul class="nav-menu">
-        <li class="nav-item">
-          <a href="index.html" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
-          <a href="about.html" class="nav-link">About</a>
-        </li>
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
         <li class="nav-item dropdown">
           <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
           <ul class="dropdown-menu">
-            <li><a href="services.html#appraisals" class="dropdown-item">Appraisal Services</a></li>
-            <li><a href="mass-appraisal.html" class="dropdown-item">Mass Appraisal Consulting</a></li>
+            <li><a href="services.html" class="dropdown-item">All Services</a></li>
+            <li><a href="services.html#private" class="dropdown-item">Private Appraisals</a></li>
+            <li><a href="services.html#lender" class="dropdown-item">Lender Appraisals</a></li>
+            <li><a href="services.html#consulting" class="dropdown-item">Consulting</a></li>
             <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a href="service-area.html" class="nav-link">Service Area</a>
-        </li>
-        <li class="nav-item">
-          <a href="reviews.html" class="nav-link">Reviews</a>
-        </li>
-        <li class="nav-item">
-          <a href="faq.html" class="nav-link">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a href="contact.html" class="nav-link">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a href="contact.html#request-quote" class="btn btn-primary">Request a Quote</a>
-        </li>
+        <li class="nav-item"><a href="service-area.html" class="nav-link">Service Area</a></li>
+        <li class="nav-item"><a href="reviews.html" class="nav-link">Reviews</a></li>
+        <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        <li class="nav-item"><a href="quote.html" class="btn btn-primary">Get a Quote</a></li>
       </ul>
-
       <button class="hamburger" aria-label="Toggle navigation menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </nav>
   </header>
@@ -375,62 +363,50 @@
   <footer>
     <div class="container">
       <div class="footer-content">
-        <!-- Column 1: Logo & Description -->
         <div class="footer-column">
           <div class="footer-logo">
-            <div class="logo">
-              <span class="logo-text">DESIGNER HOMES</span>
-              <span class="logo-subtext">REAL ESTATE SERVICES</span>
-            </div>
+            <img src="/images/logo-light.svg" alt="Designer Homes Real Estate Services" width="200" height="44" loading="lazy">
           </div>
-          <p class="footer-description">Professional appraisal services delivering accuracy, expertise, and modern technology for every valuation scenario across the Triangle.</p>
+          <p class="footer-description">Premier appraisal services delivering accuracy, expertise, and modern technology across the Triangle.</p>
           <a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a>
         </div>
-
-        <!-- Column 2: Quick Links -->
         <div class="footer-column">
-          <h3>Quick Links</h3>
+          <h3>Company</h3>
           <ul>
             <li><a href="index.html" class="footer-link">Home</a></li>
             <li><a href="about.html" class="footer-link">About</a></li>
             <li><a href="services.html" class="footer-link">Services</a></li>
             <li><a href="service-area.html" class="footer-link">Service Area</a></li>
             <li><a href="reviews.html" class="footer-link">Reviews</a></li>
-            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li><a href="faq.html" class="footer-link">FAQ</a></li>
           </ul>
         </div>
-
-        <!-- Column 3: Services -->
         <div class="footer-column">
           <h3>Services</h3>
           <ul>
-            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
-            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
-            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
-            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
-            <li><a href="mass-appraisal.html" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="services.html#private" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#lender" class="footer-link">Lender Appraisals</a></li>
+            <li><a href="services.html#consulting" class="footer-link">Consulting</a></li>
+            <li><a href="services.html#tax" class="footer-link">Tax Appeals</a></li>
+            <li><a href="services.html#mass" class="footer-link">Mass Appraisal</a></li>
             <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
           </ul>
         </div>
-
-        <!-- Column 4: Contact -->
         <div class="footer-column">
           <h3>Contact</h3>
           <div class="footer-contact">
             <p><strong>Designer Homes Real Estate Services</strong></p>
-            <p>Durham, NC<br>USA</p>
-            <p><strong>Phone:</strong><br><a href="tel:+19737259580" class="footer-link">(973) 725-9580</a></p>
-            <p><strong>Email:</strong><br><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
+            <p>Durham, NC</p>
+            <p><a href="tel:+19737259580" class="footer-link">(973) 725-9580</a></p>
+            <p><a href="mailto:info@designerhomesre.com" class="footer-link">info@designerhomesre.com</a></p>
           </div>
         </div>
       </div>
-
-      <!-- Footer Bottom -->
       <div class="footer-bottom">
         <div class="footer-bottom-links">
           <span>&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</span>
-          <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
-          <a href="terms.html" class="footer-bottom-link">Terms of Service</a>
+          <a href="privacy.html" class="footer-bottom-link">Privacy</a>
+          <a href="terms.html" class="footer-bottom-link">Terms</a>
         </div>
       </div>
     </div>
@@ -587,11 +563,6 @@
     window.addEventListener('load', () => {
       document.body.style.opacity = '1';
     });
-
-    body {
-      opacity: 0.99;
-      transition: opacity 0.3s ease-in;
-    }
   </script>
 </body>
 </html>
