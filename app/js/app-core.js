@@ -7,6 +7,57 @@
  */
 
 // ============================================================================
+// SECURITY: Input Sanitization via DOMPurify
+// ============================================================================
+
+const SafeHTML = {
+  /**
+   * Sanitize HTML string before inserting into the DOM.
+   * Uses DOMPurify if loaded, falls back to basic escaping.
+   */
+  sanitize(html) {
+    if (typeof DOMPurify !== 'undefined') {
+      return DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ['div', 'span', 'p', 'br', 'strong', 'em', 'b', 'i', 'u',
+          'table', 'thead', 'tbody', 'tr', 'th', 'td', 'h1', 'h2', 'h3', 'h4', 'h5',
+          'ul', 'ol', 'li', 'a', 'img', 'small', 'label', 'input', 'select', 'option',
+          'textarea', 'button', 'form', 'section', 'header', 'footer', 'nav',
+          'svg', 'path', 'circle', 'canvas'],
+        ALLOWED_ATTR: ['class', 'id', 'style', 'href', 'src', 'alt', 'title', 'type',
+          'value', 'placeholder', 'name', 'for', 'checked', 'disabled', 'readonly',
+          'min', 'max', 'step', 'rows', 'cols', 'colspan', 'rowspan', 'target',
+          'data-id', 'data-section', 'data-slot', 'data-type', 'data-status',
+          'data-assignment', 'data-client', 'data-invoice', 'data-index',
+          'onclick', 'onchange', 'onsubmit', 'oninput'],
+        ALLOW_DATA_ATTR: true
+      });
+    }
+    // Fallback: basic HTML entity escaping
+    return SafeHTML.escape(html);
+  },
+
+  /** Escape HTML entities for safe text insertion */
+  escape(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  },
+
+  /**
+   * Set innerHTML safely. Drop-in replacement for el.innerHTML = html.
+   * @param {HTMLElement} el - Target element
+   * @param {string} html - HTML string to sanitize and set
+   */
+  set(el, html) {
+    if (el) el.innerHTML = this.sanitize(html);
+  }
+};
+
+// ============================================================================
 // UTILITY OBJECT - Helper functions for common operations
 // ===========================================================================
 const Util = {
@@ -689,14 +740,19 @@ const SettingsModule = {
     const tempEl = document.getElementById('set-ai-temp');
     const maxTokEl = document.getElementById('set-ai-max-tokens');
     const capEl = document.getElementById('set-ai-monthly-cap');
+    const proxyEl = document.getElementById('set-ai-proxy');
+    const proxySecretEl = document.getElementById('set-ai-proxy-secret');
 
     if (providerEl) providerEl.value = s.provider || 'none';
     if (keyEl) keyEl.value = s.apiKey || '';
     if (tempEl) tempEl.value = s.temperature || 0.3;
     if (maxTokEl) maxTokEl.value = s.maxRequestTokens || 3000;
     if (capEl) capEl.value = s.maxMonthlyTokens || 500000;
+    if (proxyEl) proxyEl.value = s.useProxy ? 'proxy' : 'direct';
+    if (proxySecretEl) proxySecretEl.value = s.proxySecret || '';
 
     this.onAIProviderChange();
+    this.onProxyToggle();
     this._updateAIUsage();
   },
 
@@ -721,18 +777,41 @@ const SettingsModule = {
   },
 
   /**
+   * Toggle proxy vs direct key UI visibility
+   */
+  onProxyToggle() {
+    const mode = document.getElementById('set-ai-proxy')?.value || 'proxy';
+    const keyGroup = document.getElementById('ai-key-group');
+    const proxySecretGroup = document.getElementById('ai-proxy-secret-group');
+    const proxyHint = document.getElementById('proxy-hint');
+
+    if (mode === 'proxy') {
+      if (keyGroup) keyGroup.style.display = 'none';
+      if (proxySecretGroup) proxySecretGroup.style.display = '';
+      if (proxyHint) proxyHint.textContent = 'API key stays on the server \u2014 never touches your browser';
+    } else {
+      if (keyGroup) keyGroup.style.display = '';
+      if (proxySecretGroup) proxySecretGroup.style.display = 'none';
+      if (proxyHint) proxyHint.textContent = 'API key stored in your browser localStorage';
+    }
+  },
+
+  /**
    * Save AI settings
    */
   saveAISettings() {
     if (typeof AIService === 'undefined') return;
+    const useProxy = document.getElementById('set-ai-proxy')?.value === 'proxy';
     const settings = {
       provider: document.getElementById('set-ai-provider')?.value || 'none',
-      apiKey: document.getElementById('set-ai-key')?.value || '',
+      apiKey: useProxy ? '' : (document.getElementById('set-ai-key')?.value || ''),
       model: document.getElementById('set-ai-model')?.value || '',
       temperature: parseFloat(document.getElementById('set-ai-temp')?.value) || 0.3,
       maxRequestTokens: parseInt(document.getElementById('set-ai-max-tokens')?.value) || 3000,
       maxMonthlyTokens: parseInt(document.getElementById('set-ai-monthly-cap')?.value) || 500000,
-      enabled: document.getElementById('set-ai-provider')?.value !== 'none'
+      enabled: document.getElementById('set-ai-provider')?.value !== 'none',
+      useProxy: useProxy,
+      proxySecret: useProxy ? (document.getElementById('set-ai-proxy-secret')?.value || '') : ''
     };
     AIService.saveSettings(settings);
     App.toast('AI settings saved', 'success');
@@ -1394,10 +1473,10 @@ const App = {
     // Show/hide assignment bar and compliance disclaimer
     const assignmentSections = [
       'mls-import', 'comps', 'market-analysis', 'adjustments',
-      'cost-approach', 'income-approach', 'comments', 'mileage'
+      'cost-approach', 'income-approach', 'comments', 'mileage', 'adjustment-tool'
     ];
     const complianceSections = [
-      'market-analysis', 'adjustments', 'cost-approach', 'income-approach'
+      'market-analysis', 'adjustments', 'cost-approach', 'income-approach', 'adjustment-tool'
     ];
 
     const assignmentBar = document.getElementById('assignment-bar');
@@ -1419,6 +1498,11 @@ const App = {
 
     // Render the section
     this.renderSection(section);
+
+    // Send MLS data to Adjustment Tool iframe if navigating to adjustment-tool section
+    if (section === 'adjustment-tool' && this.activeAssignmentId) {
+      this.sendMLSDataToAdjustmentTool();
+    }
 
     // Close sidebar on mobile
     document.getElementById('sidebar').classList.remove('active');
@@ -1449,7 +1533,7 @@ const App = {
     const infoSpan = document.getElementById('active-assignment-info');
     const assignmentSections = [
       'mls-import', 'comps', 'market-analysis', 'adjustments',
-      'cost-approach', 'income-approach', 'comments', 'mileage'
+      'cost-approach', 'income-approach', 'comments', 'mileage', 'adjustment-tool'
     ];
 
     if (!assignmentSections.includes(this.currentSection)) {
@@ -1478,6 +1562,82 @@ const App = {
       }
     } else {
       infoSpan.textContent = '';
+    }
+  },
+
+  /**
+   * Send MLS data to Adjustment Tool iframe via postMessage
+   */
+  sendMLSDataToAdjustmentTool() {
+    if (!this.activeAssignmentId) return;
+
+    // Get all MLS data for the active assignment
+    const allMLSData = DB.where('mls_data', d => d.assignment_id === this.activeAssignmentId);
+    if (allMLSData.length === 0) return;
+
+    // Map DB fields to CSV headers
+    const fieldMapping = {
+      close_price: 'Close Price',
+      gla: 'Above Grade Finished Area',
+      bedrooms: 'Bedrooms Total',
+      full_baths: 'Bathrooms Full',
+      half_baths: 'Bathrooms Half',
+      garage_spaces: 'Garage Spaces',
+      basement_finished: 'Below Grade Finished Area',
+      lot_sqft: 'Lot Size Square Feet',
+      year_built: 'Year Built',
+      address: 'Address',
+      city: 'City',
+      mls_number: 'MLS #',
+      close_date: 'Close Date',
+      dom: 'Days On Market',
+      list_price: 'List Price',
+      neighborhood: 'Neighborhood',
+      subdivision: 'Subdivision',
+      lot_acres: 'Lot Size Acres',
+      stories: 'Stories',
+      price_per_sqft: 'Price Per SqFt'
+    };
+
+    // Convert normalized DB format to CSV header-keyed format, grouped by dataset_slot
+    const datasets = { a: [], b: [], c: [] };
+    const slotMap = { 1: 'a', 2: 'b', 3: 'c' };
+
+    allMLSData.forEach(record => {
+      const slot = slotMap[record.dataset_slot] || 'a';
+      const csvRow = {};
+
+      Object.keys(fieldMapping).forEach(dbField => {
+        if (record.hasOwnProperty(dbField) && record[dbField] !== null && record[dbField] !== undefined) {
+          const csvHeader = fieldMapping[dbField];
+          csvRow[csvHeader] = String(record[dbField]);
+        }
+      });
+
+      if (Object.keys(csvRow).length > 0) {
+        datasets[slot].push(csvRow);
+      }
+    });
+
+    // Get assignment info
+    const assignment = DB.getById('assignments', this.activeAssignmentId);
+    const assignmentInfo = assignment ? {
+      id: assignment.id,
+      address: assignment.subject_address || ''
+    } : { id: this.activeAssignmentId, address: '' };
+
+    // Send postMessage to iframe
+    const iframe = document.querySelector('section#section-adjustment-tool iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({
+        type: 'loadMLSData',
+        datasets: {
+          a: datasets.a.length > 0 ? datasets.a : null,
+          b: datasets.b.length > 0 ? datasets.b : null,
+          c: datasets.c.length > 0 ? datasets.c : null
+        },
+        assignmentInfo: assignmentInfo
+      }, '*');
     }
   },
 
@@ -1722,8 +1882,8 @@ const App = {
   showModal(title, bodyHTML, footerHTML) {
     const overlay = document.getElementById('modal-overlay');
     document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-body').innerHTML = bodyHTML;
-    document.getElementById('modal-footer').innerHTML = footerHTML || '';
+    SafeHTML.set(document.getElementById('modal-body'), bodyHTML);
+    SafeHTML.set(document.getElementById('modal-footer'), footerHTML || '');
     overlay.style.display = 'flex';
   },
 
@@ -1740,7 +1900,7 @@ const App = {
    */
   showDetail(title, bodyHTML) {
     document.getElementById('detail-title').textContent = title;
-    document.getElementById('detail-body').innerHTML = bodyHTML;
+    SafeHTML.set(document.getElementById('detail-body'), bodyHTML);
     document.getElementById('detail-panel').style.display = 'block';
   },
 
@@ -2036,9 +2196,178 @@ const PortalTokenModule = {
 // INITIALIZATION
 // ============================================================================
 
+// ============================================================================
+// SECURITY: LocalStorage Size Monitor
+// ============================================================================
+
+const StorageMonitor = {
+  _backupIntervalDays: 7, // Prompt backup every 7 days
+
+  /** Check localStorage usage and warn if approaching limit */
+  check() {
+    let totalBytes = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      totalBytes += key.length + localStorage.getItem(key).length;
+    }
+    const totalMB = (totalBytes * 2) / (1024 * 1024); // UTF-16 = 2 bytes per char
+    const limitMB = 5; // Conservative browser limit
+    const usagePct = Math.round((totalMB / limitMB) * 100);
+
+    if (usagePct >= 90) {
+      console.error(`[StorageMonitor] localStorage at ${usagePct}% (${totalMB.toFixed(2)}MB / ${limitMB}MB). Data loss risk!`);
+      if (typeof App !== 'undefined' && App.toast) {
+        App.toast(`Storage is ${usagePct}% full. Export your data soon to prevent loss.`, 'warning');
+      }
+      // Auto-trigger backup prompt at critical level
+      this._promptBackup(true);
+    } else if (usagePct >= 70) {
+      console.warn(`[StorageMonitor] localStorage at ${usagePct}% (${totalMB.toFixed(2)}MB / ${limitMB}MB)`);
+    }
+
+    // Check if backup is overdue (every 7 days)
+    this._checkBackupSchedule();
+
+    return { totalMB: Math.round(totalMB * 100) / 100, limitMB, usagePct };
+  },
+
+  /** Get breakdown by collection */
+  breakdown() {
+    const collections = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const bytes = (key.length + localStorage.getItem(key).length) * 2;
+      const prefix = key.startsWith('dh_') ? key : '_other';
+      collections[prefix] = (collections[prefix] || 0) + bytes;
+    }
+    return Object.entries(collections)
+      .map(([key, bytes]) => ({ collection: key, sizeMB: Math.round(bytes / 1024 / 1024 * 100) / 100 }))
+      .sort((a, b) => b.sizeMB - a.sizeMB);
+  },
+
+  /** Check if backup is overdue */
+  _checkBackupSchedule() {
+    const lastBackup = localStorage.getItem('dh_last_backup_date');
+    if (!lastBackup) {
+      // Never backed up — prompt on first load after 3 days of usage
+      const firstUse = localStorage.getItem('dh_first_use_date');
+      if (!firstUse) {
+        localStorage.setItem('dh_first_use_date', new Date().toISOString());
+        return;
+      }
+      const daysSinceFirst = (Date.now() - new Date(firstUse).getTime()) / (1000 * 60 * 60 * 24);
+      if (daysSinceFirst >= 3) {
+        this._promptBackup(false);
+      }
+      return;
+    }
+
+    const daysSinceBackup = (Date.now() - new Date(lastBackup).getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSinceBackup >= this._backupIntervalDays) {
+      this._promptBackup(false);
+    }
+  },
+
+  /** Prompt user to backup, or auto-download if critical */
+  _promptBackup(critical) {
+    // Only show once per session
+    if (sessionStorage.getItem('dh_backup_prompted')) return;
+    sessionStorage.setItem('dh_backup_prompted', 'true');
+
+    if (typeof App !== 'undefined' && App.toast) {
+      const msg = critical
+        ? 'Storage is nearly full. Exporting backup now...'
+        : 'It\'s been a while since your last backup. Consider exporting your data.';
+      App.toast(msg, critical ? 'warning' : 'info');
+    }
+
+    if (critical) {
+      // Auto-export at critical level
+      setTimeout(() => this.exportBackup(), 1500);
+    }
+  },
+
+  /** Export all dh_ data as a JSON backup file */
+  exportBackup() {
+    try {
+      const data = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('dh_')) {
+          try { data[key] = JSON.parse(localStorage.getItem(key)); }
+          catch { data[key] = localStorage.getItem(key); }
+        }
+      }
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const date = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `DHRES-Backup-${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      // Record backup timestamp
+      localStorage.setItem('dh_last_backup_date', new Date().toISOString());
+      console.log('[StorageMonitor] Backup exported successfully');
+
+      if (typeof App !== 'undefined' && App.toast) {
+        App.toast('Backup exported successfully', 'success');
+      }
+    } catch (err) {
+      console.error('[StorageMonitor] Backup export failed:', err);
+      if (typeof App !== 'undefined' && App.toast) {
+        App.toast('Backup export failed. Please try manually from Settings.', 'error');
+      }
+    }
+  }
+};
+
+
+// ============================================================================
+// SECURITY: Auto-Logout on Idle (30 minutes)
+// ============================================================================
+
+const IdleLogout = {
+  _timeout: 30 * 60 * 1000, // 30 minutes
+  _timer: null,
+
+  start() {
+    this._resetTimer();
+    ['mousemove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(event => {
+      document.addEventListener(event, () => this._resetTimer(), { passive: true });
+    });
+  },
+
+  _resetTimer() {
+    if (this._timer) clearTimeout(this._timer);
+    this._timer = setTimeout(() => this._logout(), this._timeout);
+  },
+
+  _logout() {
+    sessionStorage.removeItem('dhres-session');
+    sessionStorage.removeItem('dhres-admin-auth');
+    console.log('[IdleLogout] Session expired due to inactivity');
+    if (typeof App !== 'undefined' && App.toast) {
+      App.toast('Session expired. Please log in again.', 'warning');
+    }
+    setTimeout(() => location.reload(), 2000);
+  }
+};
+
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
+
+  // Start idle logout timer
+  IdleLogout.start();
+
+  // Check storage usage
+  StorageMonitor.check();
 
   // Sync pending Stripe payments on load
   if (typeof StripeService !== 'undefined' && StripeService.isEnabled()) {

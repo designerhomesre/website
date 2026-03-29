@@ -94,10 +94,14 @@ const AIService = {
 
   /**
    * Check if AI is configured and enabled
+   * Supports both proxy mode (no local key needed) and direct mode
    */
   isAvailable() {
     const s = this.getSettings();
-    return s.enabled && s.provider !== 'none' && s.apiKey;
+    if (!s.enabled || s.provider === 'none') return false;
+    // Proxy mode doesn't need a local API key
+    if (s.useProxy) return true;
+    return !!s.apiKey;
   },
 
   /**
@@ -131,6 +135,11 @@ const AIService = {
    * @param {object} opts — { temperature, maxTokens, assignmentId, commentType }
    * @returns {Promise<{text: string, usage: object, provider: string, model: string}>}
    */
+  /**
+   * Proxy endpoint (Netlify function)
+   */
+  _proxyUrl: '/.netlify/functions/ai-proxy',
+
   async generate(systemPrompt, userPrompt, opts = {}) {
     const settings = this.getSettings();
     if (!this.isAvailable()) {
@@ -153,11 +162,6 @@ const AIService = {
       { role: 'user', content: userPrompt }
     ];
 
-    const requestBody = provider.formatRequest(messages, model, {
-      temperature: opts.temperature || settings.temperature,
-      maxTokens: opts.maxTokens || settings.maxRequestTokens
-    });
-
     const logEntry = {
       assignment_id: opts.assignmentId || '',
       comment_type: opts.commentType || '',
@@ -171,23 +175,64 @@ const AIService = {
     };
 
     try {
-      const response = await fetch(provider.endpoint, {
-        method: 'POST',
-        headers: provider.authHeader(settings.apiKey),
-        body: JSON.stringify(requestBody)
-      });
+      let text, usage;
 
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        const errMsg = errData.error?.message || `HTTP ${response.status}`;
-        logEntry.output_text = `ERROR: ${errMsg}`;
-        DB.add('comment_gen_logs', logEntry);
-        return { text: null, error: errMsg, fallback: true };
+      if (settings.useProxy) {
+        // ---- SERVER PROXY MODE ----
+        // API key stays on the server — browser never sees it
+        const proxyHeaders = { 'Content-Type': 'application/json' };
+        if (settings.proxySecret) {
+          proxyHeaders['X-Proxy-Auth'] = settings.proxySecret;
+        }
+
+        const response = await fetch(this._proxyUrl, {
+          method: 'POST',
+          headers: proxyHeaders,
+          body: JSON.stringify({
+            provider: settings.provider,
+            model: model,
+            messages: messages,
+            temperature: opts.temperature || settings.temperature,
+            maxTokens: opts.maxTokens || settings.maxRequestTokens
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          const errMsg = data.error || `Proxy returned HTTP ${response.status}`;
+          logEntry.output_text = `PROXY ERROR: ${errMsg}`;
+          DB.add('comment_gen_logs', logEntry);
+          return { text: null, error: errMsg, fallback: true };
+        }
+
+        text = data.text || '';
+        usage = data.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
+      } else {
+        // ---- DIRECT MODE ----
+        // API key from localStorage sent directly to provider
+        const requestBody = provider.formatRequest(messages, model, {
+          temperature: opts.temperature || settings.temperature,
+          maxTokens: opts.maxTokens || settings.maxRequestTokens
+        });
+
+        const response = await fetch(provider.endpoint, {
+          method: 'POST',
+          headers: provider.authHeader(settings.apiKey),
+          body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          const errMsg = errData.error?.message || `HTTP ${response.status}`;
+          logEntry.output_text = `ERROR: ${errMsg}`;
+          DB.add('comment_gen_logs', logEntry);
+          return { text: null, error: errMsg, fallback: true };
+        }
+
+        const data = await response.json();
+        text = provider.parseResponse(data);
+        usage = provider.parseUsage(data);
       }
-
-      const data = await response.json();
-      const text = provider.parseResponse(data);
-      const usage = provider.parseUsage(data);
 
       logEntry.output_text = text.substring(0, 1000);
       logEntry.success_flag = true;

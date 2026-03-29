@@ -765,3 +765,197 @@ const StatisticalMethods = {
     };
   }
 };
+
+
+// ============================================================================
+// ADJUSTMENT GUARDRAILS — Configurable limits per feature type
+// ============================================================================
+
+const AdjustmentGuardrails = {
+  /** Default guardrail ranges (matches Adjustment Tool v2 GUARDRAILS) */
+  defaults: {
+    gla:       { typical: [40, 130],   broad: [20, 300],   maxTotal: null,  unit: '$/sf',    label: 'GLA' },
+    fullbath:  { typical: [3000, 15000], broad: [1000, 35000], maxTotal: 20000, unit: '$/unit', label: 'Full Bath' },
+    halfbath:  { typical: [2000, 8000],  broad: [500, 18000],  maxTotal: 20000, unit: '$/unit', label: 'Half Bath' },
+    garage:    { typical: [5000, 15000], broad: [2000, 30000], maxTotal: 20000, unit: '$/space', label: 'Garage' },
+    basement:  { typical: [15, 40],    broad: [5, 60],     maxTotal: null,  unit: '$/sf',    label: 'Basement' },
+    bedrooms:  { typical: [3000, 12000], broad: [1000, 50000], maxTotal: 20000, unit: '$/unit', label: 'Bedrooms' },
+    lotsize:   { typical: [1, 5],      broad: [0.5, 8],    maxTotal: null,  unit: '$/sf (×1k)', label: 'Lot Size' },
+    age:       { typical: [300, 1500], broad: [100, 3000],  maxTotal: null,  unit: '$/year',  label: 'Age' }
+  },
+
+  /** Get guardrails (user overrides from settings, or defaults) */
+  get(featureType) {
+    const custom = this._loadCustom();
+    return custom[featureType] || this.defaults[featureType] || null;
+  },
+
+  /** Get all guardrails */
+  getAll() {
+    const custom = this._loadCustom();
+    return { ...this.defaults, ...custom };
+  },
+
+  /** Save custom guardrail override for a feature */
+  saveCustom(featureType, guardrail) {
+    const custom = this._loadCustom();
+    custom[featureType] = { ...this.defaults[featureType], ...guardrail };
+    localStorage.setItem('dh_guardrails', JSON.stringify(custom));
+  },
+
+  /** Reset a feature type to default */
+  resetToDefault(featureType) {
+    const custom = this._loadCustom();
+    delete custom[featureType];
+    localStorage.setItem('dh_guardrails', JSON.stringify(custom));
+  },
+
+  /** Check an adjustment value against guardrails. Returns { status, message } */
+  check(featureType, value) {
+    const g = this.get(featureType);
+    if (!g) return { status: 'unknown', message: 'No guardrails defined' };
+
+    const absVal = Math.abs(value);
+
+    if (absVal < g.broad[0] || absVal > g.broad[1]) {
+      return { status: 'hard_fail', message: `${g.label} adjustment $${absVal.toFixed(2)} ${g.unit} exceeds hard limit [${g.broad[0]} – ${g.broad[1]}]`, severity: 'error' };
+    }
+    if (absVal < g.typical[0] || absVal > g.typical[1]) {
+      return { status: 'soft_warning', message: `${g.label} adjustment $${absVal.toFixed(2)} ${g.unit} outside typical range [${g.typical[0]} – ${g.typical[1]}]`, severity: 'warning' };
+    }
+    if (g.maxTotal !== null && absVal > g.maxTotal) {
+      return { status: 'max_exceeded', message: `${g.label} total adjustment exceeds $${g.maxTotal.toLocaleString()} maximum`, severity: 'warning' };
+    }
+    return { status: 'pass', message: `Within typical range`, severity: 'success' };
+  },
+
+  _loadCustom() {
+    try {
+      return JSON.parse(localStorage.getItem('dh_guardrails')) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+};
+
+
+// ============================================================================
+// COMPARABILITY SCORE — Auto-rank comps by similarity to subject
+// ============================================================================
+
+const ComparabilityScore = {
+  /**
+   * Score a comp against the subject property.
+   * @param {Object} subject - { gla, year_built, bedrooms, full_baths, lot_sqft, close_date, zip, subdivision }
+   * @param {Object} comp - same fields as subject, plus close_price
+   * @returns {{ total: number, breakdown: Object }} score 0-100
+   */
+  score(subject, comp) {
+    const breakdown = {};
+    let totalWeight = 0;
+    let weightedScore = 0;
+
+    // GLA difference (weight: 25%)
+    if (subject.gla && comp.gla) {
+      const pctDiff = Math.abs(comp.gla - subject.gla) / subject.gla;
+      const score = pctDiff <= 0.10 ? 100 : pctDiff <= 0.20 ? 80 : pctDiff <= 0.30 ? 60 : pctDiff <= 0.40 ? 40 : 20;
+      breakdown.gla = { score, diff: Math.round(comp.gla - subject.gla), pctDiff: Math.round(pctDiff * 100) };
+      weightedScore += score * 0.25;
+      totalWeight += 0.25;
+    }
+
+    // Age difference (weight: 15%)
+    if (subject.year_built && comp.year_built) {
+      const ageDiff = Math.abs(comp.year_built - subject.year_built);
+      const score = ageDiff <= 3 ? 100 : ageDiff <= 5 ? 85 : ageDiff <= 10 ? 65 : ageDiff <= 15 ? 45 : 20;
+      breakdown.age = { score, diff: comp.year_built - subject.year_built };
+      weightedScore += score * 0.15;
+      totalWeight += 0.15;
+    }
+
+    // Sale date proximity (weight: 20%)
+    if (comp.close_date) {
+      const saleDate = new Date(comp.close_date);
+      const now = new Date();
+      const monthsAgo = (now - saleDate) / (1000 * 60 * 60 * 24 * 30.44);
+      const score = monthsAgo <= 3 ? 100 : monthsAgo <= 6 ? 80 : monthsAgo <= 9 ? 60 : monthsAgo <= 12 ? 40 : 20;
+      breakdown.recency = { score, monthsAgo: Math.round(monthsAgo * 10) / 10 };
+      weightedScore += score * 0.20;
+      totalWeight += 0.20;
+    }
+
+    // Location proximity (weight: 20%)
+    if (subject.subdivision && comp.subdivision) {
+      const sameSub = subject.subdivision.toLowerCase().trim() === comp.subdivision.toLowerCase().trim();
+      const sameZip = subject.zip && comp.zip && subject.zip === comp.zip;
+      const score = sameSub ? 100 : sameZip ? 70 : 30;
+      breakdown.location = { score, sameSubdivision: sameSub, sameZip: sameZip };
+      weightedScore += score * 0.20;
+      totalWeight += 0.20;
+    } else if (subject.zip && comp.zip) {
+      const score = subject.zip === comp.zip ? 70 : 30;
+      breakdown.location = { score, sameZip: subject.zip === comp.zip };
+      weightedScore += score * 0.20;
+      totalWeight += 0.20;
+    }
+
+    // Feature match: beds, baths, garage (weight: 20%)
+    let featureScore = 0;
+    let featureCount = 0;
+    if (subject.bedrooms && comp.bedrooms) {
+      const diff = Math.abs(comp.bedrooms - subject.bedrooms);
+      featureScore += diff === 0 ? 100 : diff === 1 ? 75 : diff === 2 ? 40 : 10;
+      featureCount++;
+    }
+    if (subject.full_baths && comp.full_baths) {
+      const diff = Math.abs(comp.full_baths - subject.full_baths);
+      featureScore += diff === 0 ? 100 : diff === 1 ? 70 : 30;
+      featureCount++;
+    }
+    if (subject.garage_spaces !== undefined && comp.garage_spaces !== undefined) {
+      const diff = Math.abs((comp.garage_spaces || 0) - (subject.garage_spaces || 0));
+      featureScore += diff === 0 ? 100 : diff === 1 ? 70 : 30;
+      featureCount++;
+    }
+    if (featureCount > 0) {
+      const avgFeature = featureScore / featureCount;
+      breakdown.features = { score: Math.round(avgFeature), items: featureCount };
+      weightedScore += avgFeature * 0.20;
+      totalWeight += 0.20;
+    }
+
+    // Normalize if not all weights applied
+    const total = totalWeight > 0 ? Math.round(weightedScore / totalWeight) : 0;
+
+    return {
+      total,
+      grade: total >= 85 ? 'A' : total >= 70 ? 'B' : total >= 55 ? 'C' : total >= 40 ? 'D' : 'F',
+      breakdown
+    };
+  },
+
+  /**
+   * Rank an array of comps by similarity to subject. Returns sorted array with scores.
+   * @param {Object} subject
+   * @param {Array} comps
+   * @param {number} [topN] - return only top N (optional)
+   */
+  rank(subject, comps, topN) {
+    const scored = comps.map(comp => ({
+      ...comp,
+      _comparability: this.score(subject, comp)
+    }));
+
+    scored.sort((a, b) => b._comparability.total - a._comparability.total);
+
+    return topN ? scored.slice(0, topN) : scored;
+  },
+
+  /**
+   * Auto-recommend the best comps (score >= 60, max 6)
+   */
+  recommend(subject, comps) {
+    const ranked = this.rank(subject, comps);
+    return ranked.filter(c => c._comparability.total >= 60).slice(0, 6);
+  }
+};

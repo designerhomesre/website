@@ -1427,12 +1427,28 @@ const SettingsModule = {
     AdminApp.toast('Settings saved', 'success');
   },
 
-  changePassword() {
+  async changePassword() {
     const newPw = document.getElementById('new-password').value;
-    if (!newPw || newPw.length < 4) { AdminApp.toast('Password must be at least 4 characters', 'error'); return; }
-    localStorage.setItem('dhres-admin-password', newPw);
-    document.getElementById('new-password').value = '';
-    AdminApp.toast('Password updated', 'success');
+    if (!newPw || newPw.length < 8) {
+      AdminApp.toast('Password must be at least 8 characters', 'error');
+      return;
+    }
+    // Enforce basic complexity: at least one letter and one number
+    if (!/[a-zA-Z]/.test(newPw) || !/[0-9]/.test(newPw)) {
+      AdminApp.toast('Password must contain at least one letter and one number', 'error');
+      return;
+    }
+    try {
+      const hashedPw = await SecurityUtils.hash(newPw);
+      localStorage.setItem('dhres-admin-password-hash', hashedPw);
+      // Remove legacy plaintext key if it exists
+      localStorage.removeItem('dhres-admin-password');
+      document.getElementById('new-password').value = '';
+      AdminApp.toast('Password updated securely', 'success');
+    } catch (err) {
+      console.error('Password change error:', err);
+      AdminApp.toast('Failed to update password. Please try again.', 'error');
+    }
   },
 
   exportAllData() {

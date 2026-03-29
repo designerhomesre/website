@@ -1054,7 +1054,7 @@
           </div>
           <div class="card card-wide">
             <h3>AI Integration</h3>
-            <p class="setting-note">Configure AI-assisted comment generation. API keys are stored locally and never shared.</p>
+            <p class="setting-note">Configure AI-assisted comment generation.</p>
             <div class="ai-settings-grid">
               <div class="form-group">
                 <label>AI Provider</label>
@@ -1065,9 +1065,22 @@
                 </select>
               </div>
               <div class="form-group">
+                <label>Key Mode</label>
+                <select id="set-ai-proxy" onchange="SettingsModule.onProxyToggle()">
+                  <option value="proxy">Server Proxy (Recommended)</option>
+                  <option value="direct">Direct (Browser Key)</option>
+                </select>
+                <small id="proxy-hint">API key stays on the server — never touches your browser</small>
+              </div>
+              <div class="form-group" id="ai-key-group">
                 <label>API Key</label>
                 <input type="password" id="set-ai-key" placeholder="Enter API key...">
                 <small>Stored locally in your browser only</small>
+              </div>
+              <div class="form-group" id="ai-proxy-secret-group" style="display:none;">
+                <label>Proxy Auth Secret <small>(optional)</small></label>
+                <input type="password" id="set-ai-proxy-secret" placeholder="AI_PROXY_SECRET value...">
+                <small>Must match AI_PROXY_SECRET env var in Netlify if set</small>
               </div>
               <div class="form-group">
                 <label>Model</label>
@@ -1141,6 +1154,7 @@
   </div>
 
   <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
   <script src="js/app-core.js"></script>
   <script src="js/app-mls.js"></script>

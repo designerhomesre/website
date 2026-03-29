@@ -2128,6 +2128,59 @@
             currentPhase: 1
         };
 
+        // Handle postMessage from parent app to load MLS data
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'loadMLSData') {
+                const { datasets, assignmentInfo } = event.data;
+
+                // Populate datasets from received data
+                if (datasets.a) state.datasets.a = datasets.a;
+                if (datasets.b) state.datasets.b = datasets.b;
+                if (datasets.c) state.datasets.c = datasets.c;
+
+                // Update upload cards to show "Loaded from App" status
+                ['a', 'b', 'c'].forEach(dataset => {
+                    if (state.datasets[dataset]) {
+                        const card = document.querySelector(`.upload-card[data-dataset="${dataset}"]`);
+                        if (card) {
+                            card.classList.remove('empty', 'error');
+                            card.classList.add('loaded');
+                            const badge = card.querySelector('.status-badge');
+                            if (badge) {
+                                badge.className = 'status-badge loaded';
+                                badge.textContent = 'Loaded from App';
+                            }
+
+                            // Update record count
+                            const recordDiv = card.querySelector('.upload-recordcount');
+                            if (recordDiv) {
+                                recordDiv.textContent = `${state.datasets[dataset].length} records`;
+                            } else {
+                                const newRecordDiv = document.createElement('div');
+                                newRecordDiv.className = 'upload-recordcount';
+                                newRecordDiv.textContent = `${state.datasets[dataset].length} records`;
+                                const uploadStatus = card.querySelector('.upload-status');
+                                if (uploadStatus) {
+                                    uploadStatus.parentNode.insertBefore(newRecordDiv, uploadStatus);
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update phase 1 status to enable continue button
+                updatePhase1Status();
+
+                // If Dataset A has data, auto-advance to mapping phase
+                if (state.datasets.a && state.datasets.a.length > 0) {
+                    setTimeout(() => {
+                        initializeMapping();
+                        goToPhase(2);
+                    }, 300);
+                }
+            }
+        });
+
         const GUARDRAILS = {
             gla: { typical: [40, 130], broad: [20, 300], maxTotal: null, unit: '$/sf', label: 'GLA' },
             fullbath: { typical: [3000, 15000], broad: [1000, 35000], maxTotal: 20000, unit: '$/unit', label: 'Full Bath' },

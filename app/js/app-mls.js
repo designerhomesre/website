@@ -759,5 +759,212 @@ const MLSModule = {
    */
   setTag(recordId, tag) {
     DB.update('mls_data', recordId, { tag: tag });
+  },
+
+
+  // ========================================================================
+  // FUZZY FIELD MATCHING — Improved column detection with aliases and patterns
+  // ========================================================================
+
+  /**
+   * Extended alias map for common MLS header variations.
+   * Falls back to this when exact MLS_COLUMN_MAP match fails.
+   */
+  _FUZZY_ALIASES: {
+    'close_price':    ['sold price', 'sale price', 'selling price', 'sp', 'sales price', 'closeprice', 'close_price', 'soldprice'],
+    'list_price':     ['asking price', 'listprice', 'list_price', 'lp', 'listing price'],
+    'gla':            ['sqft', 'sq ft', 'square feet', 'living area', 'above grade', 'agla', 'finished sqft', 'total sqft', 'main floor', 'finished area', 'abovegrade'],
+    'bedrooms':       ['beds', 'br', 'bed rooms', 'number of bedrooms', 'bedroomstotal', 'bed', 'bdrms'],
+    'full_baths':     ['full bath', 'fb', 'baths full', 'full bathrooms', 'bathroomsfull', 'fullbaths'],
+    'half_baths':     ['half bath', 'hb', 'baths half', 'half bathrooms', 'bathroomshalf', 'halfbaths', '0.5 baths'],
+    'year_built':     ['yrblt', 'yr built', 'built year', 'yearbuilt', 'year_built', 'constructed'],
+    'lot_sqft':       ['lot sq ft', 'lot area', 'land area', 'lotsqft', 'lot size square', 'lotsizesquarefeet'],
+    'lot_acres':      ['acres', 'lot size acres', 'lotsizeacres', 'land acres'],
+    'garage_spaces':  ['gar', 'car garage', 'garage stalls', 'garage bays', 'garagespaces'],
+    'dom':            ['days on mkt', 'daysonmarket', 'market days', 'dom'],
+    'cdom':           ['cumulative dom', 'cumulativedom', 'total dom'],
+    'address':        ['street address', 'property address', 'street', 'addr'],
+    'city':           ['town', 'municipality'],
+    'zip':            ['postal code', 'postalcode', 'zipcode', 'zip code'],
+    'mls_number':     ['mls#', 'mls num', 'mlsnumber', 'listing id', 'listingnumber', 'ml#', 'ml number'],
+    'close_date':     ['sold date', 'sale date', 'closedate', 'close_date', 'settlement date'],
+    'basement_finished': ['finished basement', 'bsmt finished', 'below grade finished', 'belowgradefinished'],
+    'stories':        ['story', 'levels', 'floors', 'number of stories'],
+    'neighborhood':   ['area', 'community', 'neighborhood', 'locale'],
+    'subdivision':    ['sub division', 'subdiv', 'sub area', 'subarea']
+  },
+
+  /**
+   * Fuzzy match a header string to an internal field name.
+   * Returns { field, confidence } or null.
+   */
+  fuzzyMatchHeader(header) {
+    if (!header) return null;
+    const clean = header.toLowerCase().replace(/[^a-z0-9\s#]/g, '').trim();
+
+    // 1. Try exact match in MLS_COLUMN_MAP first
+    if (MLS_COLUMN_MAP[header]) {
+      return { field: MLS_COLUMN_MAP[header], confidence: 100, method: 'exact' };
+    }
+
+    // 2. Try case-insensitive exact match
+    const exactKey = Object.keys(MLS_COLUMN_MAP).find(k => k.toLowerCase().trim() === clean);
+    if (exactKey) {
+      return { field: MLS_COLUMN_MAP[exactKey], confidence: 95, method: 'case_insensitive' };
+    }
+
+    // 3. Try fuzzy alias match
+    for (const [field, aliases] of Object.entries(this._FUZZY_ALIASES)) {
+      if (aliases.some(a => clean === a || clean.includes(a) || a.includes(clean))) {
+        return { field, confidence: 80, method: 'alias' };
+      }
+    }
+
+    // 4. Try pattern-based detection (numeric heuristics on sample data)
+    return null;
+  },
+
+  /**
+   * Enhanced parseAndMap that uses fuzzy matching as fallback
+   */
+  _parseAndMapEnhanced(text, filename) {
+    const result = this._parseAndMap(text, filename);
+    if (result.errors.length > 0) return result;
+
+    // Try to map unmapped headers using fuzzy matching
+    const newlyMapped = [];
+    const stillUnmapped = [];
+
+    result.unmappedHeaders.forEach(header => {
+      const match = this.fuzzyMatchHeader(header);
+      if (match && match.confidence >= 70) {
+        // Check not already mapped
+        const alreadyMapped = result.mappedFields.some(mf => mf.field === match.field);
+        if (!alreadyMapped) {
+          newlyMapped.push({ csvHeader: header, field: match.field, confidence: match.confidence, method: match.method });
+        } else {
+          stillUnmapped.push(header);
+        }
+      } else {
+        stillUnmapped.push(header);
+      }
+    });
+
+    if (newlyMapped.length > 0) {
+      result.fuzzyMapped = newlyMapped;
+      result.unmappedHeaders = stillUnmapped;
+    }
+
+    return result;
+  },
+
+
+  // ========================================================================
+  // DATA VALIDATION LAYER — Post-import quality checks
+  // ========================================================================
+
+  /**
+   * Validate an array of MLS records. Returns validation report.
+   * @param {Array} records - Array of parsed MLS records
+   * @returns {{ warnings: Array, errors: Array, stats: Object }}
+   */
+  validateRecords(records) {
+    const warnings = [];
+    const errors = [];
+    const currentYear = new Date().getFullYear();
+
+    records.forEach((record, idx) => {
+      const label = record.mls_number || `Row ${idx + 1}`;
+
+      // Missing critical fields
+      if (!record.close_price && !record.list_price) {
+        errors.push({ record: label, field: 'price', message: 'Missing both close price and list price' });
+      }
+      if (!record.gla && !record.living_area) {
+        warnings.push({ record: label, field: 'gla', message: 'Missing GLA / living area' });
+      }
+      if (!record.address) {
+        warnings.push({ record: label, field: 'address', message: 'Missing property address' });
+      }
+
+      // Year built validation
+      if (record.year_built) {
+        if (record.year_built < 1800 || record.year_built > currentYear + 2) {
+          warnings.push({ record: label, field: 'year_built', message: `Year built ${record.year_built} appears invalid` });
+        }
+      }
+
+      // GLA sanity check
+      if (record.gla) {
+        if (record.gla < 200 || record.gla > 20000) {
+          warnings.push({ record: label, field: 'gla', message: `GLA of ${record.gla} sqft appears unusual` });
+        }
+      }
+
+      // Price sanity check
+      if (record.close_price) {
+        if (record.close_price < 10000 || record.close_price > 10000000) {
+          warnings.push({ record: label, field: 'close_price', message: `Close price $${record.close_price.toLocaleString()} appears unusual` });
+        }
+      }
+
+      // DOM sanity
+      if (record.dom !== null && record.dom !== undefined) {
+        if (record.dom < 0 || record.dom > 730) {
+          warnings.push({ record: label, field: 'dom', message: `DOM of ${record.dom} days appears unusual` });
+        }
+      }
+
+      // Date format normalization check
+      if (record.close_date && typeof record.close_date === 'string') {
+        const d = new Date(record.close_date);
+        if (isNaN(d.getTime())) {
+          warnings.push({ record: label, field: 'close_date', message: `Close date "${record.close_date}" could not be parsed` });
+        }
+      }
+
+      // Lot size: auto-fill sqft from acres if missing
+      if (!record.lot_sqft && record.lot_acres && record.lot_acres > 0) {
+        record.lot_sqft = Math.round(record.lot_acres * 43560);
+      }
+
+      // Use living_area as fallback for GLA
+      if (!record.gla && record.living_area) {
+        record.gla = record.living_area;
+      }
+
+      // Use CDOM as fallback for DOM
+      if ((record.dom === null || record.dom === undefined) && record.cdom !== null && record.cdom !== undefined) {
+        record.dom = record.cdom;
+      }
+    });
+
+    // Statistical outlier detection (price per sqft)
+    const ppsfs = records.filter(r => r.price_per_sqft > 0).map(r => r.price_per_sqft);
+    if (ppsfs.length >= 5) {
+      const mean = ppsfs.reduce((s, v) => s + v, 0) / ppsfs.length;
+      const stdev = Math.sqrt(ppsfs.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / ppsfs.length);
+      const threshold = 3 * stdev;
+
+      records.forEach(record => {
+        if (record.price_per_sqft && Math.abs(record.price_per_sqft - mean) > threshold) {
+          warnings.push({
+            record: record.mls_number || 'Unknown',
+            field: 'price_per_sqft',
+            message: `Price/sqft of $${record.price_per_sqft.toFixed(2)} is a statistical outlier (${Math.abs(record.price_per_sqft - mean) > 0 ? 'above' : 'below'} 3 std dev from mean $${mean.toFixed(2)})`,
+            severity: 'outlier'
+          });
+        }
+      });
+    }
+
+    return {
+      warnings,
+      errors,
+      totalRecords: records.length,
+      criticalErrors: errors.length,
+      warningCount: warnings.length,
+      passRate: Math.round(((records.length - errors.length) / Math.max(1, records.length)) * 100)
+    };
   }
 };

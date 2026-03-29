@@ -3,14 +3,83 @@
 // =====================================================
 
 // =====================================================
+// SECURITY: Input Sanitization via DOMPurify
+// =====================================================
+
+const SafeHTML = {
+  sanitize(html) {
+    if (typeof DOMPurify !== 'undefined') {
+      return DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: ['div', 'span', 'p', 'br', 'strong', 'em', 'b', 'i', 'u',
+          'table', 'thead', 'tbody', 'tr', 'th', 'td', 'h1', 'h2', 'h3', 'h4', 'h5',
+          'ul', 'ol', 'li', 'a', 'img', 'small', 'label', 'input', 'select', 'option',
+          'textarea', 'button', 'form', 'section', 'header', 'footer', 'nav'],
+        ALLOWED_ATTR: ['class', 'id', 'style', 'href', 'src', 'alt', 'title', 'type',
+          'value', 'placeholder', 'name', 'for', 'checked', 'disabled', 'readonly',
+          'min', 'max', 'step', 'rows', 'cols', 'colspan', 'rowspan', 'target',
+          'data-id', 'data-section', 'data-type', 'data-status',
+          'onclick', 'onchange', 'onsubmit', 'oninput'],
+        ALLOW_DATA_ATTR: true
+      });
+    }
+    return SafeHTML.escape(html);
+  },
+  escape(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+  set(el, html) { if (el) el.innerHTML = this.sanitize(html); }
+};
+
+// =====================================================
 // SECURITY UTILITIES - Password hashing and token management
 // =====================================================
 
 const SecurityUtils = {
+  _PBKDF2_ITERATIONS: 100000,
+  _SALT_LENGTH: 16, // 16 bytes = 128 bits
+
   /**
-   * SHA-256 hash using Web Crypto API
+   * Generate a random salt as hex string
+   */
+  _generateSalt() {
+    const saltBytes = new Uint8Array(this._SALT_LENGTH);
+    crypto.getRandomValues(saltBytes);
+    return Array.from(saltBytes, b => b.toString(16).padStart(2, '0')).join('');
+  },
+
+  /**
+   * Derive key using PBKDF2-SHA256 (browser-native Web Crypto)
+   * Returns hex string of the derived key
+   */
+  async _pbkdf2(password, saltHex) {
+    const encoder = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw', encoder.encode(password), 'PBKDF2', false, ['deriveBits']
+    );
+    const saltBytes = new Uint8Array(saltHex.match(/.{2}/g).map(b => parseInt(b, 16)));
+    const derivedBits = await crypto.subtle.deriveBits(
+      { name: 'PBKDF2', salt: saltBytes, iterations: this._PBKDF2_ITERATIONS, hash: 'SHA-256' },
+      keyMaterial, 256
+    );
+    return Array.from(new Uint8Array(derivedBits), b => b.toString(16).padStart(2, '0')).join('');
+  },
+
+  /**
+   * Hash password with PBKDF2 + random salt.
+   * Returns "salt:hash" format string for storage.
    */
   async hash(password) {
+    const salt = this._generateSalt();
+    const hash = await this._pbkdf2(password, salt);
+    return `${salt}:${hash}`;
+  },
+
+  /**
+   * Legacy SHA-256 hash (for migration compatibility only)
+   */
+  async _legacySHA256(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -19,11 +88,27 @@ const SecurityUtils = {
   },
 
   /**
-   * Verify password against stored hash
+   * Verify password against stored hash.
+   * Supports both new "salt:hash" format and legacy plain SHA-256.
+   * Auto-migrates legacy hashes to PBKDF2 on successful login.
    */
   async verify(password, storedHash) {
-    const passwordHash = await this.hash(password);
-    return passwordHash === storedHash;
+    if (storedHash.includes(':')) {
+      // New PBKDF2 format: "salt:hash"
+      const [salt, hash] = storedHash.split(':');
+      const derived = await this._pbkdf2(password, salt);
+      return derived === hash;
+    }
+    // Legacy SHA-256 format (no salt, 64 hex chars)
+    const legacyHash = await this._legacySHA256(password);
+    if (legacyHash === storedHash) {
+      // Auto-migrate to PBKDF2 on successful legacy login
+      const newHash = await this.hash(password);
+      localStorage.setItem('dhres-admin-password-hash', newHash);
+      console.log('[SecurityUtils] Migrated password from SHA-256 to PBKDF2');
+      return true;
+    }
+    return false;
   },
 
   /**
@@ -308,9 +393,9 @@ const AdminApp = {
     // Activity feed
     const activities = DB.getAll('activity').slice(-15).reverse();
     const feedEl = document.getElementById('activity-feed');
-    feedEl.innerHTML = activities.length ? activities.map(a =>
-      `<div class="activity-item"><span class="activity-time">${Util.timeAgo(a.timestamp)}</span><span class="activity-text">${a.text}</span></div>`
-    ).join('') : '<p class="empty-state">No recent activity</p>';
+    SafeHTML.set(feedEl, activities.length ? activities.map(a =>
+      `<div class="activity-item"><span class="activity-time">${Util.timeAgo(a.timestamp)}</span><span class="activity-text">${SafeHTML.escape(a.text)}</span></div>`
+    ).join('') : '<p class="empty-state">No recent activity</p>');
 
     // Pending actions
     const pending = [];
@@ -318,9 +403,9 @@ const AdminApp = {
     invoices.filter(i => i.status === 'Overdue').forEach(i => pending.push({text: `Overdue invoice: ${i.invoiceNumber} — ${Util.currency(i.total)}`, action: 'invoices'}));
     assignments.filter(a => a.status === 'Awaiting Payment').forEach(a => pending.push({text: `Awaiting payment: ${a.assignmentNumber}`, action: 'assignments'}));
     const pendingEl = document.getElementById('pending-actions');
-    pendingEl.innerHTML = pending.length ? pending.map(p =>
-      `<div class="pending-item" onclick="AdminApp.navigateTo('${p.action}')">${p.text}</div>`
-    ).join('') : '<p class="empty-state">All caught up!</p>';
+    SafeHTML.set(pendingEl, pending.length ? pending.map(p =>
+      `<div class="pending-item" onclick="AdminApp.navigateTo('${SafeHTML.escape(p.action)}')">${SafeHTML.escape(p.text)}</div>`
+    ).join('') : '<p class="empty-state">All caught up!</p>');
 
     // Revenue chart (last 6 months)
     this.renderRevenueChart('revenue-chart', invoices);
@@ -360,8 +445,8 @@ const AdminApp = {
   // ---- MODAL ----
   showModal(title, bodyHTML, footerHTML) {
     document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-body').innerHTML = bodyHTML;
-    document.getElementById('modal-footer').innerHTML = footerHTML || '';
+    SafeHTML.set(document.getElementById('modal-body'), bodyHTML);
+    SafeHTML.set(document.getElementById('modal-footer'), footerHTML || '');
     document.getElementById('modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   },
@@ -375,7 +460,7 @@ const AdminApp = {
   // ---- DETAIL PANEL ----
   showDetail(title, bodyHTML) {
     document.getElementById('detail-title').textContent = title;
-    document.getElementById('detail-body').innerHTML = bodyHTML;
+    SafeHTML.set(document.getElementById('detail-body'), bodyHTML);
     document.getElementById('detail-panel').classList.add('open');
   },
 
@@ -432,9 +517,9 @@ const AdminApp = {
     if (results.length === 0) {
       dropdown.innerHTML = '<div class="search-result-item">No results found</div>';
     } else {
-      dropdown.innerHTML = results.slice(0, 8).map(r =>
-        `<div class="search-result-item" onclick="AdminApp.navigateTo('${r.section}'); document.getElementById('search-results').innerHTML=''; document.getElementById('global-search').value='';"><span class="search-result-type">${r.type}</span> ${r.name}</div>`
-      ).join('');
+      SafeHTML.set(dropdown, results.slice(0, 8).map(r =>
+        `<div class="search-result-item" onclick="AdminApp.navigateTo('${SafeHTML.escape(r.section)}'); document.getElementById('search-results').innerHTML=''; document.getElementById('global-search').value='';"><span class="search-result-type">${SafeHTML.escape(r.type)}</span> ${SafeHTML.escape(r.name)}</div>`
+      ).join(''));
     }
     dropdown.style.display = 'block';
     // Hide on click outside
