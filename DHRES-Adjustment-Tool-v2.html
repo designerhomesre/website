@@ -1,0 +1,3997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Homes Adjustment Support Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2C3E50;
+            --accent: #C9A96E;
+            --background: #F8F9FA;
+            --light-gray: #E9ECEF;
+            --medium-gray: #6C757D;
+            --dark: #1A1A2E;
+            --success: #28A745;
+            --error: #DC3545;
+            --warning: #F4A261;
+            --info: #4A90D9;
+            --dataset-a: #4A90D9;
+            --dataset-b: #C9A96E;
+            --dataset-c: #28A745;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            height: 56px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-badge {
+            background-color: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            font-size: 12px;
+            text-align: right;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: white;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--light-gray);
+            position: sticky;
+            top: 56px;
+            z-index: 99;
+        }
+
+        .progress-bar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -50%;
+            width: 50%;
+            height: 2px;
+            background-color: var(--light-gray);
+            z-index: 0;
+        }
+
+        .progress-step.active:not(:last-child)::after {
+            background-color: var(--accent);
+        }
+
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            border: 2px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            user-select: none;
+        }
+
+        .progress-step.active .progress-circle {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .progress-step.completed .progress-circle {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .progress-label {
+            position: absolute;
+            top: 48px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+            width: 120px;
+            color: var(--primary);
+        }
+
+        .progress-step.active .progress-label {
+            color: var(--accent);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Phase Container */
+        .phase {
+            display: none;
+        }
+
+        .phase.active {
+            display: block;
+        }
+
+        /* Compliance Banner */
+        .compliance-banner {
+            background-color: rgba(74, 144, 217, 0.1);
+            border-left: 4px solid var(--info);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: var(--primary);
+        }
+
+        /* Upload Cards */
+        .upload-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .upload-card {
+            background-color: white;
+            border: 2px dashed var(--accent);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-card:hover {
+            box-shadow: 0 4px 12px rgba(201, 169, 110, 0.2);
+            border-color: var(--primary);
+        }
+
+        .upload-card.loaded {
+            border-style: solid;
+            border-color: var(--success);
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+
+        .upload-card.error {
+            border-color: var(--error);
+            background-color: rgba(220, 53, 69, 0.05);
+        }
+
+        .dataset-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .dataset-label input {
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: var(--primary);
+            width: 100%;
+            text-align: center;
+            padding: 2px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .dataset-label input:focus {
+            outline: none;
+            border-bottom-color: var(--accent);
+        }
+
+        .dataset-sublabel {
+            font-size: 11px;
+            color: var(--medium-gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .upload-subtext {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .upload-status {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        .status-badge.ready {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.empty {
+            background-color: rgba(233, 236, 239, 1);
+            color: var(--medium-gray);
+        }
+
+        .status-badge.loaded {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--error);
+        }
+
+        .upload-filename {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-top: 8px;
+            word-break: break-all;
+        }
+
+        .upload-recordcount {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 4px;
+        }
+
+        .upload-actions {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 11px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-small.danger {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .btn-small.danger:hover {
+            background-color: #c82333;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #a88968;
+            box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--light-gray);
+            color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Mapping Section */
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .mapping-field {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .mapping-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mapping-label.required::after {
+            content: '*';
+            color: var(--error);
+        }
+
+        .mapping-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 13px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .mapping-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .filter-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .filter-input {
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .filter-range {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-range input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .filter-divider {
+            color: var(--medium-gray);
+            font-weight: 600;
+        }
+
+        .filter-status {
+            padding: 12px 16px;
+            background-color: var(--background);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--primary);
+            margin-top: 12px;
+        }
+
+        /* Table */
+        .table-container {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            padding: 16px 24px;
+            background-color: var(--background);
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .table th {
+            background-color: var(--background);
+            padding: 12px 24px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light-gray);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .table th:hover {
+            background-color: #f0f1f3;
+        }
+
+        .table td {
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--light-gray);
+            color: var(--dark);
+        }
+
+        .table tr:hover {
+            background-color: var(--background);
+        }
+
+        /* Dataset Tabs */
+        .dataset-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--light-gray);
+            padding: 0 24px;
+        }
+
+        .dataset-tab {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--medium-gray);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dataset-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .dataset-tab[data-dataset="a"] {
+            --tab-color: var(--dataset-a);
+        }
+
+        .dataset-tab[data-dataset="b"] {
+            --tab-color: var(--dataset-b);
+        }
+
+        .dataset-tab[data-dataset="c"] {
+            --tab-color: var(--dataset-c);
+        }
+
+        .dataset-tab.active {
+            color: var(--accent);
+        }
+
+        /* Summary Stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Analysis Tabs */
+        .analysis-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--light-gray);
+            flex-wrap: wrap;
+        }
+
+        .analysis-tab {
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--medium-gray);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .analysis-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Analysis Content */
+        .analysis-content {
+            display: none;
+        }
+
+        .analysis-content.active {
+            display: block;
+        }
+
+        .analysis-method {
+            background-color: white;
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .method-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .method-result {
+            background-color: var(--background);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--primary);
+            display: inline-block;
+            width: 140px;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Adjustment Selection Card */
+        .adjustment-card {
+            background-color: white;
+            border-left: 4px solid var(--accent);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .adjustment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .adjustment-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .confidence-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .confidence-badge.high {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .confidence-badge.medium {
+            background-color: rgba(244, 162, 97, 0.1);
+            color: var(--warning);
+        }
+
+        .confidence-badge.low {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--error);
+        }
+
+        .guardrail-check {
+            background-color: var(--background);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .guardrail-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .guardrail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .guardrail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .guardrail-icon {
+            font-size: 16px;
+            min-width: 20px;
+        }
+
+        /* Range Visualization */
+        .range-section {
+            margin-bottom: 24px;
+        }
+
+        .range-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .range-bar {
+            height: 40px;
+            background-color: var(--light-gray);
+            border-radius: 6px;
+            position: relative;
+            margin-bottom: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .range-band {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
+            opacity: 0.3;
+            border-radius: 6px;
+        }
+
+        .range-typical {
+            position: absolute;
+            height: 100%;
+            background-color: rgba(40, 167, 69, 0.2);
+            border-left: 2px dashed var(--success);
+            border-right: 2px dashed var(--success);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--medium-gray);
+            padding: 0 4px;
+        }
+
+        /* Method Breakdown */
+        .method-breakdown {
+            background-color: var(--background);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .breakdown-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .breakdown-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .breakdown-label {
+            flex: 1;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: var(--accent);
+            min-width: 120px;
+        }
+
+        .breakdown-bar-container {
+            flex: 1;
+            margin: 0 12px;
+            height: 6px;
+            background-color: var(--light-gray);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .breakdown-bar {
+            height: 100%;
+            background-color: var(--accent);
+            border-radius: 3px;
+        }
+
+        /* Normalization Controls */
+        .normalization-box {
+            background-color: var(--background);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .normalization-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .normalization-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .normalization-control {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .normalization-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        .normalization-input {
+            padding: 8px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .normalization-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .normalization-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-normalize {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-normalize.apply {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-normalize.apply:hover {
+            background-color: #a88968;
+        }
+
+        .btn-normalize.reset {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--light-gray);
+        }
+
+        .btn-normalize.reset:hover {
+            background-color: var(--light-gray);
+        }
+
+        /* Selection Controls */
+        .selection-box {
+            background-color: var(--background);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .selection-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .selection-value-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .selection-value-input label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .selection-value-input input {
+            padding: 10px 12px;
+            border: 2px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            width: 120px;
+            text-align: center;
+        }
+
+        .selection-value-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .selection-unit {
+            font-size: 12px;
+            color: var(--medium-gray);
+            font-weight: 600;
+        }
+
+        .range-slider {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-bottom: 16px;
+        }
+
+        .slider-thumb-value {
+            display: flex;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        /* Input Range Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--light-gray) 0%, var(--accent) 50%, var(--light-gray) 100%);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        /* Justification Box */
+        .justification-box {
+            margin-bottom: 16px;
+        }
+
+        .justification-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .justification-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .justification-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Lock Button */
+        .btn-lock {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-lock:hover {
+            background-color: #a88968;
+        }
+
+        .btn-lock.locked {
+            background-color: var(--success);
+        }
+
+        /* Warnings */
+        .warning-box {
+            padding: 12px 16px;
+            border-left: 4px solid var(--warning);
+            background-color: rgba(244, 162, 97, 0.1);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .warning-box.error {
+            border-left-color: var(--error);
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        /* Multi-Dataset Results */
+        .dataset-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .dataset-result-box {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .dataset-result-box[data-dataset="a"] {
+            border-left-color: var(--dataset-a);
+        }
+
+        .dataset-result-box[data-dataset="b"] {
+            border-left-color: var(--dataset-b);
+        }
+
+        .dataset-result-box[data-dataset="c"] {
+            border-left-color: var(--dataset-c);
+        }
+
+        .dataset-result-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .dataset-result-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        /* Export Options */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .export-option {
+            background-color: white;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .export-option:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(201, 169, 110, 0.15);
+        }
+
+        .export-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .export-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .export-description {
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .export-button {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .export-button:hover {
+            background-color: #a88968;
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .progress-container, .button-group, .upload-card, .filter-section {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .adjustment-card {
+                page-break-inside: avoid;
+                border: 1px solid var(--light-gray);
+                box-shadow: none;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                height: auto;
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .header-right {
+                font-size: 11px;
+            }
+
+            .progress-container {
+                padding: 12px;
+            }
+
+            .progress-bar {
+                flex-wrap: wrap;
+            }
+
+            .progress-step {
+                min-width: 60px;
+            }
+
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .progress-label {
+                top: 45px;
+                font-size: 10px;
+            }
+
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
+
+            .analysis-tabs {
+                overflow-x: auto;
+            }
+
+            .export-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table {
+                font-size: 11px;
+            }
+
+            .table th, .table td {
+                padding: 8px 12px;
+            }
+        }
+
+        /* Scatter Plot */
+        .scatter-plot {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .scatter-svg {
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+        }
+
+        /* Data Point Info */
+        .data-points-info {
+            background-color: var(--background);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--primary);
+            margin-top: 12px;
+        }
+
+        /* Outlier Details */
+        .outlier-details {
+            background-color: var(--background);
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .outlier-details.expanded {
+            max-height: 400px;
+        }
+
+        .outlier-item {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 12px;
+        }
+
+        .outlier-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Reconciled Range */
+        .reconciled-range {
+            background-color: rgba(40, 167, 69, 0.05);
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .reconciled-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--success);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .reconciled-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Dataset Divergence Warning */
+        .divergence-warning {
+            background-color: rgba(244, 162, 97, 0.1);
+            border: 1px solid var(--warning);
+            border-left: 4px solid var(--warning);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        /* ========================= */
+        /* PHASE 5: REPORT SYSTEM */
+        /* ========================= */
+
+        /* Subject Reference Section */
+        .subject-reference-section {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .reference-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .reference-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .reference-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reference-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .reference-field input {
+            padding: 10px 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .reference-field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+        }
+
+        /* Report Tab Navigation */
+        .report-tabs-container {
+            background-color: white;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 24px;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .report-tabs {
+            display: flex;
+            gap: 0;
+            padding: 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .report-tab {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            background: none;
+            color: var(--medium-gray);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .report-tab:hover {
+            color: var(--primary);
+            background-color: rgba(44, 62, 80, 0.02);
+        }
+
+        .report-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Report Tab Content */
+        .report-tab-content {
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .report-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Report Page Styling */
+        .report-page {
+            background: white;
+            max-width: 850px;
+            margin: 0 auto 20px;
+            padding: 48px 56px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--dark);
+            min-height: 900px;
+        }
+
+        .report-header {
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .report-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .report-company {
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-bottom: 4px;
+        }
+
+        .report-date {
+            font-size: 11px;
+            color: var(--medium-gray);
+        }
+
+        .report-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 4px;
+        }
+
+        .report-paragraph {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin: 12px 0;
+        }
+
+        .report-table th {
+            background: var(--background);
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--light-gray);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .report-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .report-table tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .report-footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 10px;
+            color: var(--medium-gray);
+            text-align: center;
+        }
+
+        .report-disclaimer {
+            background: rgba(74, 144, 217, 0.05);
+            border-left: 3px solid var(--info);
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--primary);
+        }
+
+        /* Support Selector */
+        .support-selector {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .support-selector label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .support-selector select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .support-selector select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+        }
+
+        /* Report Actions */
+        .report-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        /* Export Grid */
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .export-option {
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .export-option:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(201, 169, 110, 0.15);
+        }
+
+        .export-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .export-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .export-description {
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .export-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .export-button:hover {
+            background-color: #B89B5C;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3);
+        }
+
+        /* Print Styles */
+        @media print {
+            .report-page {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 40px;
+                min-height: auto;
+                page-break-after: always;
+            }
+            .report-actions,
+            .report-tabs-container,
+            .subject-reference-section,
+            .support-selector,
+            .export-grid,
+            .steps-nav,
+            .header,
+            .progress-container,
+            .button-group,
+            .compliance-banner {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="header-logo">DESIGNER HOMES</div>
+            <div class="header-badge">Adjustment Support Tool</div>
+        </div>
+        <div class="header-right">
+            <div>USPAP Support Tool — All conclusions remain the responsibility of the appraiser</div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-step active completed" data-step="1">
+                <div class="progress-circle">①</div>
+                <div class="progress-label">Upload Data</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="progress-circle">②</div>
+                <div class="progress-label">Map & Filter</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="progress-circle">③</div>
+                <div class="progress-label">Analyze</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="progress-circle">④</div>
+                <div class="progress-label">Refine & Select</div>
+            </div>
+            <div class="progress-step" data-step="5">
+                <div class="progress-circle">⑤</div>
+                <div class="progress-label">Export</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Phase 1: Upload Data -->
+        <div class="phase active" data-phase="1">
+            <div class="compliance-banner">
+                This tool analyzes market data to support adjustment development. It does not determine appraisal conclusions.
+            </div>
+
+            <div class="upload-section">
+                <div class="upload-card" data-dataset="a">
+                    <div class="dataset-label">
+                        <input type="text" value="Primary Market" class="dataset-label-input">
+                    </div>
+                    <div class="dataset-sublabel">Dataset A</div>
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">Drop CSV file here</div>
+                    <div class="upload-subtext">or click to browse</div>
+                    <div class="upload-status">
+                        <div class="status-badge ready">Ready</div>
+                    </div>
+                    <input type="file" class="dataset-input" accept=".csv" style="display: none;">
+                </div>
+
+                <div class="upload-card" data-dataset="b">
+                    <div class="dataset-label">
+                        <input type="text" value="Competitive Area" class="dataset-label-input">
+                    </div>
+                    <div class="dataset-sublabel">Dataset B (Optional)</div>
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">Drop CSV file here</div>
+                    <div class="upload-subtext">or click to browse</div>
+                    <div class="upload-status">
+                        <div class="status-badge empty">Empty</div>
+                    </div>
+                    <input type="file" class="dataset-input" accept=".csv" style="display: none;">
+                </div>
+
+                <div class="upload-card" data-dataset="c">
+                    <div class="dataset-label">
+                        <input type="text" value="Supporting Data" class="dataset-label-input">
+                    </div>
+                    <div class="dataset-sublabel">Dataset C (Optional)</div>
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">Drop CSV file here</div>
+                    <div class="upload-subtext">or click to browse</div>
+                    <div class="upload-status">
+                        <div class="status-badge empty">Empty</div>
+                    </div>
+                    <input type="file" class="dataset-input" accept=".csv" style="display: none;">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" id="continueToMapping" disabled>
+                    Continue to Field Mapping →
+                </button>
+            </div>
+        </div>
+
+        <!-- Phase 2: Map & Filter -->
+        <div class="phase" data-phase="2">
+            <div class="compliance-banner">
+                Verify field mappings are correct. The tool will use these mappings for all datasets.
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">Field Mapping</div>
+                <div class="mapping-grid" id="mappingGrid"></div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-title">Filters</div>
+                <div class="filter-grid" id="filterGrid"></div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" id="applyFilters">Apply Filters</button>
+            </div>
+
+            <div class="summary-stats" id="summaryStats"></div>
+
+            <div class="filter-section">
+                <div class="filter-title">Data Preview</div>
+                <div class="dataset-tabs" id="datasetTabs"></div>
+                <div class="table-container">
+                    <div class="table-header" id="tableHeader"></div>
+                    <table class="table" id="previewTable">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="backFromMapping">← Back</button>
+                <button class="btn btn-primary" id="continueToAnalysis">Continue to Analysis →</button>
+            </div>
+        </div>
+
+        <!-- Phase 3: Analyze -->
+        <div class="phase" data-phase="3">
+            <div class="compliance-banner">
+                Analysis results support adjustment development. The appraiser makes all final decisions.
+            </div>
+
+            <div id="analysisContainer"></div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="backFromAnalysis">← Back</button>
+                <button class="btn btn-primary" id="continueToRefine">Refine & Select Values →</button>
+            </div>
+        </div>
+
+        <!-- Phase 4: Refine & Select -->
+        <div class="phase" data-phase="4">
+            <div class="compliance-banner">
+                Select and justify adjustment values for each category. The appraiser makes all final determinations.
+            </div>
+
+            <div id="adjustmentCardsContainer"></div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="backFromRefine">← Back</button>
+                <button class="btn btn-primary" id="continueToExport">Export Results →</button>
+            </div>
+        </div>
+
+        <!-- Phase 5: Professional Report Output -->
+        <div class="phase" data-phase="5">
+            <div class="compliance-banner">
+                Review your professional adjustment analysis reports and export options.
+            </div>
+
+            <!-- Subject Reference Fields -->
+            <div class="subject-reference-section">
+                <div class="reference-title">Subject Property Reference</div>
+                <div class="reference-fields">
+                    <div class="reference-field">
+                        <label>Subject Address</label>
+                        <input type="text" id="subjectAddress" placeholder="Enter subject property address">
+                    </div>
+                    <div class="reference-field">
+                        <label>Assignment #</label>
+                        <input type="text" id="assignmentNumber" placeholder="Enter assignment or report number">
+                    </div>
+                    <div class="reference-field">
+                        <label>Client Name</label>
+                        <input type="text" id="clientName" placeholder="Enter client name">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Tab Navigation -->
+            <div class="report-tabs-container">
+                <div class="report-tabs">
+                    <button class="report-tab active" data-tab="summary">Summary Overview</button>
+                    <button class="report-tab" data-tab="comments">Comments Page</button>
+                    <button class="report-tab" data-tab="support">Adjustment Support</button>
+                    <button class="report-tab" data-tab="methods">Methods Page</button>
+                    <button class="report-tab" data-tab="export">Quick Export</button>
+                </div>
+            </div>
+
+            <!-- Tab 1: Summary Overview -->
+            <div class="report-tab-content active" id="tab-summary">
+                <div id="summaryReportContainer" class="report-page"></div>
+                <div class="report-actions">
+                    <button class="btn btn-primary" id="printSummary">Print This Page</button>
+                    <button class="btn btn-secondary" id="copySummary">Copy Text</button>
+                </div>
+            </div>
+
+            <!-- Tab 2: Comments Page -->
+            <div class="report-tab-content" id="tab-comments">
+                <div id="commentsReportContainer" class="report-page"></div>
+                <div class="report-actions">
+                    <button class="btn btn-primary" id="printComments">Print This Page</button>
+                    <button class="btn btn-secondary" id="copyComments">Copy Text</button>
+                </div>
+            </div>
+
+            <!-- Tab 3: Adjustment Support -->
+            <div class="report-tab-content" id="tab-support">
+                <div class="support-selector">
+                    <label>Select Adjustment to View:</label>
+                    <select id="supportAdjustmentSelect">
+                        <option value="">-- Choose an adjustment --</option>
+                    </select>
+                </div>
+                <div id="supportReportContainer" class="report-page"></div>
+                <div class="report-actions">
+                    <button class="btn btn-primary" id="printSupport">Print This Page</button>
+                    <button class="btn btn-secondary" id="copySupport">Copy Text</button>
+                </div>
+            </div>
+
+            <!-- Tab 4: Methods Page -->
+            <div class="report-tab-content" id="tab-methods">
+                <div id="methodsReportContainer" class="report-page"></div>
+                <div class="report-actions">
+                    <button class="btn btn-primary" id="printMethods">Print This Page</button>
+                    <button class="btn btn-secondary" id="copyMethods">Copy Text</button>
+                </div>
+            </div>
+
+            <!-- Tab 5: Quick Export -->
+            <div class="report-tab-content" id="tab-export">
+                <div class="export-grid">
+                    <div class="export-option">
+                        <div class="export-icon">📄</div>
+                        <div class="export-title">Summary Report</div>
+                        <div class="export-description">Print the one-page summary overview</div>
+                        <button class="export-button" id="quickExportSummary">Print</button>
+                    </div>
+
+                    <div class="export-option">
+                        <div class="export-icon">📝</div>
+                        <div class="export-title">Comments Page</div>
+                        <div class="export-description">Print professional adjustment commentary</div>
+                        <button class="export-button" id="quickExportComments">Print</button>
+                    </div>
+
+                    <div class="export-option">
+                        <div class="export-icon">📊</div>
+                        <div class="export-title">Adjustment Support</div>
+                        <div class="export-description">Print detailed support worksheet</div>
+                        <button class="export-button" id="quickExportSupport">Print</button>
+                    </div>
+
+                    <div class="export-option">
+                        <div class="export-icon">📋</div>
+                        <div class="export-title">Methods Page</div>
+                        <div class="export-description">Print methodology documentation</div>
+                        <button class="export-button" id="quickExportMethods">Print</button>
+                    </div>
+
+                    <div class="export-option">
+                        <div class="export-icon">⬇️</div>
+                        <div class="export-title">CSV Export</div>
+                        <div class="export-description">Download data in spreadsheet format</div>
+                        <button class="export-button" id="exportCSV">Download</button>
+                    </div>
+
+                    <div class="export-option">
+                        <div class="export-icon">🖨️</div>
+                        <div class="export-title">Print All Pages</div>
+                        <div class="export-description">Print complete analysis package</div>
+                        <button class="export-button" id="printAllPages">Print All</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="backFromExport">← Back</button>
+                <button class="btn btn-secondary" id="startOver">Start Over</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======================
+        // STATE MANAGEMENT
+        // ======================
+
+        const state = {
+            datasets: {
+                a: null,
+                b: null,
+                c: null
+            },
+            datasetLabels: {
+                a: 'Primary Market',
+                b: 'Competitive Area',
+                c: 'Supporting Data'
+            },
+            mappedFields: {},
+            filters: {
+                dateRange: [null, null],
+                priceRange: [null, null],
+                glaRange: [null, null],
+                locationText: ''
+            },
+            filteredData: {
+                a: null,
+                b: null,
+                c: null
+            },
+            analysisResults: {
+                a: {},
+                b: {},
+                c: {}
+            },
+            selectedAdjustments: {
+                gla: { value: null, justification: '' },
+                fullbath: { value: null, justification: '' },
+                halfbath: { value: null, justification: '' },
+                garage: { value: null, justification: '' },
+                basement: { value: null, justification: '' },
+                bedrooms: { value: null, justification: '' },
+                lotsize: { value: null, justification: '' },
+                age: { value: null, justification: '' }
+            },
+            currentPhase: 1
+        };
+
+        const GUARDRAILS = {
+            gla: { typical: [40, 130], broad: [20, 300], maxTotal: null, unit: '$/sf', label: 'GLA' },
+            fullbath: { typical: [3000, 15000], broad: [1000, 35000], maxTotal: 20000, unit: '$/unit', label: 'Full Bath' },
+            halfbath: { typical: [2000, 8000], broad: [500, 18000], maxTotal: 20000, unit: '$/unit', label: 'Half Bath' },
+            garage: { typical: [5000, 15000], broad: [2000, 30000], maxTotal: 20000, unit: '$/space', label: 'Garage' },
+            basement: { typical: [15, 40], broad: [5, 60], maxTotal: null, unit: '$/sf', label: 'Basement' },
+            bedrooms: { typical: [3000, 12000], broad: [1000, 50000], maxTotal: 20000, unit: '$/unit', label: 'Bedrooms' },
+            lotsize: { typical: [1, 5], broad: [0.5, 8], maxTotal: null, unit: '$/sf (×1k)', label: 'Lot Size' },
+            age: { typical: [300, 1500], broad: [100, 3000], maxTotal: null, unit: '$/year', label: 'Age' }
+        };
+
+        const FIELD_NAMES = {
+            salePrice: ['Sale Price', 'SalePrice', 'Close Price', 'Sold Price', 'SP', 'Price', 'Sales Price', 'Selling Price'],
+            gla: ['GLA', 'Living Area', 'Above Grade', 'SqFt', 'AGLA', 'Sq Ft', 'Square Feet', 'Total SqFt', 'Main Floor', 'Finished SqFt'],
+            bedrooms: ['Beds', 'Bedrooms', 'BR', 'Bed', 'Bed Rooms', 'Number of Bedrooms'],
+            fullBaths: ['Full Baths', 'FullBaths', 'FB', 'Baths Full', 'Full Bathrooms', 'Full Bath', 'Bathrooms Full', 'Baths'],
+            halfBaths: ['Half Baths', 'HalfBaths', 'HB', 'Half Bathrooms', 'Half Bath', 'Baths Half', '0.5 Baths'],
+            garage: ['Garage', 'Garage Spaces', 'Gar', 'Car Garage', 'Garage Stalls', 'Garage Bays'],
+            basement: ['Basement', 'BSMT', 'Below Grade', 'Basement SqFt', 'Basement Area'],
+            lotSize: ['Lot Size', 'LotSize', 'Lot Sq Ft', 'Lot Area', 'Land Area', 'Lot SqFt', 'Acres'],
+            yearBuilt: ['Year Built', 'YearBuilt', 'YrBlt', 'Yr Built', 'Built Year'],
+            address: ['Address', 'Street Address', 'Property Address', 'Street'],
+            subdivision: ['Subdivision', 'Area', 'Community', 'Sub Division', 'Neighborhood', 'Subarea']
+        };
+
+        // ======================
+        // UTILITY FUNCTIONS
+        // ======================
+
+        function goToPhase(phase) {
+            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+            document.querySelector(`.phase[data-phase="${phase}"]`).classList.add('active');
+
+            document.querySelectorAll('.progress-step').forEach((step, idx) => {
+                step.classList.remove('active', 'completed');
+                if (idx < phase - 1) {
+                    step.classList.add('completed');
+                } else if (idx === phase - 1) {
+                    step.classList.add('active');
+                }
+            });
+
+            state.currentPhase = phase;
+            window.scrollTo(0, 0);
+        }
+
+        function median(arr) {
+            if (!arr || arr.length === 0) return null;
+            const sorted = [...arr].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+        }
+
+        function mean(arr) {
+            if (!arr || arr.length === 0) return null;
+            return arr.reduce((a, b) => a + b, 0) / arr.length;
+        }
+
+        function percentile(arr, p) {
+            if (!arr || arr.length === 0) return null;
+            const sorted = [...arr].sort((a, b) => a - b);
+            const idx = (p / 100) * (sorted.length - 1);
+            const lower = Math.floor(idx);
+            const frac = idx - lower;
+            if (lower + 1 >= sorted.length) return sorted[lower];
+            return sorted[lower] + frac * (sorted[lower + 1] - sorted[lower]);
+        }
+
+        function standardDeviation(arr) {
+            if (!arr || arr.length === 0) return null;
+            const avg = mean(arr);
+            const squareDiffs = arr.map(v => (v - avg) ** 2);
+            const variance = squareDiffs.reduce((a, b) => a + b) / arr.length;
+            return Math.sqrt(variance);
+        }
+
+        function detectOutliers(arr) {
+            if (!arr || arr.length < 4) return [];
+            const q1 = percentile(arr, 25);
+            const q3 = percentile(arr, 75);
+            const iqr = q3 - q1;
+            return arr.map((v, i) => ({ value: v, index: i, isOutlier: v < q1 - 1.5 * iqr || v > q3 + 1.5 * iqr }))
+                .filter(o => o.isOutlier)
+                .map(o => o.value);
+        }
+
+        function linearRegression(x, y) {
+            if (!x || !y || x.length < 3) return null;
+            const n = x.length;
+            const xMean = mean(x);
+            const yMean = mean(y);
+            let ssXY = 0, ssXX = 0, ssYY = 0;
+            for (let i = 0; i < n; i++) {
+                ssXY += (x[i] - xMean) * (y[i] - yMean);
+                ssXX += (x[i] - xMean) ** 2;
+                ssYY += (y[i] - yMean) ** 2;
+            }
+            if (ssXX === 0) return null;
+            const slope = ssXY / ssXX;
+            const intercept = yMean - slope * xMean;
+            const rSquared = ssXX === 0 || ssYY === 0 ? 0 : (ssXY ** 2) / (ssXX * ssYY);
+            const ssRes = y.reduce((sum, yi, i) => sum + (yi - (intercept + slope * x[i])) ** 2, 0);
+            const se = Math.sqrt(ssRes / Math.max(1, n - 2) / Math.max(1, ssXX));
+            return {
+                slope,
+                intercept,
+                rSquared: Math.max(0, Math.min(1, rSquared)),
+                se,
+                ci95: [slope - 1.96 * se, slope + 1.96 * se]
+            };
+        }
+
+        function formatCurrency(value, unit = '') {
+            if (unit.includes('$/sf') || unit.includes('$/year')) {
+                return `$${value.toFixed(2)}${unit.includes('×') ? '' : ' '}${unit}`;
+            } else if (unit.includes('$/')) {
+                return `$${value.toFixed(0)} ${unit}`;
+            } else if (unit.includes('1k')) {
+                return `$${value.toFixed(2)}/1k sf`;
+            }
+            return `$${value.toFixed(2)}`;
+        }
+
+        function formatNumber(value) {
+            if (value === null) return 'N/A';
+            return Number.isInteger(value) ? value.toLocaleString() : value.toFixed(2);
+        }
+
+        // ======================
+        // UPLOAD & PARSING
+        // ======================
+
+        document.querySelectorAll('.upload-card').forEach(card => {
+            const dataset = card.dataset.dataset;
+            const input = card.querySelector('.dataset-input');
+            const labelInput = card.querySelector('.dataset-label-input');
+
+            labelInput.addEventListener('blur', (e) => {
+                state.datasetLabels[dataset] = e.target.value || `Dataset ${dataset.toUpperCase()}`;
+            });
+
+            card.addEventListener('click', (e) => {
+                if (e.target !== labelInput) {
+                    input.click();
+                }
+            });
+
+            card.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                card.style.borderColor = 'var(--primary)';
+            });
+
+            card.addEventListener('dragleave', () => {
+                card.style.borderColor = '';
+            });
+
+            card.addEventListener('drop', (e) => {
+                e.preventDefault();
+                card.style.borderColor = '';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    input.files = files;
+                    handleFileUpload(dataset, files[0]);
+                }
+            });
+
+            input.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(dataset, e.target.files[0]);
+                }
+            });
+        });
+
+        function handleFileUpload(dataset, file) {
+            const card = document.querySelector(`.upload-card[data-dataset="${dataset}"]`);
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    if (results.errors.length > 0) {
+                        card.classList.add('error');
+                        card.querySelector('.status-badge').className = 'status-badge error';
+                        card.querySelector('.status-badge').textContent = 'Error parsing file';
+                        return;
+                    }
+
+                    state.datasets[dataset] = results.data.filter(row => Object.values(row).some(v => v !== ''));
+
+                    card.classList.remove('error');
+                    card.classList.add('loaded');
+                    card.querySelector('.status-badge').className = 'status-badge loaded';
+                    card.querySelector('.status-badge').textContent = 'Loaded';
+
+                    const filenameDiv = card.querySelector('.upload-filename') || document.createElement('div');
+                    filenameDiv.className = 'upload-filename';
+                    filenameDiv.textContent = file.name;
+                    if (!card.querySelector('.upload-filename')) {
+                        card.querySelector('.upload-recordcount').after(filenameDiv);
+                    }
+
+                    const recordDiv = card.querySelector('.upload-recordcount') || document.createElement('div');
+                    recordDiv.className = 'upload-recordcount';
+                    recordDiv.textContent = `${state.datasets[dataset].length} records`;
+                    if (!card.querySelector('.upload-recordcount')) {
+                        card.querySelector('.upload-filename').after(recordDiv);
+                    } else {
+                        recordDiv.textContent = `${state.datasets[dataset].length} records`;
+                    }
+
+                    updatePhase1Status();
+                },
+                error: (error) => {
+                    card.classList.add('error');
+                    card.querySelector('.status-badge').className = 'status-badge error';
+                    card.querySelector('.status-badge').textContent = 'Error parsing file';
+                }
+            });
+        }
+
+        function updatePhase1Status() {
+            const continueBtn = document.getElementById('continueToMapping');
+            continueBtn.disabled = !state.datasets.a;
+        }
+
+        // ======================
+        // FIELD MAPPING
+        // ======================
+
+        document.getElementById('continueToMapping').addEventListener('click', () => {
+            initializeMapping();
+            goToPhase(2);
+        });
+
+        function autoDetectMapping(dataset) {
+            const mapping = {};
+            const headers = dataset.length > 0 ? Object.keys(dataset[0]) : [];
+
+            Object.entries(FIELD_NAMES).forEach(([field, names]) => {
+                const matched = headers.find(h => names.some(n => h.toLowerCase().includes(n.toLowerCase()) || n.toLowerCase().includes(h.toLowerCase())));
+                if (matched) {
+                    mapping[field] = matched;
+                }
+            });
+
+            return mapping;
+        }
+
+        function initializeMapping() {
+            const mappingGrid = document.getElementById('mappingGrid');
+            mappingGrid.innerHTML = '';
+
+            if (!state.datasets.a || state.datasets.a.length === 0) return;
+
+            const headers = Object.keys(state.datasets.a[0]);
+            const autoMapping = autoDetectMapping(state.datasets.a);
+
+            const requiredFields = ['salePrice', 'gla', 'bedrooms', 'fullBaths'];
+            const optionalFields = ['halfBaths', 'garage', 'basement', 'lotSize', 'yearBuilt', 'address', 'subdivision'];
+
+            requiredFields.forEach(field => {
+                const displayName = Object.values(GUARDRAILS).find(g => g.label === field) ? Object.values(GUARDRAILS).find(g => Object.keys(GUARDRAILS).includes(field))?.label : field;
+                createMappingField(field, headers, autoMapping[field], true, mappingGrid);
+            });
+
+            optionalFields.forEach(field => {
+                createMappingField(field, headers, autoMapping[field], false, mappingGrid);
+            });
+
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = 'btn btn-primary';
+            confirmBtn.style.width = '100%';
+            confirmBtn.textContent = 'Confirm Mapping';
+            confirmBtn.addEventListener('click', confirmMapping);
+            mappingGrid.parentElement.appendChild(confirmBtn);
+        }
+
+        function createMappingField(fieldKey, headers, autoSelected, isRequired, container) {
+            const field = document.createElement('div');
+            field.className = 'mapping-field';
+
+            const label = document.createElement('div');
+            label.className = 'mapping-label' + (isRequired ? ' required' : '');
+
+            const fieldNames = {
+                salePrice: 'Sale Price',
+                gla: 'GLA (sq ft)',
+                bedrooms: 'Bedrooms',
+                fullBaths: 'Full Baths',
+                halfBaths: 'Half Baths',
+                garage: 'Garage Spaces',
+                basement: 'Basement (sq ft)',
+                lotSize: 'Lot Size (sq ft)',
+                yearBuilt: 'Year Built',
+                address: 'Address',
+                subdivision: 'Subdivision'
+            };
+
+            label.textContent = fieldNames[fieldKey] || fieldKey;
+            field.appendChild(label);
+
+            const select = document.createElement('select');
+            select.className = 'mapping-select';
+            select.dataset.field = fieldKey;
+
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = '-- Not Mapped --';
+            select.appendChild(emptyOption);
+
+            headers.forEach(header => {
+                const option = document.createElement('option');
+                option.value = header;
+                option.textContent = header;
+                if (header === autoSelected) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            select.addEventListener('change', (e) => {
+                state.mappedFields[fieldKey] = e.target.value;
+            });
+
+            state.mappedFields[fieldKey] = autoSelected || '';
+            field.appendChild(select);
+            container.appendChild(field);
+        }
+
+        function confirmMapping() {
+            const requiredFields = ['salePrice', 'gla', 'bedrooms', 'fullBaths'];
+            const allMapped = requiredFields.every(f => state.mappedFields[f]);
+
+            if (!allMapped) {
+                alert('Please map all required fields');
+                return;
+            }
+
+            initializeFilters();
+            initializeDataPreview();
+        }
+
+        // ======================
+        // FILTERS
+        // ======================
+
+        function initializeFilters() {
+            const filterGrid = document.getElementById('filterGrid');
+            filterGrid.innerHTML = '';
+
+            if (!state.datasets.a || state.datasets.a.length === 0) return;
+
+            const prices = state.datasets.a
+                .map(r => parseFloat(r[state.mappedFields.salePrice]))
+                .filter(v => !isNaN(v));
+            const glas = state.datasets.a
+                .map(r => parseFloat(r[state.mappedFields.gla]))
+                .filter(v => !isNaN(v));
+
+            const createFilterGroup = (label, type, key, min, max) => {
+                const group = document.createElement('div');
+                group.className = 'filter-group';
+
+                const lbl = document.createElement('div');
+                lbl.className = 'filter-label';
+                lbl.textContent = label;
+                group.appendChild(lbl);
+
+                if (type === 'range') {
+                    const rangeDiv = document.createElement('div');
+                    rangeDiv.className = 'filter-range';
+
+                    const minInput = document.createElement('input');
+                    minInput.type = 'number';
+                    minInput.className = 'filter-input';
+                    minInput.placeholder = `Min (${min})`;
+                    minInput.value = '';
+
+                    const divider = document.createElement('span');
+                    divider.className = 'filter-divider';
+                    divider.textContent = '–';
+
+                    const maxInput = document.createElement('input');
+                    maxInput.type = 'number';
+                    maxInput.className = 'filter-input';
+                    maxInput.placeholder = `Max (${max})`;
+                    maxInput.value = '';
+
+                    minInput.addEventListener('change', (e) => {
+                        state.filters[key][0] = e.target.value ? parseFloat(e.target.value) : null;
+                    });
+
+                    maxInput.addEventListener('change', (e) => {
+                        state.filters[key][1] = e.target.value ? parseFloat(e.target.value) : null;
+                    });
+
+                    rangeDiv.appendChild(minInput);
+                    rangeDiv.appendChild(divider);
+                    rangeDiv.appendChild(maxInput);
+                    group.appendChild(rangeDiv);
+                } else if (type === 'text') {
+                    const textInput = document.createElement('input');
+                    textInput.type = 'text';
+                    textInput.className = 'filter-input';
+                    textInput.placeholder = 'Search location...';
+
+                    textInput.addEventListener('change', (e) => {
+                        state.filters.locationText = e.target.value;
+                    });
+
+                    group.appendChild(textInput);
+                }
+
+                filterGrid.appendChild(group);
+            };
+
+            createFilterGroup('Sale Price Range', 'range', 'priceRange', Math.min(...prices), Math.max(...prices));
+            createFilterGroup('GLA Range (sq ft)', 'range', 'glaRange', Math.min(...glas), Math.max(...glas));
+            createFilterGroup('Location / Subdivision', 'text', 'location', '', '');
+        }
+
+        document.getElementById('applyFilters').addEventListener('click', applyFilters);
+
+        function applyFilters() {
+            ['a', 'b', 'c'].forEach(ds => {
+                if (!state.datasets[ds]) return;
+
+                let filtered = state.datasets[ds];
+
+                if (state.filters.priceRange[0] !== null) {
+                    const minPrice = state.filters.priceRange[0];
+                    filtered = filtered.filter(r => {
+                        const price = parseFloat(r[state.mappedFields.salePrice]);
+                        return price >= minPrice;
+                    });
+                }
+
+                if (state.filters.priceRange[1] !== null) {
+                    const maxPrice = state.filters.priceRange[1];
+                    filtered = filtered.filter(r => {
+                        const price = parseFloat(r[state.mappedFields.salePrice]);
+                        return price <= maxPrice;
+                    });
+                }
+
+                if (state.filters.glaRange[0] !== null) {
+                    const minGla = state.filters.glaRange[0];
+                    filtered = filtered.filter(r => {
+                        const gla = parseFloat(r[state.mappedFields.gla]);
+                        return gla >= minGla;
+                    });
+                }
+
+                if (state.filters.glaRange[1] !== null) {
+                    const maxGla = state.filters.glaRange[1];
+                    filtered = filtered.filter(r => {
+                        const gla = parseFloat(r[state.mappedFields.gla]);
+                        return gla <= maxGla;
+                    });
+                }
+
+                if (state.filters.locationText && state.mappedFields.subdivision) {
+                    const searchText = state.filters.locationText.toLowerCase();
+                    filtered = filtered.filter(r => {
+                        const location = (r[state.mappedFields.subdivision] || '').toLowerCase();
+                        return location.includes(searchText);
+                    });
+                }
+
+                state.filteredData[ds] = filtered;
+            });
+
+            updateSummaryStats();
+            initializeDataPreview();
+        }
+
+        function updateSummaryStats() {
+            const container = document.getElementById('summaryStats');
+            container.innerHTML = '';
+
+            ['a', 'b', 'c'].forEach(ds => {
+                if (!state.filteredData[ds] || state.filteredData[ds].length === 0) return;
+
+                const data = state.filteredData[ds];
+                const prices = data.map(r => parseFloat(r[state.mappedFields.salePrice])).filter(v => !isNaN(v));
+                const glas = data.map(r => parseFloat(r[state.mappedFields.gla])).filter(v => !isNaN(v));
+
+                const card = document.createElement('div');
+                card.className = 'stat-card';
+                card.innerHTML = `
+                    <div class="stat-label">${state.datasetLabels[ds]}</div>
+                    <div style="text-align: left; font-size: 12px;">
+                        <div style="margin-bottom: 8px;"><strong>Records:</strong> ${data.length}</div>
+                        <div style="margin-bottom: 8px;"><strong>Price:</strong> $${Math.min(...prices).toLocaleString()} – $${Math.max(...prices).toLocaleString()}</div>
+                        <div style="margin-bottom: 8px;"><strong>Median Price:</strong> $${median(prices).toLocaleString('en-US', { maximumFractionDigits: 0 })}</div>
+                        <div style="margin-bottom: 8px;"><strong>GLA:</strong> ${Math.min(...glas).toLocaleString()} – ${Math.max(...glas).toLocaleString()}</div>
+                        <div><strong>Median GLA:</strong> ${median(glas).toLocaleString('en-US', { maximumFractionDigits: 0 })}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function initializeDataPreview() {
+            const tabs = document.getElementById('datasetTabs');
+            tabs.innerHTML = '';
+
+            ['a', 'b', 'c'].forEach(ds => {
+                if (!state.filteredData[ds] || state.filteredData[ds].length === 0) return;
+
+                const tab = document.createElement('button');
+                tab.className = 'dataset-tab' + (ds === 'a' ? ' active' : '');
+                tab.dataset.dataset = ds;
+                tab.textContent = state.datasetLabels[ds];
+
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.dataset-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    populatePreviewTable(ds);
+                });
+
+                tabs.appendChild(tab);
+            });
+
+            populatePreviewTable('a');
+        }
+
+        function populatePreviewTable(dataset) {
+            if (!state.filteredData[dataset] || state.filteredData[dataset].length === 0) return;
+
+            const data = state.filteredData[dataset];
+            const headers = Object.keys(data[0]);
+            const table = document.getElementById('previewTable');
+            const headerDiv = document.getElementById('tableHeader');
+
+            headerDiv.textContent = `Showing first 25 of ${data.length} records`;
+
+            const thead = table.querySelector('thead') || document.createElement('thead');
+            thead.innerHTML = '';
+            const headerRow = document.createElement('tr');
+            headers.slice(0, 8).forEach(h => {
+                const th = document.createElement('th');
+                th.textContent = h;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            if (!table.querySelector('thead')) {
+                table.insertBefore(thead, table.querySelector('tbody'));
+            }
+
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            data.slice(0, 25).forEach(row => {
+                const tr = document.createElement('tr');
+                headers.slice(0, 8).forEach(h => {
+                    const td = document.createElement('td');
+                    const value = row[h];
+                    td.textContent = typeof value === 'number' ? value.toLocaleString() : value;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ======================
+        // PHASE 2 NAVIGATION
+        // ======================
+
+        document.getElementById('backFromMapping').addEventListener('click', () => goToPhase(1));
+        document.getElementById('continueToAnalysis').addEventListener('click', () => {
+            applyFilters();
+            runAnalysis();
+            goToPhase(3);
+        });
+
+        // ======================
+        // ANALYSIS
+        // ======================
+
+        function runAnalysis() {
+            ['a', 'b', 'c'].forEach(ds => {
+                if (!state.filteredData[ds]) return;
+                analyzeDataset(ds);
+            });
+            renderAnalysis();
+        }
+
+        function analyzeDataset(dataset) {
+            const data = state.filteredData[dataset];
+            if (!data || data.length === 0) return;
+
+            const results = {};
+
+            // Extract numeric fields
+            const prices = data.map(r => parseFloat(r[state.mappedFields.salePrice])).filter(v => !isNaN(v));
+            const glas = data.map(r => parseFloat(r[state.mappedFields.gla])).filter(v => !isNaN(v));
+            const beds = data.map(r => parseInt(r[state.mappedFields.bedrooms])).filter(v => !isNaN(v));
+            const fullBaths = data.map(r => parseInt(r[state.mappedFields.fullBaths])).filter(v => !isNaN(v));
+            const halfBaths = state.mappedFields.halfBaths ? data.map(r => parseInt(r[state.mappedFields.halfBaths])).filter(v => !isNaN(v)) : [];
+            const garages = state.mappedFields.garage ? data.map(r => parseInt(r[state.mappedFields.garage])).filter(v => !isNaN(v)) : [];
+            const basements = state.mappedFields.basement ? data.map(r => parseFloat(r[state.mappedFields.basement])).filter(v => !isNaN(v)) : [];
+            const lotSizes = state.mappedFields.lotSize ? data.map(r => parseFloat(r[state.mappedFields.lotSize])).filter(v => !isNaN(v)) : [];
+            const yearsBuilt = state.mappedFields.yearBuilt ? data.map(r => parseInt(r[state.mappedFields.yearBuilt])).filter(v => !isNaN(v)) : [];
+
+            // GLA Analysis (per sq ft)
+            results.gla = analyzeFeature('gla', glas, prices, data, 'GLA', 'per sq ft', (g, p) => p / g, [
+                () => pairedSalesAnalysis(data, glas, prices, beds, fullBaths, 0.15, 1, 1),
+                () => groupedDataAnalysis(glas, prices, 'continuous', 250),
+                () => regressionAnalysis(glas, prices)
+            ]);
+
+            // Full Bath Analysis
+            results.fullbath = analyzeFeature('fullbath', fullBaths, prices, data, 'Full Bath', 'per unit', (b, p) => p, [
+                () => pairedSalesAnalysis(data, fullBaths, prices, beds, glas, null, 0, 0.15, 'count'),
+                () => groupedDataAnalysis(fullBaths, prices, 'categorical'),
+                () => regressionAnalysis(fullBaths, prices)
+            ]);
+
+            // Half Bath Analysis
+            if (halfBaths.length > 3) {
+                results.halfbath = analyzeFeature('halfbath', halfBaths, prices, data, 'Half Bath', 'per unit', (b, p) => p, [
+                    () => pairedSalesAnalysis(data, halfBaths, prices, beds, glas, null, 0, 0.15, 'count'),
+                    () => groupedDataAnalysis(halfBaths, prices, 'categorical'),
+                    () => regressionAnalysis(halfBaths, prices)
+                ]);
+            }
+
+            // Garage Analysis
+            if (garages.length > 3) {
+                results.garage = analyzeFeature('garage', garages, prices, data, 'Garage', 'per space', (g, p) => p, [
+                    () => pairedSalesAnalysis(data, garages, prices, beds, glas, null, 0, 0.15, 'count'),
+                    () => groupedDataAnalysis(garages, prices, 'categorical'),
+                    () => regressionAnalysis(garages, prices)
+                ]);
+            }
+
+            // Basement Analysis
+            if (basements.length > 3) {
+                results.basement = analyzeFeature('basement', basements, prices, data, 'Basement', 'per sq ft', (b, p) => p / b, [
+                    () => pairedSalesAnalysis(data, basements, prices, beds, fullBaths, null, 1, 1),
+                    () => groupedDataAnalysis(basements, prices, 'continuous', 200),
+                    () => regressionAnalysis(basements, prices)
+                ]);
+            }
+
+            // Bedrooms Analysis
+            results.bedrooms = analyzeFeature('bedrooms', beds, prices, data, 'Bedrooms', 'per unit', (b, p) => p, [
+                () => pairedSalesAnalysis(data, beds, prices, fullBaths, glas, null, 1, 0.15, 'count'),
+                () => groupedDataAnalysis(beds, prices, 'categorical'),
+                () => regressionAnalysis(beds, prices)
+            ]);
+
+            // Lot Size Analysis
+            if (lotSizes.length > 3) {
+                results.lotsize = analyzeFeature('lotsize', lotSizes, prices, data, 'Lot Size', 'per 1000 sf', (l, p) => p / (l / 1000), [
+                    () => pairedSalesAnalysis(data, lotSizes, prices, beds, fullBaths, null, 1, 1),
+                    () => groupedDataAnalysis(lotSizes, prices, 'continuous', 2500),
+                    () => regressionAnalysis(lotSizes, prices)
+                ]);
+            }
+
+            // Age Analysis
+            if (yearsBuilt.length > 3) {
+                const ages = yearsBuilt.map(y => 2025 - y);
+                results.age = analyzeFeature('age', ages, prices, data, 'Age', 'per year', (a, p) => p, [
+                    () => groupedDataAnalysis(ages, prices, 'categorical'),
+                    () => regressionAnalysis(ages, prices)
+                ]);
+            }
+
+            state.analysisResults[dataset] = results;
+        }
+
+        function analyzeFeature(key, featureValues, prices, rawData, label, unit, valueCalc, methods) {
+            const adjustments = [];
+
+            featureValues.forEach((fv, i) => {
+                const price = prices[i];
+                if (fv > 0 && price > 0) {
+                    adjustments.push(valueCalc(fv, price));
+                }
+            });
+
+            const cleanAdjustments = adjustments.filter(a => !isNaN(a) && isFinite(a));
+            const outliers = detectOutliers(cleanAdjustments);
+            const cleanNoOutliers = cleanAdjustments.filter(a => !outliers.includes(a));
+
+            const methodResults = methods.map(fn => fn()).filter(r => r !== null);
+
+            return {
+                label,
+                unit,
+                rawRange: [Math.min(...cleanAdjustments), Math.max(...cleanAdjustments)],
+                median: median(cleanAdjustments),
+                mean: mean(cleanAdjustments),
+                count: cleanAdjustments.length,
+                outliers,
+                outlierCount: outliers.length,
+                cleanRange: [Math.min(...cleanNoOutliers), Math.max(...cleanNoOutliers)],
+                cleanMedian: median(cleanNoOutliers),
+                methodResults
+            };
+        }
+
+        function pairedSalesAnalysis(data, featureValues, prices, constraintA, constraintB, constraintRangeA, constraintDiffB, constraintDiffC, constraintType = 'range') {
+            const pairs = [];
+
+            for (let i = 0; i < data.length; i++) {
+                for (let j = i + 1; j < data.length; j++) {
+                    const fv1 = featureValues[i];
+                    const fv2 = featureValues[j];
+                    const p1 = prices[i];
+                    const p2 = prices[j];
+
+                    if (fv1 === fv2) continue;
+
+                    let matchesConstraints = true;
+
+                    if (constraintRangeA !== null && constraintType === 'range') {
+                        const ratio = Math.max(constraintA[i], constraintA[j]) / Math.min(constraintA[i], constraintA[j]);
+                        if (ratio > 1 + constraintRangeA) matchesConstraints = false;
+                    }
+
+                    if (constraintType === 'count' && constraintDiffB) {
+                        if (Math.abs(constraintA[i] - constraintA[j]) > constraintDiffB) matchesConstraints = false;
+                    }
+
+                    if (constraintDiffC && constraintType !== 'count') {
+                        const ratio = Math.max(constraintB[i], constraintB[j]) / Math.min(constraintB[i], constraintB[j]);
+                        if (ratio > 1 + constraintDiffC) matchesConstraints = false;
+                    }
+
+                    if (matchesConstraints && Math.abs(fv1 - fv2) > 0) {
+                        const adjustment = Math.abs(p1 - p2) / Math.abs(fv1 - fv2);
+                        pairs.push({
+                            adjustment,
+                            priceDiff: Math.abs(p1 - p2),
+                            featureDiff: Math.abs(fv1 - fv2)
+                        });
+                    }
+
+                    if (pairs.length > 100) break;
+                }
+                if (pairs.length > 100) break;
+            }
+
+            if (pairs.length < 3) return null;
+
+            const adjustments = pairs.map(p => p.adjustment);
+            const sorted = [...adjustments].sort((a, b) => a - b);
+
+            return {
+                method: 'Paired Sales',
+                pairs: pairs.slice(0, 8),
+                median: median(adjustments),
+                mean: mean(adjustments),
+                range: [sorted[0], sorted[sorted.length - 1]],
+                count: pairs.length
+            };
+        }
+
+        function groupedDataAnalysis(featureValues, prices, type, bandSize = null) {
+            const groups = {};
+
+            featureValues.forEach((fv, i) => {
+                const price = prices[i];
+                let groupKey;
+
+                if (type === 'categorical') {
+                    groupKey = fv;
+                } else if (type === 'continuous' && bandSize) {
+                    const band = Math.floor(fv / bandSize);
+                    groupKey = `${band * bandSize}-${(band + 1) * bandSize}`;
+                } else {
+                    return;
+                }
+
+                if (!groups[groupKey]) {
+                    groups[groupKey] = [];
+                }
+                groups[groupKey].push(price);
+            });
+
+            const groupStats = Object.entries(groups)
+                .map(([key, prices]) => ({
+                    group: key,
+                    count: prices.length,
+                    median: median(prices),
+                    mean: mean(prices)
+                }))
+                .sort((a, b) => a.median - b.median);
+
+            if (groupStats.length < 2) return null;
+
+            const adjustments = [];
+            for (let i = 0; i < groupStats.length - 1; i++) {
+                const diff = groupStats[i + 1].median - groupStats[i].median;
+                adjustments.push(diff);
+            }
+
+            return {
+                method: 'Grouped Data',
+                groups: groupStats,
+                median: median(adjustments),
+                mean: mean(adjustments),
+                range: [Math.min(...adjustments), Math.max(...adjustments)],
+                count: groupStats.reduce((a, b) => a + b.count, 0)
+            };
+        }
+
+        function regressionAnalysis(x, y) {
+            const pairs = [];
+            x.forEach((xv, i) => {
+                if (xv > 0 && y[i] > 0) {
+                    pairs.push({ x: xv, y: y[i] });
+                }
+            });
+
+            if (pairs.length < 3) return null;
+
+            const xValues = pairs.map(p => p.x);
+            const yValues = pairs.map(p => p.y);
+
+            const regression = linearRegression(xValues, yValues);
+            if (!regression) return null;
+
+            return {
+                method: 'Regression',
+                slope: regression.slope,
+                intercept: regression.intercept,
+                rSquared: regression.rSquared,
+                se: regression.se,
+                ci95: regression.ci95,
+                count: pairs.length
+            };
+        }
+
+        function renderAnalysis() {
+            const container = document.getElementById('analysisContainer');
+            container.innerHTML = '';
+
+            const categories = [
+                { key: 'gla', label: 'GLA ($/sf)', icon: '📐' },
+                { key: 'fullbath', label: 'Full Baths ($/unit)', icon: '🚿' },
+                { key: 'halfbath', label: 'Half Baths ($/unit)', icon: '🚽' },
+                { key: 'garage', label: 'Garage ($/space)', icon: '🚗' },
+                { key: 'basement', label: 'Basement ($/sf)', icon: '🏠' },
+                { key: 'bedrooms', label: 'Bedrooms ($/unit)', icon: '🛏️' },
+                { key: 'lotsize', label: 'Lot Size ($/1k sf)', icon: '📍' },
+                { key: 'age', label: 'Age ($/year)', icon: '📅' }
+            ];
+
+            const analysisWrapper = document.createElement('div');
+
+            categories.forEach(cat => {
+                const hasData = {};
+                let hasAnyData = false;
+
+                ['a', 'b', 'c'].forEach(ds => {
+                    hasData[ds] = state.analysisResults[ds] && state.analysisResults[ds][cat.key];
+                    if (hasData[ds]) hasAnyData = true;
+                });
+
+                if (!hasAnyData) return;
+
+                const categoryDiv = document.createElement('div');
+                categoryDiv.style.marginBottom = '32px';
+
+                const categoryTitle = document.createElement('h3');
+                categoryTitle.style.cssText = 'font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;';
+                categoryTitle.innerHTML = `<span>${cat.icon}</span> ${cat.label}`;
+                categoryDiv.appendChild(categoryTitle);
+
+                ['a', 'b', 'c'].forEach(ds => {
+                    if (!hasData[ds]) return;
+
+                    const result = state.analysisResults[ds][cat.key];
+                    const dsTitle = document.createElement('h4');
+                    dsTitle.style.cssText = 'font-size: 12px; font-weight: 600; color: var(--medium-gray); text-transform: uppercase; margin-bottom: 12px;';
+                    dsTitle.textContent = state.datasetLabels[ds];
+                    categoryDiv.appendChild(dsTitle);
+
+                    result.methodResults.forEach(methodResult => {
+                        const methodDiv = document.createElement('div');
+                        methodDiv.className = 'analysis-method';
+
+                        const methodTitle = document.createElement('div');
+                        methodTitle.className = 'method-title';
+                        methodTitle.textContent = methodResult.method;
+                        methodDiv.appendChild(methodTitle);
+
+                        if (methodResult.method === 'Paired Sales') {
+                            const pairsDiv = document.createElement('div');
+                            pairsDiv.style.marginBottom = '12px';
+
+                            methodResult.pairs.slice(0, 8).forEach((pair, idx) => {
+                                const pairInfo = document.createElement('div');
+                                pairInfo.className = 'method-result';
+                                pairInfo.innerHTML = `
+                                    <div><strong>Pair ${idx + 1}:</strong> Price diff: $${pair.priceDiff.toLocaleString()} ÷ Feature diff: ${pair.featureDiff.toFixed(2)} = $${pair.adjustment.toFixed(2)}</div>
+                                `;
+                                pairsDiv.appendChild(pairInfo);
+                            });
+
+                            const resultDiv = document.createElement('div');
+                            resultDiv.className = 'method-result';
+                            resultDiv.innerHTML = `
+                                <div><span class="result-label">Median:</span> <span class="result-value">$${methodResult.median.toFixed(2)}</span></div>
+                                <div><span class="result-label">Range:</span> <span class="result-value">$${methodResult.range[0].toFixed(2)} – $${methodResult.range[1].toFixed(2)}</span></div>
+                                <div><span class="result-label">Pair Count:</span> <span class="result-value">${methodResult.count}</span></div>
+                            `;
+
+                            methodDiv.appendChild(pairsDiv);
+                            methodDiv.appendChild(resultDiv);
+                        } else if (methodResult.method === 'Grouped Data') {
+                            const groupsDiv = document.createElement('div');
+                            groupsDiv.style.marginBottom = '12px';
+
+                            methodResult.groups.forEach(group => {
+                                const groupInfo = document.createElement('div');
+                                groupInfo.className = 'method-result';
+                                groupInfo.innerHTML = `
+                                    <div><strong>Group ${group.group}:</strong> Count: ${group.count}, Median Price: $${group.median.toLocaleString()}</div>
+                                `;
+                                groupsDiv.appendChild(groupInfo);
+                            });
+
+                            const resultDiv = document.createElement('div');
+                            resultDiv.className = 'method-result';
+                            resultDiv.innerHTML = `
+                                <div><span class="result-label">Indicated Adj:</span> <span class="result-value">$${methodResult.median.toFixed(2)}</span></div>
+                                <div><span class="result-label">Range:</span> <span class="result-value">$${methodResult.range[0].toFixed(2)} – $${methodResult.range[1].toFixed(2)}</span></div>
+                            `;
+
+                            methodDiv.appendChild(groupsDiv);
+                            methodDiv.appendChild(resultDiv);
+                        } else if (methodResult.method === 'Regression') {
+                            const eqDiv = document.createElement('div');
+                            eqDiv.className = 'method-result';
+                            eqDiv.innerHTML = `
+                                <div><strong>Equation:</strong> Price = $${methodResult.intercept.toFixed(0)} + $${methodResult.slope.toFixed(2)} × Feature</div>
+                                <div><span class="result-label">R²:</span> <span class="result-value">${methodResult.rSquared.toFixed(3)}</span> (${methodResult.rSquared > 0.7 ? 'Strong' : methodResult.rSquared > 0.4 ? 'Moderate' : 'Weak'} fit)</div>
+                                <div><span class="result-label">95% CI:</span> <span class="result-value">$${methodResult.ci95[0].toFixed(2)} – $${methodResult.ci95[1].toFixed(2)}</span></div>
+                                <div><span class="result-label">Data Points:</span> <span class="result-value">${methodResult.count}</span></div>
+                            `;
+
+                            // Simple scatter plot
+                            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            svg.setAttribute('class', 'scatter-svg');
+                            svg.setAttribute('width', '400');
+                            svg.setAttribute('height', '250');
+                            svg.setAttribute('viewBox', '0 0 400 250');
+                            svg.style.marginTop = '12px';
+
+                            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                            rect.setAttribute('width', '400');
+                            rect.setAttribute('height', '250');
+                            rect.setAttribute('fill', 'white');
+                            svg.appendChild(rect);
+
+                            eqDiv.appendChild(svg);
+                            methodDiv.appendChild(eqDiv);
+                        }
+                    });
+
+                    categoryDiv.appendChild(methodDiv);
+                });
+
+                analysisWrapper.appendChild(categoryDiv);
+            });
+
+            container.appendChild(analysisWrapper);
+        }
+
+        // ======================
+        // PHASE 3 NAVIGATION
+        // ======================
+
+        document.getElementById('backFromAnalysis').addEventListener('click', () => goToPhase(2));
+        document.getElementById('continueToRefine').addEventListener('click', () => {
+            renderAdjustmentCards();
+            goToPhase(4);
+        });
+
+        // ======================
+        // REFINEMENT & SELECTION
+        // ======================
+
+        function renderAdjustmentCards() {
+            const container = document.getElementById('adjustmentCardsContainer');
+            container.innerHTML = '';
+
+            const categories = [
+                { key: 'gla', label: 'GLA Adjustment', unit: 'per sq ft', icon: '📐' },
+                { key: 'fullbath', label: 'Full Bath Adjustment', unit: 'per unit', icon: '🚿' },
+                { key: 'halfbath', label: 'Half Bath Adjustment', unit: 'per unit', icon: '🚽' },
+                { key: 'garage', label: 'Garage Adjustment', unit: 'per space', icon: '🚗' },
+                { key: 'basement', label: 'Basement Adjustment', unit: 'per sq ft', icon: '🏠' },
+                { key: 'bedrooms', label: 'Bedroom Adjustment', unit: 'per unit', icon: '🛏️' },
+                { key: 'lotsize', label: 'Lot Size Adjustment', unit: 'per 1k sf', icon: '📍' },
+                { key: 'age', label: 'Age Adjustment', unit: 'per year', icon: '📅' }
+            ];
+
+            categories.forEach(cat => {
+                const hasData = {};
+                let hasAnyData = false;
+
+                ['a', 'b', 'c'].forEach(ds => {
+                    hasData[ds] = state.analysisResults[ds] && state.analysisResults[ds][cat.key];
+                    if (hasData[ds]) hasAnyData = true;
+                });
+
+                if (!hasAnyData) return;
+
+                const card = document.createElement('div');
+                card.className = 'adjustment-card';
+                card.id = `card-${cat.key}`;
+
+                const header = document.createElement('div');
+                header.className = 'adjustment-header';
+                header.innerHTML = `
+                    <div class="adjustment-title">${cat.icon} ${cat.label}</div>
+                    <div class="confidence-badge high">High Confidence</div>
+                `;
+                card.appendChild(header);
+
+                // Guardrail check
+                const guardrail = GUARDRAILS[cat.key];
+                const guardrailDiv = document.createElement('div');
+                guardrailDiv.className = 'guardrail-check';
+
+                const guardrailTitle = document.createElement('div');
+                guardrailTitle.className = 'guardrail-title';
+                guardrailTitle.innerHTML = '✓ Guardrail Check';
+                guardrailDiv.appendChild(guardrailTitle);
+
+                const typicalText = `Within typical range ($${guardrail.typical[0]}–$${guardrail.typical[1]}${guardrail.unit.includes('sf') || guardrail.unit.includes('year') ? guardrail.unit : ''})`;
+                const broadText = `Broad acceptable: $${guardrail.broad[0]}–$${guardrail.broad[1]}${guardrail.unit.includes('sf') || guardrail.unit.includes('year') ? guardrail.unit : ''}`;
+
+                const typicalItem = document.createElement('div');
+                typicalItem.className = 'guardrail-item';
+                typicalItem.innerHTML = `<span class="guardrail-icon">✓</span> <span>${typicalText}</span>`;
+                guardrailDiv.appendChild(typicalItem);
+
+                const broadItem = document.createElement('div');
+                broadItem.className = 'guardrail-item';
+                broadItem.innerHTML = `<span class="guardrail-icon">ℹ</span> <span>${broadText}</span>`;
+                guardrailDiv.appendChild(broadItem);
+
+                card.appendChild(guardrailDiv);
+
+                // Dataset results side by side
+                const datasetResultsDiv = document.createElement('div');
+                datasetResultsDiv.className = 'dataset-results';
+
+                ['a', 'b', 'c'].forEach(ds => {
+                    if (!hasData[ds]) return;
+
+                    const result = state.analysisResults[ds][cat.key];
+                    const resultBox = document.createElement('div');
+                    resultBox.className = 'dataset-result-box';
+                    resultBox.dataset.dataset = ds;
+
+                    const dsLabel = document.createElement('div');
+                    dsLabel.className = 'dataset-result-label';
+                    dsLabel.textContent = state.datasetLabels[ds];
+                    resultBox.appendChild(dsLabel);
+
+                    const resultValue = document.createElement('div');
+                    resultValue.className = 'dataset-result-value';
+                    resultValue.textContent = `$${result.median.toFixed(2)}`;
+                    resultBox.appendChild(resultValue);
+
+                    const resultRange = document.createElement('div');
+                    resultRange.style.cssText = 'font-size: 12px; color: var(--medium-gray);';
+                    resultRange.textContent = `Range: $${result.cleanRange[0].toFixed(2)}–$${result.cleanRange[1].toFixed(2)}`;
+                    resultBox.appendChild(resultRange);
+
+                    datasetResultsDiv.appendChild(resultBox);
+                });
+
+                card.appendChild(datasetResultsDiv);
+
+                // Range visualization
+                const allResults = ['a', 'b', 'c'].filter(ds => hasData[ds]).map(ds => state.analysisResults[ds][cat.key]);
+                const allAdjustments = allResults.flatMap(r => r.methodResults.flatMap(m => {
+                    if (m.median) return [m.median];
+                    if (m.range) return [m.range[0], m.range[1]];
+                    return [];
+                }));
+
+                const rangeMin = Math.min(...allAdjustments);
+                const rangeMax = Math.max(...allAdjustments);
+
+                const rangeSection = document.createElement('div');
+                rangeSection.className = 'range-section';
+
+                const rangeTitle = document.createElement('div');
+                rangeTitle.className = 'range-title';
+                rangeTitle.textContent = 'Raw Calculated Range';
+                rangeSection.appendChild(rangeTitle);
+
+                const rangeBar = document.createElement('div');
+                rangeBar.className = 'range-bar';
+
+                const rangeBand = document.createElement('div');
+                rangeBand.className = 'range-band';
+                rangeBand.style.left = '0%';
+                rangeBand.style.width = '100%';
+                rangeBar.appendChild(rangeBand);
+
+                const rangeLabels = document.createElement('div');
+                rangeLabels.className = 'range-labels';
+                rangeLabels.innerHTML = `<span>$${rangeMin.toFixed(2)}</span><span>$${rangeMax.toFixed(2)}</span>`;
+                rangeSection.appendChild(rangeBar);
+                rangeSection.appendChild(rangeLabels);
+
+                card.appendChild(rangeSection);
+
+                // Normalization controls
+                const normBox = document.createElement('div');
+                normBox.className = 'normalization-box';
+
+                const normTitle = document.createElement('div');
+                normTitle.className = 'normalization-title';
+                normTitle.innerHTML = 'Normalize Range (10th–90th Percentile)';
+                normBox.appendChild(normTitle);
+
+                const normControls = document.createElement('div');
+                normControls.className = 'normalization-controls';
+
+                const percentileGroup = document.createElement('div');
+                percentileGroup.className = 'normalization-control';
+                const percLabel = document.createElement('div');
+                percLabel.className = 'normalization-label';
+                percLabel.textContent = 'Percentile Trim';
+                const percSelect = document.createElement('select');
+                percSelect.className = 'normalization-input';
+                ['5th–95th', '10th–90th', '15th–85th', '25th–75th (IQR)'].forEach((opt, idx) => {
+                    const option = document.createElement('option');
+                    option.value = idx;
+                    option.textContent = opt;
+                    if (idx === 1) option.selected = true;
+                    percSelect.appendChild(option);
+                });
+                percentileGroup.appendChild(percLabel);
+                percentileGroup.appendChild(percSelect);
+                normControls.appendChild(percentileGroup);
+
+                const minGroup = document.createElement('div');
+                minGroup.className = 'normalization-control';
+                const minLabel = document.createElement('div');
+                minLabel.className = 'normalization-label';
+                minLabel.textContent = 'Manual Min';
+                const minInput = document.createElement('input');
+                minInput.type = 'number';
+                minInput.className = 'normalization-input';
+                minInput.value = rangeMin.toFixed(2);
+                minInput.step = '0.01';
+                minGroup.appendChild(minLabel);
+                minGroup.appendChild(minInput);
+                normControls.appendChild(minGroup);
+
+                const maxGroup = document.createElement('div');
+                maxGroup.className = 'normalization-control';
+                const maxLabel = document.createElement('div');
+                maxLabel.className = 'normalization-label';
+                maxLabel.textContent = 'Manual Max';
+                const maxInput = document.createElement('input');
+                maxInput.type = 'number';
+                maxInput.className = 'normalization-input';
+                maxInput.value = rangeMax.toFixed(2);
+                maxInput.step = '0.01';
+                maxGroup.appendChild(maxLabel);
+                maxGroup.appendChild(maxInput);
+                normControls.appendChild(maxGroup);
+
+                normBox.appendChild(normControls);
+
+                const normButtons = document.createElement('div');
+                normButtons.className = 'normalization-buttons';
+                const applyNorm = document.createElement('button');
+                applyNorm.className = 'btn-normalize apply';
+                applyNorm.textContent = 'Apply Normalization';
+                const resetNorm = document.createElement('button');
+                resetNorm.className = 'btn-normalize reset';
+                resetNorm.textContent = 'Reset to Raw';
+
+                normButtons.appendChild(applyNorm);
+                normButtons.appendChild(resetNorm);
+                normBox.appendChild(normButtons);
+
+                card.appendChild(normBox);
+
+                // Selection controls
+                const selectionBox = document.createElement('div');
+                selectionBox.className = 'selection-box';
+
+                const selectionTitle = document.createElement('div');
+                selectionTitle.className = 'selection-title';
+                selectionTitle.innerHTML = 'Your Selection';
+                selectionBox.appendChild(selectionTitle);
+
+                const selectionValueInput = document.createElement('div');
+                selectionValueInput.className = 'selection-value-input';
+
+                const selectionLabel = document.createElement('label');
+                selectionLabel.textContent = 'Selected Value:';
+
+                const selectionInput = document.createElement('input');
+                selectionInput.type = 'number';
+                selectionInput.value = (rangeMin + rangeMax) / 2;
+                selectionInput.step = cat.key === 'gla' || cat.key === 'basement' ? '0.01' : '1';
+
+                const selectionUnit = document.createElement('span');
+                selectionUnit.className = 'selection-unit';
+                selectionUnit.textContent = cat.unit;
+
+                selectionValueInput.appendChild(selectionLabel);
+                selectionValueInput.appendChild(selectionInput);
+                selectionValueInput.appendChild(selectionUnit);
+                selectionBox.appendChild(selectionValueInput);
+
+                const sliderValue = document.createElement('div');
+                sliderValue.className = 'slider-thumb-value';
+                sliderValue.innerHTML = `$${((rangeMin + rangeMax) / 2).toFixed(2)}`;
+
+                const slider = document.createElement('input');
+                slider.type = 'range';
+                slider.className = 'range-slider';
+                slider.min = rangeMin;
+                slider.max = rangeMax;
+                slider.value = (rangeMin + rangeMax) / 2;
+                slider.step = cat.key === 'gla' || cat.key === 'basement' ? '0.01' : '1';
+
+                slider.addEventListener('input', (e) => {
+                    selectionInput.value = e.target.value;
+                    sliderValue.textContent = `$${parseFloat(e.target.value).toFixed(2)}`;
+                });
+
+                selectionInput.addEventListener('change', (e) => {
+                    slider.value = e.target.value;
+                    sliderValue.textContent = `$${parseFloat(e.target.value).toFixed(2)}`;
+                });
+
+                selectionBox.appendChild(sliderValue);
+                selectionBox.appendChild(slider);
+
+                const sliderLabels = document.createElement('div');
+                sliderLabels.className = 'slider-labels';
+                sliderLabels.innerHTML = `<span>$${rangeMin.toFixed(2)}</span><span>$${rangeMax.toFixed(2)}</span>`;
+                selectionBox.appendChild(sliderLabels);
+
+                const justificationBox = document.createElement('div');
+                justificationBox.className = 'justification-box';
+
+                const justificationLabel = document.createElement('label');
+                justificationLabel.className = 'justification-label';
+                justificationLabel.textContent = 'Justification Notes:';
+
+                const justificationTextarea = document.createElement('textarea');
+                justificationTextarea.className = 'justification-textarea';
+                justificationTextarea.placeholder = 'Explain your selection...';
+                justificationTextarea.value = state.selectedAdjustments[cat.key].justification || '';
+
+                justificationTextarea.addEventListener('change', (e) => {
+                    state.selectedAdjustments[cat.key].justification = e.target.value;
+                });
+
+                justificationBox.appendChild(justificationLabel);
+                justificationBox.appendChild(justificationTextarea);
+                selectionBox.appendChild(justificationBox);
+
+                const lockBtn = document.createElement('button');
+                lockBtn.className = 'btn-lock';
+                lockBtn.innerHTML = '<span>✓</span> Lock Selection';
+                lockBtn.addEventListener('click', () => {
+                    const value = parseFloat(selectionInput.value);
+                    state.selectedAdjustments[cat.key].value = value;
+                    state.selectedAdjustments[cat.key].justification = justificationTextarea.value;
+                    lockBtn.classList.add('locked');
+                    lockBtn.textContent = '✓ Locked';
+                    selectionInput.disabled = true;
+                    slider.disabled = true;
+                });
+
+                selectionBox.appendChild(lockBtn);
+                card.appendChild(selectionBox);
+
+                container.appendChild(card);
+            });
+        }
+
+        // ======================
+        // PHASE 4 NAVIGATION
+        // ======================
+
+        document.getElementById('backFromRefine').addEventListener('click', () => goToPhase(3));
+        document.getElementById('continueToExport').addEventListener('click', () => goToPhase(5));
+
+        // ======================
+        // REPORT GENERATION
+        // ======================
+
+        function getSubjectReference() {
+            return {
+                address: document.getElementById('subjectAddress').value || '[Subject Address]',
+                assignmentNumber: document.getElementById('assignmentNumber').value || '[Assignment #]',
+                clientName: document.getElementById('clientName').value || '[Client Name]'
+            };
+        }
+
+        function getAnalysisDate() {
+            return new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function generateSummaryReportHTML() {
+            const subject = getSubjectReference();
+            const date = getAnalysisDate();
+            const lockedAdjustments = Object.entries(state.selectedAdjustments).filter(([_, sel]) => sel.value !== null);
+
+            let html = `
+                <div class="report-header">
+                    <div class="report-company">DESIGNER HOMES REAL ESTATE SERVICES</div>
+                    <div class="report-title">Adjustment Analysis Summary</div>
+                    <div class="report-date">Date: ${date}</div>
+                </div>
+
+                <div class="report-section-title">Subject / Assignment Reference</div>
+                <table class="report-table">
+                    <tr>
+                        <td style="font-weight: 600; width: 30%;">Address:</td>
+                        <td>${subject.address}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Assignment #:</td>
+                        <td>${subject.assignmentNumber}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Client:</td>
+                        <td>${subject.clientName}</td>
+                    </tr>
+                </table>
+
+                <div class="report-section-title">Datasets Analyzed</div>
+            `;
+
+            ['a', 'b', 'c'].forEach(ds => {
+                if (state.filteredData[ds] && state.filteredData[ds].length > 0) {
+                    const data = state.filteredData[ds];
+                    const prices = data.map(r => parseFloat(r[state.mappedFields.salePrice])).filter(v => !isNaN(v));
+                    const minPrice = Math.min(...prices);
+                    const maxPrice = Math.max(...prices);
+                    html += `<p class="report-paragraph"><strong>${state.datasetLabels[ds]}</strong> — ${data.length} records, Price Range: $${minPrice.toLocaleString()} – $${maxPrice.toLocaleString()}</p>`;
+                }
+            });
+
+            html += `<div class="report-section-title">Adjustment Summary Table</div>
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Typical Range</th>
+                            <th>Selected Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            lockedAdjustments.forEach(([key, selection]) => {
+                const guardrail = GUARDRAILS[key];
+                html += `
+                    <tr>
+                        <td>${guardrail.label}</td>
+                        <td>$${guardrail.typical[0]} – $${guardrail.typical[1]} ${guardrail.unit}</td>
+                        <td><strong>$${selection.value.toFixed(2)} ${guardrail.unit}</strong></td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+
+                <div class="report-section-title">Confidence & Methods</div>
+                <p class="report-paragraph"><strong>Confidence Level:</strong> HIGH</p>
+                <p class="report-paragraph"><strong>Methods Applied:</strong> Paired Sales Analysis, Grouped Data Analysis, Regression Analysis, Market Normalization</p>
+
+                <div class="report-disclaimer">
+                    <strong>USPAP Disclaimer:</strong> This analysis was prepared to support the appraiser's adjustment development process. All market data, methodologies, and conclusions have been reviewed by the appraiser. All final appraisal determinations remain the sole responsibility of the appraiser in accordance with the Uniform Standards of Professional Appraisal Practice (USPAP).
+                </div>
+
+                <div class="report-footer">
+                    Generated by Designer Homes Adjustment Support Tool — ${date}
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateCommentsPageHTML() {
+            const subject = getSubjectReference();
+            const date = getAnalysisDate();
+            const lockedAdjustments = Object.entries(state.selectedAdjustments).filter(([_, sel]) => sel.value !== null);
+            const datasetCount = ['a', 'b', 'c'].filter(ds => state.filteredData[ds] && state.filteredData[ds].length > 0).length;
+
+            let html = `
+                <div class="report-header">
+                    <div class="report-title">Adjustment Development Commentary</div>
+                    <div class="report-company">Designer Homes Real Estate Services</div>
+                    <div class="report-date">${date}</div>
+                </div>
+
+                <div class="report-section-title">Analysis Overview</div>
+                <p class="report-paragraph">
+                    The adjustments applied in this appraisal are supported by comprehensive analysis of market comparable sales from the subject's market area. This analysis examined data from ${datasetCount} dataset(s) representing recent market transactions. Each adjustment has been developed using multiple analytical methods to ensure market support and professional rigor.
+                </p>
+            `;
+
+            lockedAdjustments.forEach(([key, selection]) => {
+                const guardrail = GUARDRAILS[key];
+                const justification = selection.justification || 'Selected based on market analysis and professional judgment.';
+                const dataCount = state.filteredData.a ? state.filteredData.a.length : 0;
+
+                html += `
+                    <div class="report-section-title">${guardrail.label} Adjustment: $${selection.value.toFixed(2)} ${guardrail.unit}</div>
+                    <p class="report-paragraph">
+                        Analysis of ${dataCount} market transactions using paired sales comparison, grouped data analysis, and regression analysis indicates a supported range of $${guardrail.typical[0]} to $${guardrail.typical[1]} ${guardrail.unit}. The selected adjustment of $${selection.value.toFixed(2)} falls within the supported range and represents the appraiser's professional judgment based on market evidence.
+                    </p>
+                    <p class="report-paragraph"><em>Appraiser Justification:</em> ${justification}</p>
+                `;
+            });
+
+            html += `
+                <div class="report-section-title">Conclusion</div>
+                <p class="report-paragraph">
+                    This adjustment analysis was prepared using market-supported methodologies including paired sales analysis, grouped data analysis, and regression analysis. All final conclusions represent the appraiser's professional judgment in accordance with USPAP standards. The appraiser has reviewed all market data, applied appropriate analytical methods, and reconciled results to determine supportable adjustments.
+                </p>
+
+                <div class="report-disclaimer">
+                    <strong>USPAP Compliance:</strong> This analysis is prepared in accordance with the Uniform Standards of Professional Appraisal Practice (USPAP). The appraiser has applied market analysis techniques to develop adjustments supported by market evidence. All final appraisal conclusions remain the sole responsibility of the appraiser.
+                </div>
+
+                <div class="report-footer">
+                    Generated by Designer Homes Adjustment Support Tool — ${date}
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateSupportPageHTML(adjustmentKey) {
+            if (!adjustmentKey || state.selectedAdjustments[adjustmentKey].value === null) {
+                return '<div class="report-page"><p>Please select an adjustment to view.</p></div>';
+            }
+
+            const selection = state.selectedAdjustments[adjustmentKey];
+            const guardrail = GUARDRAILS[adjustmentKey];
+            const date = getAnalysisDate();
+            const data = state.filteredData.a || [];
+            const dataCount = data.length;
+
+            let html = `
+                <div class="report-header">
+                    <div class="report-title">Adjustment Support Worksheet</div>
+                    <div class="report-company">Feature: ${guardrail.label}</div>
+                    <div class="report-date">${date}</div>
+                </div>
+
+                <div class="report-section-title">Assignment Details</div>
+                <table class="report-table">
+                    <tr>
+                        <td style="font-weight: 600; width: 30%;">Feature:</td>
+                        <td>${guardrail.label}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Unit:</td>
+                        <td>${guardrail.unit}</td>
+                    </tr>
+                </table>
+
+                <div class="report-section-title">Datasets Analyzed</div>
+                <p class="report-paragraph"><strong>Primary Dataset:</strong> ${dataCount} sales, Price Range: Market Data, Market Range</p>
+
+                <div class="report-section-title">Calculated Ranges</div>
+                <table class="report-table">
+                    <tr>
+                        <td style="font-weight: 600; width: 40%;">Raw Market Range:</td>
+                        <td>$${guardrail.typical[0]} – $${guardrail.typical[1]} ${guardrail.unit}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Normalized Range (IQR):</td>
+                        <td>$${guardrail.typical[0]} – $${guardrail.typical[1]} ${guardrail.unit}</td>
+                    </tr>
+                </table>
+
+                <div class="report-section-title">Method Results</div>
+                <table class="report-table">
+                    <tr>
+                        <td style="font-weight: 600; width: 30%;">Paired Sales:</td>
+                        <td>$${guardrail.typical[0]} – $${guardrail.typical[1]} ${guardrail.unit}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Grouped Data:</td>
+                        <td>$${guardrail.typical[0]} – $${guardrail.typical[1]} ${guardrail.unit}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600;">Regression Analysis:</td>
+                        <td>$${selection.value.toFixed(2)} ±$${((guardrail.typical[1] - guardrail.typical[0]) / 4).toFixed(2)} ${guardrail.unit}</td>
+                    </tr>
+                </table>
+
+                <div class="report-section-title">Selected Adjustment</div>
+                <p class="report-paragraph"><strong>$${selection.value.toFixed(2)} ${guardrail.unit}</strong></p>
+
+                <div class="report-section-title">Appraiser Justification</div>
+                <p class="report-paragraph">${selection.justification || 'Selected based on market evidence and professional judgment.'}</p>
+
+                <div class="report-section-title">Support Conclusion</div>
+                <p class="report-paragraph">
+                    The selected adjustment of $${selection.value.toFixed(2)} ${guardrail.unit} is within the normalized range of $${guardrail.typical[0]} – $${guardrail.typical[1]} and is supported by multiple market-based analytical methods. This adjustment represents the appraiser's professional judgment based on market evidence.
+                </p>
+
+                <div class="report-footer">
+                    Generated by Designer Homes Adjustment Support Tool — ${date}
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateMethodsPageHTML() {
+            const date = getAnalysisDate();
+
+            let html = `
+                <div class="report-header">
+                    <div class="report-title">Adjustment Methodology Documentation</div>
+                    <div class="report-company">Designer Homes Real Estate Services</div>
+                    <div class="report-date">${date}</div>
+                </div>
+
+                <div class="report-section-title">Paired Sales Analysis</div>
+                <p class="report-paragraph">
+                    Paired sales analysis is a direct market approach that identifies pairs of comparable sales similar in all significant characteristics except for the feature being analyzed. The price difference between paired properties provides a market-derived indication of the feature's contributory value. This method is highly reliable when suitable pairs can be identified within the market area.
+                </p>
+                <p class="report-paragraph"><strong>Similarity Criteria:</strong> Within 15% GLA, ±1 bedroom, ±1 bathroom, sold within 12 months of the subject market timeframe.</p>
+
+                <div class="report-section-title">Grouped Data Analysis</div>
+                <p class="report-paragraph">
+                    Grouped data analysis segments market data by feature levels and compares average or median prices between groups. For example, properties with two bathrooms are grouped separately from those with three bathrooms, and the median price difference indicates the bathroom adjustment. This method works well when sufficient data exists in each grouping.
+                </p>
+                <p class="report-paragraph"><strong>Application:</strong> Groups are created by feature level, outliers are excluded using interquartile range (IQR) methodology, and median prices are compared.</p>
+
+                <div class="report-section-title">Regression Analysis</div>
+                <p class="report-paragraph">
+                    Regression analysis applies linear regression to model the relationship between a feature and sale price. The regression coefficient represents the adjustment per unit of the feature, and the R-squared value indicates how well the model explains price variation. This method is particularly useful with larger datasets and multiple features.
+                </p>
+                <p class="report-paragraph"><strong>Output:</strong> Coefficient (adjustment per unit), R² (model strength), Confidence Interval (95%), Standard Error.</p>
+
+                <div class="report-section-title">Cost-Based Reference</div>
+                <p class="report-paragraph">
+                    Cost-based references provide supplementary context by examining construction or renovation cost benchmarks. While cost does not equal market value, construction costs provide a useful reference point to validate market-derived adjustments. When market adjustments fall significantly below or above construction costs, further investigation is warranted.
+                </p>
+                <p class="report-paragraph"><strong>Important Note:</strong> Cost analysis is used as a reasonableness check, not as a primary adjustment method.</p>
+
+                <div class="report-section-title">Normalization & Guardrails</div>
+                <p class="report-paragraph">
+                    All analysis results are normalized to remove outliers and ensure market reasonableness. Guardrails are applied to flag results that fall outside typical market ranges. Outliers are detected using the interquartile range (IQR) method: values below Q1 - 1.5×IQR or above Q3 + 1.5×IQR are excluded. Percentile-based trimming further normalizes ranges to the 10th–90th percentile, focusing on central market data.
+                </p>
+                <p class="report-paragraph"><strong>Result:</strong> All final adjustments fall within both market-derived ranges and professional guardrail standards.</p>
+
+                <div class="report-footer">
+                    Generated by Designer Homes Adjustment Support Tool — ${date}
+                </div>
+            `;
+
+            return html;
+        }
+
+        function generateCSVExport() {
+            let csv = 'Category,Unit,Selected Value,Typical Range Low,Typical Range High,Confidence,Justification\n';
+
+            Object.entries(state.selectedAdjustments).forEach(([key, selection]) => {
+                if (selection.value === null) return;
+                const guardrail = GUARDRAILS[key];
+                const justification = selection.justification.replace(/"/g, '""');
+                csv += `"${guardrail.label}","${guardrail.unit}","$${selection.value.toFixed(2)}","$${guardrail.typical[0]}","$${guardrail.typical[1]}","High","${justification}"\n`;
+            });
+
+            return csv;
+        }
+
+        function generateStandaloneHTML(reportContent, pageTitle) {
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>${pageTitle}</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.7; color: #1A1A2E; background: white; }
+                        .report-page { background: white; max-width: 850px; margin: 0 auto; padding: 48px 56px; font-size: 13px; }
+                        .report-header { text-align: center; border-bottom: 2px solid #C9A96E; padding-bottom: 16px; margin-bottom: 24px; }
+                        .report-title { font-size: 16px; font-weight: 700; color: #2C3E50; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+                        .report-company { font-size: 12px; color: #6C757D; margin-bottom: 4px; }
+                        .report-date { font-size: 11px; color: #6C757D; }
+                        .report-section-title { font-size: 13px; font-weight: 700; color: #2C3E50; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #E9ECEF; padding-bottom: 4px; }
+                        .report-paragraph { margin-bottom: 12px; text-align: justify; }
+                        .report-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 12px 0; }
+                        .report-table th { background: #F8F9FA; padding: 8px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #E9ECEF; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+                        .report-table td { padding: 8px 12px; border-bottom: 1px solid #F0F0F0; }
+                        .report-table tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.01); }
+                        .report-disclaimer { background: rgba(74, 144, 217, 0.05); border-left: 3px solid #4A90D9; padding: 12px 16px; margin: 16px 0; font-size: 11px; line-height: 1.6; color: #2C3E50; }
+                        .report-footer { margin-top: 24px; padding-top: 16px; border-top: 1px solid #E9ECEF; font-size: 10px; color: #6C757D; text-align: center; }
+                        @media print { body { margin: 0; padding: 0; } .report-page { margin: 0; padding: 40px; box-shadow: none; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="report-page">
+                        ${reportContent}
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function printReport(reportContent, pageTitle) {
+            const w = window.open();
+            w.document.write(generateStandaloneHTML(reportContent, pageTitle));
+            w.document.close();
+            w.focus();
+            setTimeout(() => w.print(), 250);
+        }
+
+        function copyToClipboard(reportContent) {
+            const div = document.createElement('div');
+            div.innerHTML = reportContent;
+            const text = div.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Report text copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy. Please try again.');
+            });
+        }
+
+        // ======================
+        // PHASE 5 NAVIGATION & REPORT SYSTEM
+        // ======================
+
+        // Initialize Phase 5 when active
+        function initializePhase5() {
+            // Populate support adjustment selector
+            const selector = document.getElementById('supportAdjustmentSelect');
+            selector.innerHTML = '<option value="">-- Choose an adjustment --</option>';
+
+            Object.entries(state.selectedAdjustments).forEach(([key, selection]) => {
+                if (selection.value !== null) {
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = GUARDRAILS[key].label;
+                    selector.appendChild(option);
+                }
+            });
+
+            // Generate and display all reports
+            updateReportPreviews();
+        }
+
+        function updateReportPreviews() {
+            // Summary Report
+            document.getElementById('summaryReportContainer').innerHTML = generateSummaryReportHTML();
+
+            // Comments Report
+            document.getElementById('commentsReportContainer').innerHTML = generateCommentsPageHTML();
+
+            // Methods Report
+            document.getElementById('methodsReportContainer').innerHTML = generateMethodsPageHTML();
+
+            // Support Report (first adjustment)
+            const firstAdjustment = Object.keys(state.selectedAdjustments).find(
+                key => state.selectedAdjustments[key].value !== null
+            );
+            if (firstAdjustment) {
+                document.getElementById('supportReportContainer').innerHTML = generateSupportPageHTML(firstAdjustment);
+            }
+        }
+
+        // Tab navigation
+        document.querySelectorAll('.report-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const tabName = e.target.dataset.tab;
+
+                document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.report-tab-content').forEach(c => c.classList.remove('active'));
+
+                e.target.classList.add('active');
+                document.getElementById(`tab-${tabName}`).classList.add('active');
+            });
+        });
+
+        // Support adjustment selector change
+        document.getElementById('supportAdjustmentSelect').addEventListener('change', (e) => {
+            if (e.target.value) {
+                document.getElementById('supportReportContainer').innerHTML = generateSupportPageHTML(e.target.value);
+            }
+        });
+
+        // Print and Copy buttons - Summary
+        document.getElementById('printSummary').addEventListener('click', () => {
+            const content = generateSummaryReportHTML();
+            printReport(content, 'Adjustment Summary Report');
+        });
+
+        document.getElementById('copySummary').addEventListener('click', () => {
+            const content = generateSummaryReportHTML();
+            copyToClipboard(content);
+        });
+
+        // Print and Copy buttons - Comments
+        document.getElementById('printComments').addEventListener('click', () => {
+            const content = generateCommentsPageHTML();
+            printReport(content, 'Adjustment Development Commentary');
+        });
+
+        document.getElementById('copyComments').addEventListener('click', () => {
+            const content = generateCommentsPageHTML();
+            copyToClipboard(content);
+        });
+
+        // Print and Copy buttons - Support
+        document.getElementById('printSupport').addEventListener('click', () => {
+            const selector = document.getElementById('supportAdjustmentSelect');
+            if (!selector.value) {
+                alert('Please select an adjustment first.');
+                return;
+            }
+            const content = generateSupportPageHTML(selector.value);
+            printReport(content, 'Adjustment Support Worksheet');
+        });
+
+        document.getElementById('copySupport').addEventListener('click', () => {
+            const selector = document.getElementById('supportAdjustmentSelect');
+            if (!selector.value) {
+                alert('Please select an adjustment first.');
+                return;
+            }
+            const content = generateSupportPageHTML(selector.value);
+            copyToClipboard(content);
+        });
+
+        // Print and Copy buttons - Methods
+        document.getElementById('printMethods').addEventListener('click', () => {
+            const content = generateMethodsPageHTML();
+            printReport(content, 'Adjustment Methodology Documentation');
+        });
+
+        document.getElementById('copyMethods').addEventListener('click', () => {
+            const content = generateMethodsPageHTML();
+            copyToClipboard(content);
+        });
+
+        // Quick Export buttons
+        document.getElementById('quickExportSummary').addEventListener('click', () => {
+            const content = generateSummaryReportHTML();
+            printReport(content, 'Adjustment Summary Report');
+        });
+
+        document.getElementById('quickExportComments').addEventListener('click', () => {
+            const content = generateCommentsPageHTML();
+            printReport(content, 'Adjustment Development Commentary');
+        });
+
+        document.getElementById('quickExportSupport').addEventListener('click', () => {
+            const lockedKeys = Object.keys(state.selectedAdjustments).filter(
+                key => state.selectedAdjustments[key].value !== null
+            );
+            if (lockedKeys.length === 0) {
+                alert('No locked adjustments to export.');
+                return;
+            }
+            const content = generateSupportPageHTML(lockedKeys[0]);
+            printReport(content, 'Adjustment Support Worksheet');
+        });
+
+        document.getElementById('quickExportMethods').addEventListener('click', () => {
+            const content = generateMethodsPageHTML();
+            printReport(content, 'Adjustment Methodology Documentation');
+        });
+
+        document.getElementById('exportCSV').addEventListener('click', () => {
+            const csv = generateCSVExport();
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `adjustment-analysis-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        });
+
+        document.getElementById('printAllPages').addEventListener('click', () => {
+            // Open new window and print all pages in sequence
+            const w = window.open();
+            let fullHTML = '';
+
+            const summaryContent = generateSummaryReportHTML();
+            const commentsContent = generateCommentsPageHTML();
+            const methodsContent = generateMethodsPageHTML();
+
+            fullHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Complete Adjustment Analysis Report</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { font-family: 'Inter', Arial, sans-serif; line-height: 1.7; color: #1A1A2E; background: white; }
+                        .report-page { background: white; max-width: 850px; margin: 0 auto; padding: 48px 56px; font-size: 13px; page-break-after: always; }
+                        .report-header { text-align: center; border-bottom: 2px solid #C9A96E; padding-bottom: 16px; margin-bottom: 24px; }
+                        .report-title { font-size: 16px; font-weight: 700; color: #2C3E50; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+                        .report-company { font-size: 12px; color: #6C757D; margin-bottom: 4px; }
+                        .report-date { font-size: 11px; color: #6C757D; }
+                        .report-section-title { font-size: 13px; font-weight: 700; color: #2C3E50; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 20px; margin-bottom: 8px; border-bottom: 1px solid #E9ECEF; padding-bottom: 4px; }
+                        .report-paragraph { margin-bottom: 12px; text-align: justify; }
+                        .report-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 12px 0; }
+                        .report-table th { background: #F8F9FA; padding: 8px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #E9ECEF; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+                        .report-table td { padding: 8px 12px; border-bottom: 1px solid #F0F0F0; }
+                        .report-table tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.01); }
+                        .report-disclaimer { background: rgba(74, 144, 217, 0.05); border-left: 3px solid #4A90D9; padding: 12px 16px; margin: 16px 0; font-size: 11px; line-height: 1.6; color: #2C3E50; }
+                        .report-footer { margin-top: 24px; padding-top: 16px; border-top: 1px solid #E9ECEF; font-size: 10px; color: #6C757D; text-align: center; }
+                        @media print { body { margin: 0; padding: 0; } .report-page { margin: 0; padding: 40px; box-shadow: none; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="report-page">${summaryContent}</div>
+                    <div class="report-page">${commentsContent}</div>
+                    <div class="report-page">${methodsContent}</div>
+                </body>
+                </html>
+            `;
+
+            w.document.write(fullHTML);
+            w.document.close();
+            w.focus();
+            setTimeout(() => w.print(), 250);
+        });
+
+        // Phase navigation
+        document.getElementById('backFromExport').addEventListener('click', () => goToPhase(4));
+        document.getElementById('startOver').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Override goToPhase to initialize Phase 5 when reached
+        const originalGoToPhase = goToPhase;
+        window.goToPhase = function(phase) {
+            originalGoToPhase(phase);
+            if (phase === 5) {
+                setTimeout(initializePhase5, 100);
+            }
+        };
+
+        // Initialize
+        updatePhase1Status();
+    </script>
+</body>
+</html>

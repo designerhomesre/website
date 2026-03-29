@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Homes Adjustment Support Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+            color: #1A1A2E;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background-color: #1A1A2E;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .badge {
+            background-color: #C9A96E;
+            color: #1A1A2E;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            font-size: 12px;
+            max-width: 400px;
+            text-align: right;
+            color: #E9ECEF;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Tabs/Steps Navigation */
+        .steps-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .steps-nav::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #E9ECEF;
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            z-index: 1;
+            position: relative;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #E9ECEF;
+            border: 2px solid #E9ECEF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #6C757D;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background-color: #C9A96E;
+            border-color: #C9A96E;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-circle {
+            background-color: #28A745;
+            border-color: #28A745;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6C757D;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: #2C3E50;
+            font-weight: 700;
+        }
+
+        /* Phase Sections */
+        .phase {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .phase.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .phase-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        .phase-subtitle {
+            font-size: 14px;
+            color: #6C757D;
+            margin-bottom: 24px;
+        }
+
+        /* Cards & Sections */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #E9ECEF;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Upload Area */
+        .upload-zone {
+            border: 2px dashed #C9A96E;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+            background-color: #F8F9FA;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .upload-zone:hover {
+            border-color: #2C3E50;
+            background-color: #F0F2F5;
+        }
+
+        .upload-zone.dragover {
+            border-color: #28A745;
+            background-color: #E8F5E9;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+
+        .upload-subtext {
+            font-size: 12px;
+            color: #6C757D;
+        }
+
+        #csvFile {
+            display: none;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        button, input[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: #2C3E50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1A1A2E;
+            box-shadow: 0 4px 8px rgba(44,62,80,0.3);
+        }
+
+        .btn-accent {
+            background-color: #C9A96E;
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background-color: #B89451;
+            box-shadow: 0 4px 8px rgba(201,169,110,0.3);
+        }
+
+        .btn-success {
+            background-color: #28A745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-outline {
+            border: 1px solid #E9ECEF;
+            background-color: white;
+            color: #2C3E50;
+        }
+
+        .btn-outline:hover {
+            background-color: #F8F9FA;
+            border-color: #2C3E50;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        select, input[type="text"], input[type="number"], input[type="date"], textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E9ECEF;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #2C3E50;
+            transition: border-color 0.2s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #C9A96E;
+            box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #F8F9FA;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            color: #2C3E50;
+            border-bottom: 2px solid #E9ECEF;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        th:hover {
+            background-color: #E9ECEF;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        tr:hover {
+            background-color: #F8F9FA;
+        }
+
+        .table-row-missing {
+            background-color: #fff3cd;
+        }
+
+        /* Filter Section */
+        .filters-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .filter-group-range {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            flex: 1;
+        }
+
+        .filter-separator {
+            color: #6C757D;
+            font-weight: 600;
+            padding: 0 4px;
+        }
+
+        /* Analysis Tabs */
+        .analysis-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #E9ECEF;
+        }
+
+        .analysis-tab {
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6C757D;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .analysis-tab:hover {
+            color: #2C3E50;
+        }
+
+        .analysis-tab.active {
+            color: #C9A96E;
+            border-bottom-color: #C9A96E;
+        }
+
+        /* Analysis Content */
+        .analysis-content {
+            display: none;
+        }
+
+        .analysis-content.active {
+            display: block;
+        }
+
+        .method-section {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        .method-section:last-child {
+            border-bottom: none;
+        }
+
+        .method-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method-badge {
+            display: inline-block;
+            background-color: #E9ECEF;
+            color: #2C3E50;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .method-result {
+            background-color: #F8F9FA;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        /* Result Cards */
+        .adjustment-card {
+            background-color: white;
+            border: 2px solid #E9ECEF;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .adjustment-card.confirmed {
+            border-color: #28A745;
+            background-color: #F1F8F4;
+        }
+
+        .adjustment-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .adjustment-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+
+        .confidence-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .confidence-high {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+
+        .confidence-medium {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+
+        .confidence-low {
+            background-color: #F8D7DA;
+            color: #721C24;
+        }
+
+        /* Range Bar */
+        .range-container {
+            margin-bottom: 16px;
+        }
+
+        .range-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        .range-bar {
+            position: relative;
+            height: 28px;
+            background-color: #E9ECEF;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .range-fill {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, #4A90D9 0%, #4A90D9 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .range-tick {
+            position: absolute;
+            top: -8px;
+            width: 2px;
+            height: 44px;
+            background-color: #6C757D;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 32px;
+            font-size: 11px;
+            color: #6C757D;
+            font-weight: 600;
+            transform: translateX(-50%);
+        }
+
+        .selected-indicator {
+            position: absolute;
+            top: -12px;
+            width: 3px;
+            height: 52px;
+            background-color: #C9A96E;
+            border-radius: 2px;
+            transform: translateX(-50%);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6C757D;
+            font-weight: 600;
+        }
+
+        /* Method Breakdown */
+        .method-breakdown {
+            background-color: #F8F9FA;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        .breakdown-row:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            font-weight: 600;
+            color: #2C3E50;
+            flex: 1;
+        }
+
+        .breakdown-value {
+            color: #4A90D9;
+            font-weight: 700;
+        }
+
+        .breakdown-count {
+            color: #6C757D;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        /* Input Fields in Adjustment Cards */
+        .adjustment-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .adjustment-input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .adjustment-input-field label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .adjustment-input-field input {
+            padding: 10px 12px;
+            border: 2px solid #E9ECEF;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #C9A96E;
+        }
+
+        .adjustment-input-field input:focus {
+            border-color: #C9A96E;
+            box-shadow: 0 0 0 3px rgba(201,169,110,0.1);
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background-color: #FFF3CD;
+            border: 1px solid #FFE69C;
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #856404;
+            display: none;
+        }
+
+        .warning-box.show {
+            display: block;
+        }
+
+        /* Scatter Plot */
+        .scatter-plot {
+            background-color: #F8F9FA;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Summary Stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background-color: #F8F9FA;
+            padding: 16px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #6C757D;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+
+        /* Export Options */
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .export-card {
+            border: 1px solid #E9ECEF;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .export-card:hover {
+            border-color: #C9A96E;
+            box-shadow: 0 4px 12px rgba(201,169,110,0.15);
+        }
+
+        .export-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .export-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        .export-desc {
+            font-size: 12px;
+            color: #6C757D;
+            margin-bottom: 12px;
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .steps-nav, .analysis-tabs, .button-group, #demoButton {
+                display: none;
+            }
+
+            .phase {
+                page-break-after: always;
+            }
+
+            .adjustment-card {
+                page-break-inside: avoid;
+            }
+
+            body {
+                background-color: white;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .form-row,
+            .adjustment-input-group,
+            .filters-section {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-nav {
+                gap: 8px;
+            }
+
+            .step-label {
+                font-size: 10px;
+                max-width: 60px;
+                word-break: break-word;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .header-left {
+                justify-content: center;
+            }
+
+            .header-right {
+                text-align: center;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+        }
+
+        /* Compliance Banner */
+        .compliance-banner {
+            background-color: #E7F3FF;
+            border-left: 4px solid #4A90D9;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #004085;
+        }
+
+        /* Demo Mode Indicator */
+        .demo-badge {
+            display: inline-block;
+            background-color: #F4A261;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .checkmark {
+            color: #28A745;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="brand">DESIGNER HOMES</div>
+            <div class="badge">Adjustment Support Tool</div>
+        </div>
+        <div class="header-right">
+            USPAP Support Tool — All conclusions remain the responsibility of the appraiser
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Steps Navigation -->
+        <div class="steps-nav">
+            <div class="step active" data-phase="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Data Input</div>
+            </div>
+            <div class="step" data-phase="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Analysis</div>
+            </div>
+            <div class="step" data-phase="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Selection</div>
+            </div>
+            <div class="step" data-phase="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Export</div>
+            </div>
+        </div>
+
+        <!-- PHASE 1: DATA INPUT -->
+        <div class="phase active" id="phase-1">
+            <h1 class="phase-title">Market Data Import</h1>
+            <p class="phase-subtitle">Upload MLS export data to build your adjustment analysis dataset</p>
+
+            <div class="card">
+                <div class="section-title">CSV Upload Area</div>
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Drop MLS .csv export here or click to browse</div>
+                    <div class="upload-subtext">Accepted format: CSV files from MLS exports</div>
+                </div>
+                <input type="file" id="csvFile" accept=".csv" />
+                <div class="button-group">
+                    <button class="btn-accent" id="demoButton">📊 Load Demo Data</button>
+                    <button class="btn-outline btn-small" id="clearDataButton" style="display:none;">Clear Data</button>
+                </div>
+                <div id="demoIndicator" style="margin-top: 12px; font-size: 12px; color: #6C757D; display:none;">
+                    <span class="demo-badge">Demo Mode</span> - Using sample Triangle NC market data
+                </div>
+            </div>
+
+            <!-- Field Mapping Panel -->
+            <div class="card" id="mappingPanel" style="display:none;">
+                <div class="section-title">Field Mapping</div>
+                <p style="font-size: 13px; color: #6C757D; margin-bottom: 16px;">Match your CSV columns to required fields. Auto-mapping has been applied.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sale Price</label>
+                        <select id="map_price"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sale Date</label>
+                        <select id="map_date"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>GLA (Above-Grade Living Area, sq ft)</label>
+                        <select id="map_gla"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bedrooms</label>
+                        <select id="map_beds"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Bathrooms</label>
+                        <select id="map_fullbaths"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Half Bathrooms</label>
+                        <select id="map_halfbaths"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Garage Spaces</label>
+                        <select id="map_garage"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Below-Grade / Basement (sq ft)</label>
+                        <select id="map_basement"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Lot Size (sq ft)</label>
+                        <select id="map_lot"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Year Built</label>
+                        <select id="map_yearbuilt"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Address (Optional)</label>
+                        <select id="map_address"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subdivision / Location (Optional)</label>
+                        <select id="map_location"></select>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="confirmMappingButton">Confirm Mapping</button>
+            </div>
+
+            <!-- Data Filters -->
+            <div class="card" id="filtersPanel" style="display:none;">
+                <div class="section-title">Data Filters</div>
+
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <div style="flex: 1;">
+                            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">From Date</label>
+                            <input type="date" id="filterFromDate" />
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div style="flex: 1;">
+                            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">To Date</label>
+                            <input type="date" id="filterToDate" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filters-section">
+                    <div class="filter-group-range">
+                        <div style="flex: 1;">
+                            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Price Range</label>
+                            <input type="number" id="filterPriceMin" placeholder="Min" />
+                        </div>
+                        <span class="filter-separator">to</span>
+                        <div style="flex: 1;">
+                            <input type="number" id="filterPriceMax" placeholder="Max" />
+                        </div>
+                    </div>
+                    <div class="filter-group-range">
+                        <div style="flex: 1;">
+                            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">GLA Range (sq ft)</label>
+                            <input type="number" id="filterGLAMin" placeholder="Min" />
+                        </div>
+                        <span class="filter-separator">to</span>
+                        <div style="flex: 1;">
+                            <input type="number" id="filterGLAMax" placeholder="Max" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Subdivision / Location</label>
+                    <input type="text" id="filterLocation" placeholder="Search by subdivision..." />
+                </div>
+
+                <button class="btn-primary" id="applyFiltersButton">Apply Filters</button>
+            </div>
+
+            <!-- Data Preview -->
+            <div class="card" id="previewPanel" style="display:none;">
+                <div class="section-title">Data Summary & Preview</div>
+
+                <div class="summary-stats" id="summaryStats"></div>
+
+                <div class="table-wrapper">
+                    <table id="previewTable">
+                        <thead>
+                            <tr id="previewHeader"></tr>
+                        </thead>
+                        <tbody id="previewBody"></tbody>
+                    </table>
+                </div>
+
+                <div style="text-align:center; margin-top:16px;">
+                    <button class="btn-primary" id="proceedToAnalysisButton">Proceed to Analysis →</button>
+                </div>
+            </div>
+
+            <div class="compliance-banner">
+                ⓘ This tool analyzes market data to support adjustment development. It does not determine appraisal conclusions.
+            </div>
+        </div>
+
+        <!-- PHASE 2: ANALYSIS -->
+        <div class="phase" id="phase-2">
+            <h1 class="phase-title">Adjustment Analysis</h1>
+            <p class="phase-subtitle">Multiple recognized methods applied to your market data</p>
+
+            <div class="card">
+                <div class="section-title">Select Adjustment Category</div>
+                <div class="analysis-tabs">
+                    <button class="analysis-tab active" data-category="gla">GLA (per sq ft)</button>
+                    <button class="analysis-tab" data-category="fullbath">Full Baths</button>
+                    <button class="analysis-tab" data-category="halfbath">Half Baths</button>
+                    <button class="analysis-tab" data-category="garage">Garage Spaces</button>
+                    <button class="analysis-tab" data-category="basement">Basement (per sq ft)</button>
+                    <button class="analysis-tab" data-category="bedrooms">Bedrooms</button>
+                    <button class="analysis-tab" data-category="lotsize">Lot Size (per 1k sq ft)</button>
+                    <button class="analysis-tab" data-category="age">Age / Year Built</button>
+                </div>
+            </div>
+
+            <div id="analysisContainer"></div>
+
+            <div class="card">
+                <div style="text-align:center; margin-top:24px;">
+                    <button class="btn-primary" id="proceedToSelectionButton">Review & Select Adjustments →</button>
+                </div>
+            </div>
+
+            <div class="compliance-banner">
+                ⓘ Multiple recognized methodologies are applied to provide a range of market-supported indications.
+            </div>
+        </div>
+
+        <!-- PHASE 3: SELECTION -->
+        <div class="phase" id="phase-3">
+            <h1 class="phase-title">Adjustment Selection</h1>
+            <p class="phase-subtitle">Review calculated ranges and select your final adjustments</p>
+
+            <div id="adjustmentCardsContainer"></div>
+
+            <div class="card">
+                <div style="text-align:center;">
+                    <button class="btn-primary" id="proceedToExportButton">Generate Export & Documentation →</button>
+                </div>
+            </div>
+
+            <div class="compliance-banner">
+                ⓘ The appraiser's selected value represents professional judgment informed by market data analysis.
+            </div>
+        </div>
+
+        <!-- PHASE 4: EXPORT -->
+        <div class="phase" id="phase-4">
+            <h1 class="phase-title">Export & Documentation</h1>
+            <p class="phase-subtitle">Generate defensible documentation for your appraisal file</p>
+
+            <div class="card">
+                <div class="section-title">Export Options</div>
+                <div class="export-options">
+                    <div class="export-card">
+                        <div class="export-icon">📄</div>
+                        <div class="export-title">Summary Report</div>
+                        <div class="export-desc">Generate an HTML report with methodology and selected adjustments</div>
+                        <button class="btn-primary btn-small" id="exportReportButton">Generate & Print</button>
+                    </div>
+                    <div class="export-card">
+                        <div class="export-icon">📊</div>
+                        <div class="export-title">CSV Export</div>
+                        <div class="export-desc">Download selected adjustments as a CSV file for your workfile</div>
+                        <button class="btn-primary btn-small" id="exportCSVButton">Download CSV</button>
+                    </div>
+                    <div class="export-card">
+                        <div class="export-icon">📝</div>
+                        <div class="export-title">Addendum Text</div>
+                        <div class="export-desc">Pre-written narrative for inclusion in your appraisal addendum</div>
+                        <button class="btn-primary btn-small" id="exportAddendumButton">Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="addendumPreview" style="display:none;" class="card">
+                <div class="section-title">Addendum Text Preview</div>
+                <textarea id="addendumText" readonly style="min-height: 200px;"></textarea>
+                <div class="button-group" style="margin-top: 12px;">
+                    <button class="btn-primary" id="copyAddendumButton">Copy to Clipboard</button>
+                </div>
+            </div>
+
+            <div class="compliance-banner">
+                ⓘ This documentation supports the adjustment development process and may be included in the appraisal workfile.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        const state = {
+            rawData: [],
+            filteredData: [],
+            headers: [],
+            fieldMap: {},
+            selectedAdjustments: {},
+            analysisResults: {}
+        };
+
+        const CATEGORIES = {
+            gla: { label: 'GLA (per sq ft)', unit: '$ per sq ft', field: 'gla' },
+            fullbath: { label: 'Full Bathrooms', unit: '$ per unit', field: 'fullbaths' },
+            halfbath: { label: 'Half Bathrooms', unit: '$ per unit', field: 'halfbaths' },
+            garage: { label: 'Garage Spaces', unit: '$ per space', field: 'garage' },
+            basement: { label: 'Basement (per sq ft)', unit: '$ per sq ft', field: 'basement' },
+            bedrooms: { label: 'Bedrooms', unit: '$ per bedroom', field: 'beds' },
+            lotsize: { label: 'Lot Size (per 1k sq ft)', unit: '$ per 1k sq ft', field: 'lot' },
+            age: { label: 'Age / Year Built', unit: '$ per year', field: 'yearbuilt' }
+        };
+
+        // Event Listeners - Phase Navigation
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('click', () => {
+                const phase = step.dataset.phase;
+                switchPhase(phase);
+            });
+        });
+
+        function switchPhase(phaseNum) {
+            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+
+            document.getElementById(`phase-${phaseNum}`).classList.add('active');
+            document.querySelector(`[data-phase="${phaseNum}"]`).classList.add('active');
+
+            // Mark previous phases as completed
+            for (let i = 1; i < phaseNum; i++) {
+                document.querySelector(`[data-phase="${i}"]`).classList.add('completed');
+            }
+        }
+
+        // PHASE 1: CSV Upload and Mapping
+        const uploadZone = document.getElementById('uploadZone');
+        const csvFile = document.getElementById('csvFile');
+
+        uploadZone.addEventListener('click', () => csvFile.click());
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            if (e.dataTransfer.files[0]) {
+                handleCSVFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        csvFile.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                handleCSVFile(e.target.files[0]);
+            }
+        });
+
+        function handleCSVFile(file) {
+            Papa.parse(file, {
+                header: false,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    state.headers = results.data[0];
+                    state.rawData = results.data.slice(1).map(row => {
+                        const obj = {};
+                        state.headers.forEach((h, i) => {
+                            obj[h] = row[i];
+                        });
+                        return obj;
+                    });
+                    showMappingPanel();
+                }
+            });
+        }
+
+        function showMappingPanel() {
+            document.getElementById('mappingPanel').style.display = 'block';
+            populateMappingSelects();
+            autoMapFields();
+        }
+
+        function populateMappingSelects() {
+            const mappingIds = ['map_price', 'map_date', 'map_gla', 'map_beds', 'map_fullbaths', 'map_halfbaths', 'map_garage', 'map_basement', 'map_lot', 'map_yearbuilt', 'map_address', 'map_location'];
+
+            mappingIds.forEach(id => {
+                const select = document.getElementById(id);
+                select.innerHTML = '<option value="">-- Select Column --</option>';
+                state.headers.forEach(h => {
+                    const opt = document.createElement('option');
+                    opt.value = h;
+                    opt.textContent = h;
+                    select.appendChild(opt);
+                });
+            });
+        }
+
+        function autoMapFields() {
+            const mappings = {
+                map_price: ['Sale Price', 'SalePrice', 'SALE_PRICE', 'Close Price', 'ClosedPrice', 'Price'],
+                map_date: ['Sale Date', 'SaleDate', 'SALE_DATE', 'Closed', 'ClosedDate', 'Date Sold', 'DOM'],
+                map_gla: ['GLA', 'Living Area', 'LIVING_AREA', 'Above Grade', 'SqFt', 'Sq Ft'],
+                map_beds: ['Beds', 'Bedrooms', 'Bed', 'BR'],
+                map_fullbaths: ['Full Baths', 'FullBaths', 'Full Bath', 'FULL_BATHS', 'Baths'],
+                map_halfbaths: ['Half Baths', 'HalfBaths', 'Half Bath', 'HALF_BATHS', 'Half'],
+                map_garage: ['Garage', 'Garage Spaces', 'GARAGE_SPACES', 'Cars', 'Garage Stalls'],
+                map_basement: ['Basement', 'Below Grade', 'BELOW_GRADE', 'Finished Basement', 'Bsmt'],
+                map_lot: ['Lot Size', 'LotSize', 'LOT_SIZE', 'Lot Sq Ft', 'Lot SqFt'],
+                map_yearbuilt: ['Year Built', 'YearBuilt', 'YEAR_BUILT', 'Built', 'Year'],
+                map_address: ['Address', 'Street Address', 'STREET_ADDRESS', 'Property Address'],
+                map_location: ['Subdivision', 'SUBDIVISION', 'Area', 'Community', 'Location']
+            };
+
+            for (const [mapId, possibleNames] of Object.entries(mappings)) {
+                const select = document.getElementById(mapId);
+                for (const possibleName of possibleNames) {
+                    const option = Array.from(select.options).find(opt => opt.value.toLowerCase().includes(possibleName.toLowerCase()) || possibleName.toLowerCase().includes(opt.value.toLowerCase()));
+                    if (option) {
+                        select.value = option.value;
+                        break;
+                    }
+                }
+            }
+        }
+
+        document.getElementById('confirmMappingButton').addEventListener('click', () => {
+            state.fieldMap = {
+                price: document.getElementById('map_price').value,
+                date: document.getElementById('map_date').value,
+                gla: document.getElementById('map_gla').value,
+                beds: document.getElementById('map_beds').value,
+                fullbaths: document.getElementById('map_fullbaths').value,
+                halfbaths: document.getElementById('map_halfbaths').value,
+                garage: document.getElementById('map_garage').value,
+                basement: document.getElementById('map_basement').value,
+                lot: document.getElementById('map_lot').value,
+                yearbuilt: document.getElementById('map_yearbuilt').value,
+                address: document.getElementById('map_address').value,
+                location: document.getElementById('map_location').value
+            };
+
+            // Normalize data
+            state.rawData = state.rawData.map(row => ({
+                price: parseFloat(row[state.fieldMap.price]) || 0,
+                date: new Date(row[state.fieldMap.date]),
+                gla: parseFloat(row[state.fieldMap.gla]) || 0,
+                beds: parseFloat(row[state.fieldMap.beds]) || 0,
+                fullbaths: parseFloat(row[state.fieldMap.fullbaths]) || 0,
+                halfbaths: parseFloat(row[state.fieldMap.halfbaths]) || 0,
+                garage: parseFloat(row[state.fieldMap.garage]) || 0,
+                basement: parseFloat(row[state.fieldMap.basement]) || 0,
+                lot: parseFloat(row[state.fieldMap.lot]) || 0,
+                yearbuilt: parseFloat(row[state.fieldMap.yearbuilt]) || 0,
+                address: row[state.fieldMap.address] || 'N/A',
+                location: row[state.fieldMap.location] || 'N/A'
+            }));
+
+            state.filteredData = [...state.rawData];
+            showFiltersPanel();
+            applyFilters();
+        });
+
+        function showFiltersPanel() {
+            document.getElementById('filtersPanel').style.display = 'block';
+
+            // Set date range defaults
+            const dates = state.rawData.map(r => r.date).sort((a, b) => a - b);
+            if (dates.length > 0) {
+                document.getElementById('filterFromDate').valueAsDate = dates[0];
+                document.getElementById('filterToDate').valueAsDate = dates[dates.length - 1];
+            }
+        }
+
+        document.getElementById('applyFiltersButton').addEventListener('click', applyFilters);
+
+        function applyFilters() {
+            const fromDate = new Date(document.getElementById('filterFromDate').value);
+            const toDate = new Date(document.getElementById('filterToDate').value);
+            const priceMin = parseFloat(document.getElementById('filterPriceMin').value) || 0;
+            const priceMax = parseFloat(document.getElementById('filterPriceMax').value) || Infinity;
+            const glaMin = parseFloat(document.getElementById('filterGLAMin').value) || 0;
+            const glaMax = parseFloat(document.getElementById('filterGLAMax').value) || Infinity;
+            const locationFilter = document.getElementById('filterLocation').value.toLowerCase();
+
+            state.filteredData = state.rawData.filter(row => {
+                return row.date >= fromDate && row.date <= toDate &&
+                       row.price >= priceMin && row.price <= priceMax &&
+                       row.gla >= glaMin && row.gla <= glaMax &&
+                       (locationFilter === '' || row.location.toLowerCase().includes(locationFilter));
+            });
+
+            showPreviewPanel();
+        }
+
+        function showPreviewPanel() {
+            const panel = document.getElementById('previewPanel');
+            panel.style.display = 'block';
+
+            // Summary stats
+            const stats = document.getElementById('summaryStats');
+            const prices = state.filteredData.map(r => r.price).sort((a, b) => a - b);
+            const glas = state.filteredData.map(r => r.gla).sort((a, b) => a - b);
+
+            stats.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-label">Records</div>
+                    <div class="stat-value">${state.filteredData.length}</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Price Range</div>
+                    <div class="stat-value" style="font-size:14px;">\$${Math.min(...prices).toLocaleString()} - \$${Math.max(...prices).toLocaleString()}</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">GLA Range</div>
+                    <div class="stat-value" style="font-size:14px;">${Math.min(...glas).toLocaleString()} - ${Math.max(...glas).toLocaleString()} sqft</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Date Range</div>
+                    <div class="stat-value" style="font-size:12px;">${state.filteredData[0] ? new Date(Math.min(...state.filteredData.map(r => r.date))).toLocaleDateString() : 'N/A'}</div>
+                </div>
+            `;
+
+            // Preview table
+            const thead = document.getElementById('previewHeader');
+            thead.innerHTML = `
+                <th onclick="sortTable(this)">Address</th>
+                <th onclick="sortTable(this)">Price</th>
+                <th onclick="sortTable(this)">GLA</th>
+                <th onclick="sortTable(this)">Beds</th>
+                <th onclick="sortTable(this)">Baths</th>
+                <th onclick="sortTable(this)">Garage</th>
+                <th onclick="sortTable(this)">Date</th>
+            `;
+
+            const tbody = document.getElementById('previewBody');
+            tbody.innerHTML = '';
+            state.filteredData.slice(0, 20).forEach(row => {
+                const tr = document.createElement('tr');
+                const hasMissing = !row.price || !row.gla || !row.beds || !row.fullbaths;
+                if (hasMissing) tr.classList.add('table-row-missing');
+                tr.innerHTML = `
+                    <td>${row.address}</td>
+                    <td>$${row.price.toLocaleString()}</td>
+                    <td>${row.gla.toLocaleString()}</td>
+                    <td>${row.beds}</td>
+                    <td>${row.fullbaths}${row.halfbaths ? ' + ' + row.halfbaths : ''}</td>
+                    <td>${row.garage}</td>
+                    <td>${row.date.toLocaleDateString()}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function sortTable(header) {
+            const table = header.closest('table');
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+            const index = Array.from(header.parentNode.children).indexOf(header);
+            const rows = Array.from(tbody.rows);
+
+            const isAscending = header.classList.contains('ascending');
+            header.classList.toggle('ascending');
+
+            rows.sort((a, b) => {
+                let aVal = a.children[index].textContent.replace(/[$,]/g, '');
+                let bVal = b.children[index].textContent.replace(/[$,]/g, '');
+                aVal = isNaN(aVal) ? aVal : parseFloat(aVal);
+                bVal = isNaN(bVal) ? bVal : parseFloat(bVal);
+                return isAscending ? aVal - bVal : bVal - aVal;
+            });
+
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        document.getElementById('proceedToAnalysisButton').addEventListener('click', () => {
+            switchPhase(2);
+            if (!document.getElementById('analysisContainer').innerHTML) {
+                renderAnalysisTab('gla');
+            }
+        });
+
+        // PHASE 2: Analysis
+        document.querySelectorAll('.analysis-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.analysis-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderAnalysisTab(tab.dataset.category);
+            });
+        });
+
+        function renderAnalysisTab(category) {
+            const container = document.getElementById('analysisContainer');
+            const results = performAnalysis(category);
+            state.analysisResults[category] = results;
+
+            let html = `<div class="card">
+                <div class="section-title">${CATEGORIES[category].label} - Analysis Results</div>
+                <p style="font-size:13px; color:#6C757D; margin-bottom:20px;">All applicable market-based methodologies:</p>`;
+
+            // Paired Sales
+            html += `
+                <div class="method-section">
+                    <div class="method-title">
+                        Method 1: Paired Sales Analysis
+                        <span class="method-badge">Market-Based</span>
+                    </div>
+                    <div class="method-result">
+                        <strong>${results.pairedSales.pairs.length} valid pairs found</strong><br>
+                        Median Indicated Adjustment: <strong>$${results.pairedSales.median.toFixed(2)}</strong><br>
+                        Range: $${results.pairedSales.min.toFixed(2)} - $${results.pairedSales.max.toFixed(2)}
+                    </div>
+                    ${results.pairedSales.pairs.length > 0 ? `
+                        <div class="table-wrapper" style="margin-top: 12px;">
+                            <table style="font-size:12px;">
+                                <thead>
+                                    <tr><th>Pair</th><th>Property 1</th><th>Property 2</th><th>Feature Diff</th><th>Price Diff</th><th>Indicated $/Unit</th></tr>
+                                </thead>
+                                <tbody>
+                                    ${results.pairedSales.pairs.slice(0, 5).map((p, i) => `
+                                        <tr>
+                                            <td>${i+1}</td>
+                                            <td>${p.addr1.substring(0, 20)}... ($${p.price1.toLocaleString()})</td>
+                                            <td>${p.addr2.substring(0, 20)}... ($${p.price2.toLocaleString()})</td>
+                                            <td>${p.featureDiff.toFixed(2)}</td>
+                                            <td>$${p.priceDiff.toLocaleString()}</td>
+                                            <td><strong>$${p.indicated.toFixed(2)}</strong></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : '<p style="font-style:italic; color:#6C757D; margin-top:8px;">Insufficient data for paired analysis</p>'}
+                </div>`;
+
+            // Grouped Data
+            html += `
+                <div class="method-section">
+                    <div class="method-title">
+                        Method 2: Grouped Data Analysis
+                        <span class="method-badge">Market-Based</span>
+                    </div>
+                    <div class="method-result">
+                        <strong>${results.groupedData.groups.length} groups identified</strong><br>
+                        Indicated Adjustment: <strong>$${results.groupedData.indicated.toFixed(2)}</strong><br>
+                        Based on median price differential between primary groups
+                    </div>
+                    <div class="table-wrapper" style="margin-top: 12px;">
+                        <table style="font-size:12px;">
+                            <thead>
+                                <tr><th>Group</th><th>Count</th><th>Median Price</th><th>Avg Price/Unit</th></tr>
+                            </thead>
+                            <tbody>
+                                ${results.groupedData.groups.map(g => `
+                                    <tr>
+                                        <td><strong>${g.label}</strong></td>
+                                        <td>${g.count}</td>
+                                        <td>$${g.medianPrice.toLocaleString()}</td>
+                                        <td>$${(g.medianPrice / (g.feature || 1)).toFixed(2)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+
+            // Regression
+            html += `
+                <div class="method-section">
+                    <div class="method-title">
+                        Method 3: Linear Regression Analysis
+                        <span class="method-badge">Market-Based</span>
+                    </div>
+                    <div class="method-result">
+                        <strong>Regression Coefficient: $${results.regression.coefficient.toFixed(2)} per ${results.regression.unit}</strong><br>
+                        <strong>R² = ${results.regression.rSquared.toFixed(3)}</strong> (${getRegressionInterpretation(results.regression.rSquared)})<br>
+                        <strong>P-value: ${results.regression.pValue.toFixed(4)}</strong> ${results.regression.pValue < 0.05 ? '(Statistically Significant)' : '(Not Significant)'}<br>
+                        95% Confidence Interval: $${(results.regression.coefficient - 1.96 * results.regression.se).toFixed(2)} to $${(results.regression.coefficient + 1.96 * results.regression.se).toFixed(2)}
+                    </div>
+                    <div class="scatter-plot">
+                        ${renderScatterPlot(results.regression.data, results.regression.line)}
+                    </div>
+                </div>`;
+
+            // Cost Reference (where applicable)
+            if (category === 'gla' || category === 'basement' || category === 'garage') {
+                html += `
+                    <div class="method-section">
+                        <div class="method-title">
+                            Method 4: Cost-Based Reference
+                            <span class="method-badge" style="background-color:#F4A261; color:white;">Cost Analysis</span>
+                        </div>
+                        <div class="method-result">
+                            ${results.costRef ? results.costRef : 'Not applicable for this category'}
+                        </div>
+                    </div>`;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function performAnalysis(category) {
+            const field = CATEGORIES[category].field;
+            const data = state.filteredData.filter(r => r[field] > 0 && r.price > 0);
+
+            return {
+                pairedSales: performPairedSalesAnalysis(data, field, category),
+                groupedData: performGroupedDataAnalysis(data, field, category),
+                regression: performRegressionAnalysis(data, field, category),
+                costRef: getCostReference(category)
+            };
+        }
+
+        function performPairedSalesAnalysis(data, field, category) {
+            const pairs = [];
+            const tolerance = {
+                gla: 0.15,
+                basement: 0.20,
+                lot: 0.25
+            };
+            const tol = tolerance[category] || 0.10;
+
+            for (let i = 0; i < data.length; i++) {
+                for (let j = i + 1; j < data.length; j++) {
+                    const d1 = data[i];
+                    const d2 = data[j];
+
+                    // Similarity check
+                    const glaDiff = Math.abs(d1.gla - d2.gla) / Math.max(d1.gla, d2.gla);
+                    const bedDiff = Math.abs(d1.beds - d2.beds);
+                    const bathDiff = Math.abs(d1.fullbaths - d2.fullbaths);
+                    const dateDiff = Math.abs(d1.date - d2.date) / (1000 * 60 * 60 * 24);
+
+                    // Accept if similar on GLA and other major features
+                    if (glaDiff <= 0.15 && bedDiff <= 1 && bathDiff <= 1 && dateDiff <= 365) {
+                        const featureDiff = Math.abs(d1[field] - d2[field]);
+                        const priceDiff = Math.abs(d1.price - d2.price);
+
+                        if (featureDiff > 0) {
+                            const indicated = priceDiff / featureDiff;
+                            pairs.push({
+                                addr1: d1.address,
+                                addr2: d2.address,
+                                price1: d1.price,
+                                price2: d2.price,
+                                feature1: d1[field],
+                                feature2: d2[field],
+                                featureDiff: featureDiff,
+                                priceDiff: priceDiff,
+                                indicated: indicated
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Filter outliers (beyond 2 std dev)
+            if (pairs.length > 0) {
+                const indications = pairs.map(p => p.indicated);
+                const mean = indications.reduce((a, b) => a + b) / indications.length;
+                const std = Math.sqrt(indications.reduce((a, b) => a + Math.pow(b - mean, 2)) / indications.length);
+                pairs.filter(p => Math.abs(p.indicated - mean) <= 2 * std);
+            }
+
+            const indicated = pairs.length > 0 ? pairs.map(p => p.indicated).sort((a, b) => a - b) : [];
+            const median = indicated.length > 0 ? indicated[Math.floor(indicated.length / 2)] : 0;
+            const min = indicated.length > 0 ? Math.min(...indicated) : 0;
+            const max = indicated.length > 0 ? Math.max(...indicated) : 0;
+
+            return { pairs: pairs.slice(0, 10), median, min, max };
+        }
+
+        function performGroupedDataAnalysis(data, field, category) {
+            const groups = [];
+            let indicated = 0;
+
+            if (category === 'fullbath' || category === 'halfbath' || category === 'bedrooms' || category === 'garage') {
+                // Categorical grouping
+                const grouped = {};
+                data.forEach(row => {
+                    const key = row[field];
+                    if (!grouped[key]) grouped[key] = [];
+                    grouped[key].push(row);
+                });
+
+                const sortedKeys = Object.keys(grouped).map(Number).sort((a, b) => a - b);
+                sortedKeys.forEach(key => {
+                    const rows = grouped[key];
+                    const prices = rows.map(r => r.price).sort((a, b) => a - b);
+                    const medianPrice = prices[Math.floor(prices.length / 2)];
+                    groups.push({
+                        label: `${key} units`,
+                        value: key,
+                        count: rows.length,
+                        medianPrice: medianPrice,
+                        feature: key
+                    });
+                });
+
+                if (groups.length >= 2) {
+                    const priceDiff = groups[groups.length - 1].medianPrice - groups[0].medianPrice;
+                    const featureDiff = groups[groups.length - 1].value - groups[0].value;
+                    indicated = featureDiff > 0 ? priceDiff / featureDiff : 0;
+                }
+            } else {
+                // Quartile grouping for continuous
+                const sorted = data.slice().sort((a, b) => a[field] - b[field]);
+                const q = Math.floor(sorted.length / 4);
+
+                for (let i = 0; i < 4; i++) {
+                    const subset = sorted.slice(i * q, (i + 1) * q);
+                    if (subset.length > 0) {
+                        const prices = subset.map(r => r.price).sort((a, b) => a - b);
+                        const medianPrice = prices[Math.floor(prices.length / 2)];
+                        const medianFeature = subset.map(r => r[field]).sort((a, b) => a - b)[Math.floor(subset.length / 2)];
+                        groups.push({
+                            label: `Q${i + 1}`,
+                            value: medianFeature,
+                            count: subset.length,
+                            medianPrice: medianPrice,
+                            feature: medianFeature
+                        });
+                    }
+                }
+
+                if (groups.length >= 2) {
+                    const priceDiff = groups[groups.length - 1].medianPrice - groups[0].medianPrice;
+                    const featureDiff = groups[groups.length - 1].value - groups[0].value;
+                    indicated = featureDiff > 0 ? priceDiff / featureDiff : 0;
+                }
+            }
+
+            return { groups, indicated };
+        }
+
+        function performRegressionAnalysis(data, field, category) {
+            const n = data.length;
+            const xValues = data.map(r => r[field]);
+            const yValues = data.map(r => r.price);
+
+            const xMean = xValues.reduce((a, b) => a + b) / n;
+            const yMean = yValues.reduce((a, b) => a + b) / n;
+
+            let numerator = 0;
+            let denominator = 0;
+
+            for (let i = 0; i < n; i++) {
+                numerator += (xValues[i] - xMean) * (yValues[i] - yMean);
+                denominator += Math.pow(xValues[i] - xMean, 2);
+            }
+
+            const coefficient = denominator > 0 ? numerator / denominator : 0;
+            const intercept = yMean - coefficient * xMean;
+
+            // R-squared
+            let ssTotal = 0;
+            let ssResidual = 0;
+            for (let i = 0; i < n; i++) {
+                ssTotal += Math.pow(yValues[i] - yMean, 2);
+                const predicted = intercept + coefficient * xValues[i];
+                ssResidual += Math.pow(yValues[i] - predicted, 2);
+            }
+
+            const rSquared = 1 - (ssResidual / ssTotal);
+
+            // Standard Error
+            const se = Math.sqrt(ssResidual / ((n - 2) * denominator));
+            const tValue = coefficient / se;
+            const pValue = 2 * (1 - cumulativeNormalDistribution(Math.abs(tValue)));
+
+            // Generate line data for scatter plot
+            const lineData = [
+                { x: Math.min(...xValues), y: intercept + coefficient * Math.min(...xValues) },
+                { x: Math.max(...xValues), y: intercept + coefficient * Math.max(...xValues) }
+            ];
+
+            return {
+                coefficient,
+                intercept,
+                rSquared,
+                se,
+                pValue,
+                data: data.map(r => ({ x: r[field], y: r.price })),
+                line: lineData,
+                unit: CATEGORIES[category].unit.split(' ')[2] || 'unit'
+            };
+        }
+
+        function cumulativeNormalDistribution(z) {
+            const a1 = 0.254829592;
+            const a2 = -0.284496736;
+            const a3 = 1.421413741;
+            const a4 = -1.453152027;
+            const a5 = 1.061405429;
+            const p = 0.3275911;
+
+            const sign = z < 0 ? -1 : 1;
+            z = Math.abs(z) / Math.sqrt(2);
+
+            const t = 1.0 / (1.0 + p * z);
+            const y = 1.0 - (((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t) * Math.exp(-z * z);
+
+            return 0.5 * (1.0 + sign * y);
+        }
+
+        function getCostReference(category) {
+            const refs = {
+                gla: 'Construction Cost Reference: $100-150 per sq ft (local builder estimates). Note: Cost does not equal market value.',
+                basement: 'Basement Finish Cost Reference: $50-100 per sq ft. Note: Varies significantly by finish quality.',
+                garage: 'Garage Addition Cost Reference: $20,000-30,000 per space. Note: Market reaction to garage additions varies by property.'
+            };
+            return refs[category] || '';
+        }
+
+        function renderScatterPlot(dataPoints, lineData) {
+            if (dataPoints.length === 0) return '<p style="color:#6C757D;">Insufficient data for scatter plot</p>';
+
+            const padding = 40;
+            const width = 400;
+            const height = 300;
+            const plotWidth = width - 2 * padding;
+            const plotHeight = height - 2 * padding;
+
+            const xs = dataPoints.map(p => p.x);
+            const ys = dataPoints.map(p => p.y);
+            const minX = Math.min(...xs);
+            const maxX = Math.max(...xs);
+            const minY = Math.min(...ys);
+            const maxY = Math.max(...ys);
+
+            const scaleX = (maxX - minX) > 0 ? plotWidth / (maxX - minX) : plotWidth;
+            const scaleY = (maxY - minY) > 0 ? plotHeight / (maxY - minY) : plotHeight;
+
+            let svg = `<svg width="${width}" height="${height}" style="border: 1px solid #E9ECEF; background: white;">`;
+
+            // Axes
+            svg += `<line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#E9ECEF" stroke-width="2"/>`;
+            svg += `<line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#E9ECEF" stroke-width="2"/>`;
+
+            // Grid lines
+            for (let i = 0; i <= 5; i++) {
+                const x = padding + (i / 5) * plotWidth;
+                const y = padding + (i / 5) * plotHeight;
+                svg += `<line x1="${x}" y1="${height - padding}" x2="${x}" y2="${height - padding - 5}" stroke="#E9ECEF" stroke-width="1"/>`;
+                svg += `<line x1="${padding}" y1="${y}" x2="${padding + 5}" y2="${y}" stroke="#E9ECEF" stroke-width="1"/>`;
+            }
+
+            // Regression line
+            if (lineData && lineData.length >= 2) {
+                const x1 = padding + (lineData[0].x - minX) * scaleX;
+                const y1 = (height - padding) - (lineData[0].y - minY) * scaleY;
+                const x2 = padding + (lineData[1].x - minX) * scaleX;
+                const y2 = (height - padding) - (lineData[1].y - minY) * scaleY;
+                svg += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#4A90D9" stroke-width="2" stroke-dasharray="5,5"/>`;
+            }
+
+            // Data points
+            dataPoints.forEach(p => {
+                const x = padding + (p.x - minX) * scaleX;
+                const y = (height - padding) - (p.y - minY) * scaleY;
+                svg += `<circle cx="${x}" cy="${y}" r="4" fill="#4A90D9" opacity="0.6"/>`;
+            });
+
+            svg += `</svg>`;
+            return svg;
+        }
+
+        function getRegressionInterpretation(rSquared) {
+            if (rSquared >= 0.7) return 'Strong relationship';
+            if (rSquared >= 0.4) return 'Moderate relationship';
+            if (rSquared >= 0.2) return 'Weak relationship';
+            return 'Very weak relationship';
+        }
+
+        document.getElementById('proceedToSelectionButton').addEventListener('click', () => {
+            switchPhase(3);
+            renderAdjustmentCards();
+        });
+
+        // PHASE 3: Selection
+        function renderAdjustmentCards() {
+            const container = document.getElementById('adjustmentCardsContainer');
+            container.innerHTML = '';
+
+            for (const [catKey, catData] of Object.entries(CATEGORIES)) {
+                const results = state.analysisResults[catKey];
+                if (!results) continue;
+
+                const min = Math.min(
+                    results.pairedSales.min || Infinity,
+                    results.regression.coefficient - 1.96 * results.regression.se || Infinity,
+                    results.groupedData.indicated || Infinity
+                );
+                const max = Math.max(
+                    results.pairedSales.max || 0,
+                    results.regression.coefficient + 1.96 * results.regression.se || 0,
+                    results.groupedData.indicated || 0
+                );
+                const range = max - min;
+                const midpoint = (min + max) / 2;
+
+                // Determine confidence
+                let confidence = 'Low';
+                let methodsAgree = 0;
+                const vals = [
+                    results.pairedSales.median,
+                    results.regression.coefficient,
+                    results.groupedData.indicated
+                ].filter(v => v > 0);
+
+                if (vals.length >= 2) {
+                    const spread = (Math.max(...vals) - Math.min(...vals)) / midpoint;
+                    if (spread < 0.15) confidence = 'High';
+                    else if (spread < 0.30) confidence = 'Medium';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'adjustment-card';
+                card.innerHTML = `
+                    <div class="adjustment-card-header">
+                        <div>
+                            <div class="adjustment-card-title">${catData.label}</div>
+                            <div style="font-size:13px; color:#6C757D; margin-top:4px;">Unit: ${catData.unit}</div>
+                        </div>
+                        <div class="confidence-badge confidence-${confidence.toLowerCase()}">${confidence}</div>
+                    </div>
+
+                    <div class="range-container">
+                        <div class="range-label">Calculated Range: $${min.toFixed(2)} – $${max.toFixed(2)}</div>
+                        <div class="range-bar">
+                            <div class="range-fill" style="left:0%; width:100%;"></div>
+                            <div class="selected-indicator" style="left:50%;"></div>
+                        </div>
+                        <div class="range-labels">
+                            <span>$${min.toFixed(2)}</span>
+                            <span>$${midpoint.toFixed(2)}</span>
+                            <span>$${max.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <div class="method-breakdown">
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Paired Sales</span>
+                            <span class="breakdown-value">$${results.pairedSales.median.toFixed(2)}</span>
+                            <span class="breakdown-count">(${results.pairedSales.pairs.length} pairs)</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Grouped Data</span>
+                            <span class="breakdown-value">$${results.groupedData.indicated.toFixed(2)}</span>
+                            <span class="breakdown-count">(${results.groupedData.groups.length} groups)</span>
+                        </div>
+                        <div class="breakdown-row">
+                            <span class="breakdown-label">Regression Analysis</span>
+                            <span class="breakdown-value">$${results.regression.coefficient.toFixed(2)}</span>
+                            <span class="breakdown-count">(R²=${results.regression.rSquared.toFixed(2)})</span>
+                        </div>
+                    </div>
+
+                    <div class="adjustment-input-group">
+                        <div class="adjustment-input-field">
+                            <label>Your Selected Value</label>
+                            <input type="number" class="adjustment-value-input" data-category="${catKey}" value="${midpoint.toFixed(2)}" step="0.01">
+                        </div>
+                        <div class="adjustment-input-field">
+                            <label>Confidence Level</label>
+                            <input type="text" value="${confidence}" readonly style="background-color:#F8F9FA; cursor:default;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Justification Notes</label>
+                        <textarea class="adjustment-notes-input" data-category="${catKey}" placeholder="Explain your selection, methodology reasoning, and relationship to market data..."></textarea>
+                    </div>
+
+                    <div class="warning-box"></div>
+
+                    <button class="btn-success" data-category="${catKey}" style="width:100%;">✓ Lock Selection</button>
+                `;
+
+                container.appendChild(card);
+
+                const valueInput = card.querySelector('.adjustment-value-input');
+                const notesInput = card.querySelector('.adjustment-notes-input');
+                const lockBtn = card.querySelector('.btn-success');
+                const warningBox = card.querySelector('.warning-box');
+
+                valueInput.addEventListener('change', () => {
+                    const val = parseFloat(valueInput.value);
+                    if (val < min || val > max) {
+                        warningBox.classList.add('show');
+                        warningBox.innerHTML = '⚠ Selected value is outside the calculated range. Additional justification recommended.';
+                    } else {
+                        warningBox.classList.remove('show');
+                    }
+
+                    // Update indicator position
+                    const percent = ((val - min) / range) * 100;
+                    const indicator = card.querySelector('.selected-indicator');
+                    indicator.style.left = `${percent}%`;
+                });
+
+                lockBtn.addEventListener('click', () => {
+                    state.selectedAdjustments[catKey] = {
+                        value: parseFloat(valueInput.value),
+                        notes: notesInput.value,
+                        confidence: confidence,
+                        range: { min, max }
+                    };
+                    card.classList.add('confirmed');
+                    lockBtn.innerHTML = '<span class="checkmark">✓</span> Selection Locked';
+                    lockBtn.disabled = true;
+                });
+            }
+        }
+
+        document.getElementById('proceedToExportButton').addEventListener('click', () => {
+            switchPhase(4);
+        });
+
+        // PHASE 4: Export
+        document.getElementById('exportReportButton').addEventListener('click', generateReport);
+        document.getElementById('exportCSVButton').addEventListener('click', exportCSV);
+        document.getElementById('exportAddendumButton').addEventListener('click', generateAddendum);
+
+        function generateReport() {
+            let html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Adjustment Support Analysis Report</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+                    h1 { color: #2C3E50; border-bottom: 3px solid #C9A96E; padding-bottom: 10px; }
+                    h2 { color: #2C3E50; margin-top: 30px; }
+                    .section { margin-bottom: 30px; }
+                    .adjustment { page-break-inside: avoid; border: 1px solid #E9ECEF; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+                    .range { font-weight: bold; color: #4A90D9; }
+                    .disclaimer { background-color: #E7F3FF; border-left: 4px solid #4A90D9; padding: 10px; margin-bottom: 20px; font-size: 12px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    th { background-color: #F8F9FA; font-weight: bold; }
+                </style>
+            </head>
+            <body>
+                <h1>Adjustment Support Analysis Report</h1>
+                <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                <p><strong>Tool:</strong> Designer Homes Adjustment Support Tool</p>
+
+                <div class="disclaimer">
+                    <strong>USPAP Compliance Notice:</strong> This documentation supports the adjustment development process and may be included in the appraisal workfile. All conclusions remain the responsibility of the appraiser. This tool analyzes market data to support adjustment development using recognized methodologies.
+                </div>
+
+                <h2>Data Summary</h2>
+                <div class="section">
+                    <p><strong>Records Analyzed:</strong> ${state.filteredData.length}</p>
+                    <p><strong>Price Range:</strong> $${Math.min(...state.filteredData.map(r => r.price)).toLocaleString()} - $${Math.max(...state.filteredData.map(r => r.price)).toLocaleString()}</p>
+                    <p><strong>GLA Range:</strong> ${Math.min(...state.filteredData.map(r => r.gla)).toLocaleString()} - ${Math.max(...state.filteredData.map(r => r.gla)).toLocaleString()} sq ft</p>
+                </div>
+
+                <h2>Selected Adjustments</h2>
+            `;
+
+            for (const [catKey, selection] of Object.entries(state.selectedAdjustments)) {
+                const cat = CATEGORIES[catKey];
+                html += `
+                    <div class="adjustment">
+                        <h3>${cat.label}</h3>
+                        <p><strong>Unit:</strong> ${cat.unit}</p>
+                        <p><strong>Calculated Range:</strong> <span class="range">$${selection.range.min.toFixed(2)} – $${selection.range.max.toFixed(2)}</span></p>
+                        <p><strong>Selected Value:</strong> <span class="range">$${selection.value.toFixed(2)}</span></p>
+                        <p><strong>Confidence:</strong> ${selection.confidence}</p>
+                        <p><strong>Justification:</strong> ${selection.notes || 'N/A'}</p>
+                    </div>
+                `;
+            }
+
+            html += `
+                <h2>Methodology</h2>
+                <div class="section">
+                    <p>This analysis applied four recognized market-based methodologies to develop defensible adjustment ranges:</p>
+                    <ol>
+                        <li><strong>Paired Sales Analysis:</strong> Identified comparable sales differing primarily in the subject feature, calculating median indicated adjustments.</li>
+                        <li><strong>Grouped Data Analysis:</strong> Segmented the market data by feature levels, comparing median prices between groups.</li>
+                        <li><strong>Regression Analysis:</strong> Applied linear regression to quantify the statistical relationship between features and sale price.</li>
+                        <li><strong>Cost Reference:</strong> Where applicable, referenced construction cost data as a supplementary check (cost does not equal value).</li>
+                    </ol>
+                    <p>The appraiser selected final adjustments based on professional judgment informed by these market-based calculations and local market knowledge.</p>
+                </div>
+
+                <h2>Documentation Notes</h2>
+                <p>This analysis was performed using the Designer Homes Adjustment Support Tool to provide transparent, auditable documentation of adjustment development consistent with USPAP standards.</p>
+            </body>
+            </html>
+            `;
+
+            const win = window.open('', '', 'width=800,height=600');
+            win.document.write(html);
+            win.document.close();
+            setTimeout(() => win.print(), 250);
+        }
+
+        function exportCSV() {
+            let csv = 'Category,Unit,Range Low,Range High,Selected Value,Justification,Confidence,Data Points\n';
+
+            for (const [catKey, selection] of Object.entries(state.selectedAdjustments)) {
+                const cat = CATEGORIES[catKey];
+                const justification = (selection.notes || '').replace(/"/g, '""');
+                csv += `"${cat.label}","${cat.unit}","${selection.range.min.toFixed(2)}","${selection.range.max.toFixed(2)}","${selection.value.toFixed(2)}","${justification}","${selection.confidence}","${state.filteredData.length}"\n`;
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `adjustment-analysis-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        function generateAddendum() {
+            let text = `ADJUSTMENT DEVELOPMENT METHODOLOGY
+
+This appraisal employed market-based approaches to develop defensible adjustment ranges using comparable sales data analysis. The appraiser applied four recognized methodologies:
+
+1. PAIRED SALES ANALYSIS
+Comparable sales were analyzed to identify pairs of properties differing primarily in the subject feature. The indicated adjustments from these pairs were compiled to establish a range of market-supported adjustments.
+
+2. GROUPED DATA ANALYSIS
+The comparable sales dataset was segmented by feature levels (e.g., bedroom count, bathroom count), and median prices were compared between groups to establish indicated adjustments.
+
+3. LINEAR REGRESSION ANALYSIS
+Statistical regression analysis was applied to quantify the relationship between property features and sale price, controlling for multiple variables simultaneously.
+
+4. COST REFERENCE
+Where applicable, cost data for additions or improvements were reviewed as a supplementary reference point. It is noted that construction cost does not necessarily equal market value.
+
+`;
+
+            let hasAdjustments = false;
+            for (const [catKey, selection] of Object.entries(state.selectedAdjustments)) {
+                if (selection.value !== 0) {
+                    hasAdjustments = true;
+                    const cat = CATEGORIES[catKey];
+                    text += `\n${cat.label.toUpperCase()}\n`;
+                    text += `Selected Adjustment: $${selection.value.toFixed(2)} per ${cat.unit}\n`;
+                    text += `Calculated Range: $${selection.range.min.toFixed(2)} - $${selection.range.max.toFixed(2)}\n`;
+                    text += `Market Support: ${selection.confidence} confidence based on analysis of ${state.filteredData.length} comparable sales.\n`;
+                    if (selection.notes) {
+                        text += `Notes: ${selection.notes}\n`;
+                    }
+                }
+            }
+
+            if (!hasAdjustments) {
+                text += '\n[No adjustments selected]';
+            }
+
+            text += `\n\nAll adjustments represent professional judgment informed by market data analysis and remain the responsibility of the appraiser. This analysis is intended to support the appraisal conclusions and may be included in the appraisal file.`;
+
+            document.getElementById('addendumText').value = text;
+            document.getElementById('addendumPreview').style.display = 'block';
+
+            document.getElementById('copyAddendumButton').addEventListener('click', () => {
+                document.getElementById('addendumText').select();
+                document.execCommand('copy');
+                alert('Addendum text copied to clipboard!');
+            });
+        }
+
+        // Demo Data Mode
+        function generateDemoData() {
+            const addresses = [
+                '123 Oak Ridge Dr, Durham',
+                '456 Pinecrest Ln, Raleigh',
+                '789 Elm Court, Chapel Hill',
+                '234 Maple Ave, Cary',
+                '567 Birch Rd, Durham',
+                '890 Cedar Ln, Raleigh',
+                '321 Ash St, Durham',
+                '654 Walnut Dr, Chapel Hill',
+                '987 Hickory Way, Cary',
+                '147 Poplar Pl, Raleigh',
+                '258 Spruce Ln, Durham',
+                '369 Hemlock Dr, Chapel Hill',
+                '741 Sycamore Rd, Cary',
+                '852 Beech St, Raleigh',
+                '963 Locust Ave, Durham',
+                '159 Chestnut Dr, Chapel Hill',
+                '357 Dogwood Ln, Cary',
+                '468 Fir Court, Raleigh',
+                '579 Magnolia Way, Durham',
+                '680 Redbud Rd, Chapel Hill',
+                '792 Sassafras Dr, Cary',
+                '804 Tulip St, Raleigh',
+                '915 Verbena Ave, Durham',
+                '137 Willow Ln, Chapel Hill',
+                '246 Zinnia Dr, Cary',
+                '358 Alder Rd, Raleigh',
+                '469 Bayberry St, Durham',
+                '571 Cypress Way, Chapel Hill',
+                '682 Dogwood Dr, Cary',
+                '793 Elderberry Ln, Raleigh'
+            ];
+
+            const locations = ['North Ridge', 'Ridgemont', 'Forest Hills', 'Cathedral', 'Southern Pines', 'Oak Park'];
+
+            const data = [];
+            for (let i = 0; i < 30; i++) {
+                const yearBuilt = Math.floor(Math.random() * (2024 - 1960 + 1)) + 1960;
+                const beds = Math.floor(Math.random() * 4) + 2;
+                const fullBaths = Math.floor(Math.random() * 3) + 1;
+                const halfBaths = Math.random() > 0.5 ? 1 : 0;
+                const garage = Math.floor(Math.random() * 3) + 1;
+                const gla = Math.floor(Math.random() * (3200 - 1200 + 1)) + 1200;
+                const basement = Math.random() > 0.4 ? Math.floor(Math.random() * 1200) : 0;
+                const lot = Math.floor(Math.random() * (25000 - 5000 + 1)) + 5000;
+                const basePrice = 250000 + (gla - 1200) * 50 + (beds * 30000) + (fullBaths * 25000) + (garage * 20000) + (basement * 15);
+                const price = Math.floor(basePrice * (0.85 + Math.random() * 0.3));
+                const daysAgo = Math.floor(Math.random() * 365);
+                const saleDate = new Date();
+                saleDate.setDate(saleDate.getDate() - daysAgo);
+
+                data.push({
+                    address: addresses[i],
+                    price: price,
+                    gla: gla,
+                    beds: beds,
+                    fullbaths: fullBaths,
+                    halfbaths: halfBaths,
+                    garage: garage,
+                    basement: basement,
+                    lot: lot,
+                    yearbuilt: yearBuilt,
+                    location: locations[Math.floor(Math.random() * locations.length)],
+                    date: saleDate
+                });
+            }
+
+            return data;
+        }
+
+        document.getElementById('demoButton').addEventListener('click', () => {
+            state.rawData = generateDemoData();
+            state.filteredData = [...state.rawData];
+            document.getElementById('demoIndicator').style.display = 'block';
+            document.getElementById('clearDataButton').style.display = 'inline-block';
+            document.getElementById('mappingPanel').style.display = 'none';
+            showFiltersPanel();
+            applyFilters();
+        });
+
+        document.getElementById('clearDataButton').addEventListener('click', () => {
+            state.rawData = [];
+            state.filteredData = [];
+            state.fieldMap = {};
+            document.getElementById('mappingPanel').style.display = 'none';
+            document.getElementById('filtersPanel').style.display = 'none';
+            document.getElementById('previewPanel').style.display = 'none';
+            document.getElementById('demoIndicator').style.display = 'none';
+            document.getElementById('clearDataButton').style.display = 'none';
+            document.getElementById('uploadZone').classList.remove('dragover');
+            csvFile.value = '';
+        });
+    </script>
+</body>
+</html>

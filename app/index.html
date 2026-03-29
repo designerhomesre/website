@@ -6,7 +6,7 @@
   <title>Designer Homes Appraisal Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
@@ -56,6 +56,7 @@
         <a href="#" class="sidebar-link" data-section="comps" onclick="App.switchSection(event, 'comps')">🏘️ Comparables</a>
         <a href="#" class="sidebar-link" data-section="market-analysis" onclick="App.switchSection(event, 'market-analysis')">📈 Market Analysis</a>
         <a href="#" class="sidebar-link" data-section="adjustments" onclick="App.switchSection(event, 'adjustments')">⚖️ Adjustments</a>
+        <a href="#" class="sidebar-link" data-section="adjustment-tool" onclick="App.switchSection(event, 'adjustment-tool')">📊 Adjustment Tool</a>
         <a href="#" class="sidebar-link" data-section="cost-approach" onclick="App.switchSection(event, 'cost-approach')">🏗️ Cost Approach</a>
         <a href="#" class="sidebar-link" data-section="income-approach" onclick="App.switchSection(event, 'income-approach')">💰 Income Approach</a>
 
@@ -452,6 +453,17 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- SECTION: ADJUSTMENT TOOL -->
+      <section id="section-adjustment-tool" class="content-section" style="display:none;">
+        <div class="section-header">
+          <h1>Adjustment Support Tool</h1>
+          <p style="margin: 0; font-size: 0.875rem; color: #6C757D;">Professional adjustment analysis with multi-dataset support and guardrails</p>
+        </div>
+        <div style="width:100%; height: calc(100vh - 140px); border: none; border-radius: 12px; overflow: hidden; background: #fff;">
+          <iframe src="/DHRES-Adjustment-Tool-v2.html" style="width:100%; height:100%; border:none;" title="Adjustment Support Tool"></iframe>
         </div>
       </section>
 

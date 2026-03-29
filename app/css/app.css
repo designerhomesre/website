@@ -8,32 +8,32 @@
 
 :root {
   /* Primary Colors */
-  --color-primary-navy: #1B2A4A;
-  --color-primary-dark: #141E35;
-  --color-accent-gold: #C9A84C;
+  --color-primary-navy: #2C3E50;
+  --color-primary-dark: #1A252F;
+  --color-accent-gold: #C9A96E;
   --color-white: #FFFFFF;
 
   /* Backgrounds */
-  --color-bg-light: #F7F8FA;
+  --color-bg-light: #F8F9FA;
   --color-bg-lighter: #FAFBFC;
 
   /* Text Colors */
-  --color-text-dark: #2D2D2D;
-  --color-text-medium: #5A6275;
-  --color-text-light: #8A92A2;
+  --color-text-dark: #2C3E50;
+  --color-text-medium: #6C757D;
+  --color-text-light: #95A5A6;
 
   /* Borders & UI */
-  --color-border: #E2E5EB;
-  --color-border-light: #ECEEF3;
+  --color-border: #E9ECEF;
+  --color-border-light: #F1F5F9;
 
   /* Status Colors */
-  --color-success: #2D8F5E;
-  --color-error: #C94545;
-  --color-warning: #D4941E;
-  --color-info: #2196F3;
-  --color-teal: #00897B;
-  --color-amber: #FFB74D;
-  --color-orange: #FF9800;
+  --color-success: #28A745;
+  --color-error: #DC3545;
+  --color-warning: #F39C12;
+  --color-info: #3498DB;
+  --color-teal: #1ABC9C;
+  --color-amber: #F39C12;
+  --color-orange: #E67E22;
 
   /* Semantic Colors */
   --color-primary: var(--color-primary-navy);
@@ -68,10 +68,10 @@
   --spacing-3xl: 3rem;    /* 48px */
 
   /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
+  --radius-sm: 8px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -620,8 +620,8 @@ p:last-child {
 }
 
 .btn-primary:hover {
-  background-color: #B8992E;
-  border-color: #B8992E;
+  background-color: #A89570;
+  border-color: #A89570;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
 }
@@ -655,8 +655,8 @@ p:last-child {
 }
 
 .btn-danger:hover {
-  background-color: #B83A3A;
-  border-color: #B83A3A;
+  background-color: #C83232;
+  border-color: #C83232;
 }
 
 .btn-sm {
@@ -757,17 +757,17 @@ select {
 
 .badge-blue {
   background-color: rgba(33, 150, 243, 0.15);
-  color: #2196F3;
+  color: #3498DB;
 }
 
 .badge-amber {
   background-color: rgba(255, 183, 77, 0.15);
-  color: #FFB74D;
+  color: #F39C12;
 }
 
 .badge-orange {
   background-color: rgba(255, 152, 0, 0.15);
-  color: #FF9800;
+  color: #E67E22;
 }
 
 .badge-green {
@@ -2457,7 +2457,7 @@ details summary {
 .tag-select, .tag-select-sm {
   padding: 4px 8px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 12px;
   background: #fff;
   cursor: pointer;
@@ -2470,7 +2470,7 @@ details summary {
 
 .row-selected {
   background: rgba(40, 167, 69, 0.06) !important;
-  border-left: 3px solid #28a745;
+  border-left: 3px solid #28A745;
 }
 
 .row-excluded {
@@ -2500,7 +2500,7 @@ details summary {
 }
 
 .comp-card-selected {
-  border-color: #28a745;
+  border-color: #28A745;
   border-width: 2px;
   background: rgba(40, 167, 69, 0.04);
 }
@@ -2596,7 +2596,7 @@ details summary {
    ============================================================================ */
 
 .morning-briefing {
-  background: linear-gradient(135deg, #1B2A4A 0%, #2a3d66 100%);
+  background: linear-gradient(135deg, #2C3E50 0%, #384E63 100%);
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 24px;
@@ -2608,7 +2608,7 @@ details summary {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #C9A84C;
+  color: #C9A96E;
   margin-bottom: 14px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(201, 168, 76, 0.3);
@@ -2617,7 +2617,7 @@ details summary {
 .briefing-item {
   padding: 8px 12px;
   margin-bottom: 6px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 13px;
   line-height: 1.5;
   display: flex;
@@ -2640,37 +2640,37 @@ details summary {
 
 .briefing-urgent {
   background: rgba(220, 53, 69, 0.2);
-  border-left: 3px solid #dc3545;
+  border-left: 3px solid #DC3545;
 }
 .briefing-urgent .briefing-icon {
-  background: #dc3545;
+  background: #DC3545;
   color: #fff;
 }
 
 .briefing-warning {
   background: rgba(255, 193, 7, 0.15);
-  border-left: 3px solid #ffc107;
+  border-left: 3px solid #F39C12;
 }
 .briefing-warning .briefing-icon {
-  background: #ffc107;
-  color: #1B2A4A;
+  background: #F39C12;
+  color: #2C3E50;
 }
 
 .briefing-info {
   background: rgba(23, 162, 184, 0.15);
-  border-left: 3px solid #17a2b8;
+  border-left: 3px solid #1ABC9C;
 }
 .briefing-info .briefing-icon {
-  background: #17a2b8;
+  background: #1ABC9C;
   color: #fff;
 }
 
 .briefing-clear {
   background: rgba(40, 167, 69, 0.15);
-  border-left: 3px solid #28a745;
+  border-left: 3px solid #28A745;
 }
 .briefing-clear .briefing-icon {
-  background: #28a745;
+  background: #28A745;
   color: #fff;
 }
 
@@ -2926,7 +2926,7 @@ details summary {
   margin-bottom: 24px;
   font-size: 13px;
   color: var(--text-secondary);
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 8px 8px 0;
 }
 
 .approach-section {
@@ -3046,7 +3046,7 @@ details summary {
   color: var(--text-secondary);
   font-size: 12.5px;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
@@ -3091,7 +3091,7 @@ details summary {
   padding: 5px 8px;
   font-size: 12.5px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 8px;
   background: #fff;
 }
 
@@ -3203,7 +3203,7 @@ details summary {
   color: var(--text-primary);
   cursor: pointer;
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: background 0.15s;
 }
 
@@ -3256,7 +3256,7 @@ details summary {
   grid-column: 2;
   padding: 8px 10px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 12.5px;
   font-family: 'Inter', sans-serif;
 }
@@ -3361,7 +3361,7 @@ details summary {
   padding: 10px 14px;
   background: rgba(234, 179, 8, 0.08);
   border: 1px dashed #fbbf24;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 11px;
   color: #92400e;
   text-align: center;
@@ -3393,7 +3393,7 @@ details summary {
 .cg-stmt-item {
   padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 8px;
   transition: background 0.15s;
 }
@@ -3438,7 +3438,7 @@ details summary {
 .cg-saved-item {
   padding: 12px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 8px;
 }
 
@@ -3514,7 +3514,7 @@ details summary {
   color: var(--text-secondary);
   padding: 8px 12px;
   background: #f0f1f3;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 12px;
 }
 
@@ -3609,7 +3609,7 @@ details summary {
   padding: 5px 8px;
   font-size: 13px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .adj-unit {
@@ -3679,7 +3679,7 @@ details summary {
   font-size: 12px;
   cursor: pointer;
   padding: 3px 6px;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .adj-method-toggle:hover {
@@ -3747,7 +3747,7 @@ details summary {
 
 .adj-result-consensus {
   background: rgba(201, 168, 76, 0.08);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 8px 6px;
   margin: 4px 0;
   border: 1px solid rgba(201, 168, 76, 0.3);
@@ -3790,7 +3790,7 @@ details summary {
   top: 4px;
   height: 12px;
   background: rgba(27, 42, 74, 0.15);
-  border-radius: 6px;
+  border-radius: 8px;
   min-width: 2px;
 }
 
@@ -3845,7 +3845,7 @@ details summary {
   flex-direction: column;
   padding: 8px 10px;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #f0f1f3;
 }
 
@@ -3903,7 +3903,7 @@ details summary {
   font-size: 14px;
   font-weight: 600;
   border: 2px solid var(--gold);
-  border-radius: 6px;
+  border-radius: 8px;
   text-align: center;
 }
 
@@ -3925,7 +3925,7 @@ details summary {
   padding: 8px 10px;
   font-size: 12px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   font-family: 'Inter', sans-serif;
   resize: vertical;
 }

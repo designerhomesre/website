@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Homes Real Estate Services - Residential Appraisals Triangle NC</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== DESIGN TOKENS ===== */
+        :root {
+            /* Colors */
+            --color-primary: #2C3E50;
+            --color-accent: #C9A96E;
+            --color-off-white: #F8F9FA;
+            --color-light-gray: #E9ECEF;
+            --color-medium-gray: #6C757D;
+            --color-dark: #1A1A2E;
+            --color-success: #28A745;
+            --color-error: #DC3545;
+            --color-warning: #F4A261;
+
+            /* Typography */
+            --font-body: 'Inter', sans-serif;
+            --font-display: 'Playfair Display', serif;
+
+            /* Spacing (8px grid) */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-base: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-primary);
+            background: var(--color-off-white);
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        section {
+            padding: var(--space-3xl) 0;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+        }
+
+        h2 {
+            font-size: clamp(1.875rem, 4vw, 2.5rem);
+        }
+
+        h3 {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+        }
+
+        p {
+            line-height: 1.7;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color var(--transition-base);
+        }
+
+        a:hover {
+            color: #B5935C;
+        }
+
+        /* ===== BUTTON STYLES ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            gap: var(--space-sm);
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-dark);
+        }
+
+        .btn-primary:hover {
+            background: #B5935C;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--color-primary);
+        }
+
+        .btn-sm {
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.875rem;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(44, 62, 80, 0.95);
+            transition: background var(--transition-base);
+        }
+
+        nav.scrolled {
+            background: rgba(44, 62, 80, 0.98);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-md) var(--space-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .logo-main {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo-sub {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-lg);
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            font-weight: 500;
+            transition: color var(--transition-base);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .nav-links li.active a {
+            color: var(--color-accent);
+        }
+
+        /* Dropdown menu */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-trigger {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 200px;
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--transition-base);
+            margin-top: var(--space-sm);
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown-menu li {
+            border-bottom: 1px solid var(--color-light-gray);
+        }
+
+        .nav-dropdown-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: var(--space-md) var(--space-lg);
+            color: var(--color-primary);
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: var(--color-off-white);
+            color: var(--color-accent);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: var(--space-xs);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: white;
+            transition: all var(--transition-base);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--color-primary);
+            flex-direction: column;
+            gap: var(--space-lg);
+            padding: var(--space-lg);
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: white;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(44, 62, 80, 0.85) 0%, rgba(26, 26, 46, 0.85) 100%);
+            z-index: 1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(201, 169, 110, 0.03) 1px, rgba(201, 169, 110, 0.03) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(201, 169, 110, 0.03) 1px, rgba(201, 169, 110, 0.03) 2px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--color-accent);
+            margin-bottom: var(--space-md);
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            color: white;
+            margin-bottom: var(--space-md);
+            font-weight: 800;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-2xl);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .hero-trust {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+            padding-top: var(--space-lg);
+            border-top: 1px solid rgba(201, 169, 110, 0.3);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: var(--space-lg);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .scroll-icon {
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 8px;
+        }
+
+        .scroll-dot {
+            width: 4px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 2px;
+            animation: scroll-bounce 2s infinite;
+        }
+
+        @keyframes scroll-bounce {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(8px); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 70vh;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .hero-trust {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+        }
+
+        /* ===== METRICS SECTION ===== */
+        .metrics {
+            background: var(--color-dark);
+            color: white;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-2xl);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-family: var(--font-display);
+            color: var(--color-accent);
+            margin-bottom: var(--space-sm);
+            font-weight: 800;
+        }
+
+        .metric-label {
+            font-size: clamp(0.875rem, 2vw, 1rem);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-lg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        .services {
+            background: var(--color-off-white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-header h2 {
+            margin-bottom: var(--space-md);
+        }
+
+        .section-subtitle {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            color: var(--color-medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2xl);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .service-card {
+            background: white;
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .service-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-lg);
+            background: linear-gradient(135deg, var(--color-accent), #B5935C);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-card h3 {
+            color: var(--color-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .service-card p {
+            color: var(--color-medium-gray);
+            font-size: 0.95rem;
+        }
+
+        .purposes-container {
+            background: white;
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-light-gray);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .purposes-container h3 {
+            color: var(--color-primary);
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+
+        .purposes-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .purpose-tag {
+            background: var(--color-off-white);
+            color: var(--color-primary);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-xl);
+            font-size: 0.875rem;
+            border: 1px solid var(--color-light-gray);
+            transition: all var(--transition-base);
+        }
+
+        .purpose-tag:hover {
+            background: var(--color-accent);
+            color: var(--color-dark);
+            border-color: var(--color-accent);
+        }
+
+        .service-view-all {
+            text-align: center;
+        }
+
+        .service-view-all a {
+            color: var(--color-accent);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .service-view-all a:hover {
+            color: #B5935C;
+        }
+
+        @media (max-width: 768px) {
+            .service-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-lg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .purposes-tags {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+
+            .purpose-tag {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* ===== PROCESS SECTION ===== */
+        .process {
+            background: white;
+        }
+
+        .process-timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-light-gray));
+            z-index: 0;
+        }
+
+        .process-step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            color: var(--color-dark);
+            font-size: 1.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .process-step h3 {
+            color: var(--color-primary);
+            margin-bottom: var(--space-md);
+            font-size: 1.125rem;
+        }
+
+        .process-step p {
+            color: var(--color-medium-gray);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .process-timeline {
+                grid-template-columns: 1fr;
+                gap: var(--space-2xl);
+            }
+
+            .process-timeline::before {
+                content: '';
+                position: absolute;
+                left: 40px;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                height: 100%;
+                background: linear-gradient(180deg, var(--color-accent), var(--color-light-gray));
+            }
+
+            .step-number {
+                margin-left: 0;
+            }
+
+            .process-step {
+                text-align: left;
+                padding-left: var(--space-2xl);
+            }
+        }
+
+        /* ===== WHY CHOOSE US SECTION ===== */
+        .why-us {
+            background: var(--color-off-white);
+        }
+
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-2xl);
+        }
+
+        .why-card {
+            background: white;
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            border: 2px solid transparent;
+        }
+
+        .why-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent);
+        }
+
+        .why-card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--color-accent), #B5935C);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .why-card h3 {
+            color: var(--color-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .why-card p {
+            color: var(--color-medium-gray);
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .why-us-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== TECHNOLOGY SECTION ===== */
+        .technology {
+            background: white;
+        }
+
+        .tech-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+
+        .tech-content h2 {
+            color: var(--color-primary);
+            margin-bottom: var(--space-lg);
+        }
+
+        .tech-content > p {
+            color: var(--color-medium-gray);
+            font-size: 1.05rem;
+            margin-bottom: var(--space-xl);
+        }
+
+        .tech-features {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .tech-feature {
+            display: flex;
+            gap: var(--space-md);
+            align-items: flex-start;
+        }
+
+        .tech-feature-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--color-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .tech-feature-text {
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        .tracker-card {
+            background: white;
+            border: 1px solid var(--color-light-gray);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tracker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--color-light-gray);
+            padding-bottom: var(--space-lg);
+        }
+
+        .tracker-status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-warning);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tracker-property {
+            margin-bottom: var(--space-md);
+        }
+
+        .tracker-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--color-medium-gray);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .tracker-value {
+            font-size: 1rem;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .tracker-progress {
+            margin: var(--space-lg) 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--color-light-gray);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: var(--space-sm);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 65%;
+            background: linear-gradient(90deg, var(--color-accent), #B5935C);
+            border-radius: var(--radius-sm);
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            color: var(--color-medium-gray);
+            text-align: right;
+        }
+
+        .tracker-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tracker-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .step-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-medium-gray);
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .tracker-step.completed .step-dot {
+            background: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+        }
+
+        .tracker-step.active .step-dot {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: var(--color-dark);
+        }
+
+        .step-label {
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .tech-container {
+                grid-template-columns: 1fr;
+                gap: var(--space-2xl);
+            }
+        }
+
+        /* ===== TESTIMONIALS SECTION ===== */
+        .testimonials {
+            background: var(--color-off-white);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2xl);
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: var(--space-2xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            transition: all var(--transition-base);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            font-size: 2.5rem;
+            color: var(--color-accent);
+            opacity: 0.2;
+        }
+
+        .testimonial-text {
+            font-size: 0.95rem;
+            color: var(--color-primary);
+            font-style: italic;
+            margin-bottom: var(--space-lg);
+            line-height: 1.8;
+        }
+
+        .testimonial-rating {
+            display: flex;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+        }
+
+        .star {
+            color: var(--color-accent);
+            font-size: 1.125rem;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--color-medium-gray);
+        }
+
+        @media (max-width: 768px) {
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== FINAL CTA SECTION ===== */
+        .final-cta {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            color: white;
+            margin-bottom: var(--space-md);
+        }
+
+        .final-cta-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-2xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .final-cta-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .final-cta-area {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--color-primary);
+            color: white;
+            padding: var(--space-3xl) 0 var(--space-lg);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: var(--space-md);
+            font-size: 1.125rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color var(--transition-base);
+        }
+
+        .footer-section a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-about {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+            padding-top: var(--space-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-lg);
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+
+            section {
+                padding: var(--space-2xl) 0;
+            }
+
+            .hero-trust {
+                gap: var(--space-sm);
+                font-size: 0.75rem;
+            }
+
+            .final-cta-buttons {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-main">DESIGNER HOMES</div>
+                <div class="logo-sub">Real Estate Services</div>
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li class="nav-dropdown">
+                    <a href="#services" class="nav-dropdown-trigger">
+                        Services
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 5L6 9L10 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="#services">Single Family</a></li>
+                        <li><a href="#services">Condo</a></li>
+                        <li><a href="#services">Townhome</a></li>
+                        <li><a href="#services">Multi-Family</a></li>
+                        <li><a href="#services">Land</a></li>
+                    </ul>
+                </li>
+                <li><a href="#service-area">Service Area</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="btn btn-primary btn-sm">Get a Quote</button>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#service-area">Service Area</a>
+            <a href="#testimonials">Reviews</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contact</a>
+            <button class="btn btn-primary" style="width: 100%;">Get a Quote</button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-eyebrow">State-Certified Residential Appraiser · Triangle NC</div>
+            <h1>Accurate Appraisals. Defensible Results.</h1>
+            <p class="hero-subtitle">Fast turnaround, modern technology, and local expertise — serving Durham, Raleigh, Chapel Hill, and beyond.</p>
+
+            <div class="hero-cta">
+                <button class="btn btn-primary">Get a Quote</button>
+                <button class="btn btn-outline">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px;">
+                        <path d="M13.5 1h-2V0h-2v1H6.5V0h-2v1h-2c-.8 0-1.5.7-1.5 1.5v11c0 .8.7 1.5 1.5 1.5h11c.8 0 1.5-.7 1.5-1.5v-11c0-.8-.7-1.5-1.5-1.5zm0 12.5h-11v-7h11v7z" fill="currentColor"/>
+                    </svg>
+                    Call (973) 725-9580
+                </button>
+            </div>
+
+            <div class="hero-trust">
+                <span>✓ State Certified (NC)</span>
+                <span>✓ Licensed Broker</span>
+                <span>✓ NCDOR Registered</span>
+                <span>✓ 100% Digital</span>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-icon">
+                <div class="scroll-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METRICS SECTION -->
+    <section class="metrics">
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-number" data-target="10">10</div>
+                    <div class="metric-label">Years Experience</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-number" data-target="3">3-5</div>
+                    <div class="metric-label">Day Turnaround</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-number" data-target="100">100</div>
+                    <div class="metric-label">% Digital Process</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-number" data-target="10">10+</div>
+                    <div class="metric-label">Counties Served</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Do You Need Appraised?</h2>
+                <p class="section-subtitle">We handle all residential property types with professional expertise and care.</p>
+            </div>
+
+            <div class="service-cards">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2L28 9V28H4V9L16 2Z" fill="white" stroke="white" stroke-width="0.5"/>
+                        </svg>
+                    </div>
+                    <h3>Single Family</h3>
+                    <p>Residential homes and single-family dwellings</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="8" width="26" height="20" fill="white" stroke="white" stroke-width="0.5"/>
+                            <line x1="3" y1="14" x2="29" y2="14" stroke="white" stroke-width="0.5"/>
+                            <line x1="16" y1="8" x2="16" y2="28" stroke="white" stroke-width="0.5"/>
+                        </svg>
+                    </div>
+                    <h3>Condo</h3>
+                    <p>Condominium units and shared properties</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2L26 8V28H6V8L16 2Z" fill="white" stroke="white" stroke-width="0.5"/>
+                            <line x1="16" y1="2" x2="16" y2="28" stroke="white" stroke-width="0.5"/>
+                        </svg>
+                    </div>
+                    <h3>Townhome</h3>
+                    <p>Townhouse and row house properties</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="10" width="24" height="18" fill="white" stroke="white" stroke-width="0.5"/>
+                            <circle cx="10" cy="16" r="2" fill="white"/>
+                            <circle cx="22" cy="16" r="2" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3>Manufactured</h3>
+                    <p>Mobile homes and manufactured housing</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="6" width="11" height="12" fill="white" stroke="white" stroke-width="0.5"/>
+                            <rect x="18" y="6" width="11" height="12" fill="white" stroke="white" stroke-width="0.5"/>
+                            <rect x="3" y="22" width="11" height="6" fill="white" stroke="white" stroke-width="0.5"/>
+                            <rect x="18" y="22" width="11" height="6" fill="white" stroke="white" stroke-width="0.5"/>
+                        </svg>
+                    </div>
+                    <h3>Multi-Family</h3>
+                    <p>Duplex, triplex, and small apartment buildings</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 26H26V4H6V26Z" fill="white" stroke="white" stroke-width="0.5"/>
+                            <line x1="10" y1="12" x2="22" y2="12" stroke="white" stroke-width="0.5"/>
+                            <line x1="10" y1="18" x2="22" y2="18" stroke="white" stroke-width="0.5"/>
+                        </svg>
+                    </div>
+                    <h3>Land/Vacant</h3>
+                    <p>Raw land and vacant property appraisals</p>
+                </div>
+            </div>
+
+            <div class="purposes-container">
+                <h3>Common Valuation Purposes</h3>
+                <div class="purposes-tags">
+                    <span class="purpose-tag">Purchase</span>
+                    <span class="purpose-tag">Pre-Listing Sale</span>
+                    <span class="purpose-tag">Refinance</span>
+                    <span class="purpose-tag">Estate/Death</span>
+                    <span class="purpose-tag">Divorce Settlement</span>
+                    <span class="purpose-tag">Tax Appeal</span>
+                    <span class="purpose-tag">FHA/HUD</span>
+                    <span class="purpose-tag">New Construction</span>
+                    <span class="purpose-tag">PMI Removal</span>
+                    <span class="purpose-tag">Investment Analysis</span>
+                </div>
+                <div class="service-view-all">
+                    <a href="#services">View all services →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS SECTION -->
+    <section class="process">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p class="section-subtitle">Our streamlined process gets you results fast.</p>
+            </div>
+
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Request Quote</h3>
+                    <p>Submit your property details and valuation purpose through our online form.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Property Inspection</h3>
+                    <p>Our certified appraiser schedules and completes an in-depth property walkthrough.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Analysis & Report</h3>
+                    <p>We analyze market data and prepare a detailed, defensible appraisal report.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3>Secure Delivery</h3>
+                    <p>Receive your final report digitally with full authentication and security.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US SECTION -->
+    <section class="why-us" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Clients Choose Designer Homes</h2>
+                <p class="section-subtitle">Trusted expertise, modern approach, local knowledge</p>
+            </div>
+
+            <div class="why-us-grid">
+                <div class="why-card">
+                    <div class="why-card-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2C8.3 2 2 8.3 2 16s6.3 14 14 14 14-6.3 14-14-6.3-14-14-14zm6.6 11.4L15 20.6l-4.6-4.6c-.8-.8-2-.8-2.8 0-.8.8-.8 2 0 2.8l6 6c.8.8 2 .8 2.8 0l10-10c.8-.8.8-2 0-2.8-.8-.8-2-.8-2.8 0z" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3>Certified & Credentialed</h3>
+                    <p>State-certified appraiser with full NC licensing and NCDOR registration. We meet all professional standards and maintain continuing education requirements.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-card-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M28 6H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 18H4V8h24v16zm-9-10h-2v6h2v-6zm-4-2h-2v8h2v-8z" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3>Fast Turnaround</h3>
+                    <p>3-5 business day average turnaround from inspection to delivery. We understand your timeline matters and deliver without sacrificing quality.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-card-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M28 4H4C2.9 4 2 4.9 2 6v20c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 20H4V6h24v18zm-4-14h-2v10h2V10zm-8 4h-2v6h2v-6z" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3>Technology-Driven</h3>
+                    <p>100% digital process using modern tools and secure platforms. Track your appraisal status in real-time and access reports instantly online.</p>
+                </div>
+
+                <div class="why-card">
+                    <div class="why-card-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 2C8.27 2 2 8.27 2 16s6.27 14 14 14 14-6.27 14-14-6.27-14-14-14zm0 26c-6.6 0-12-5.4-12-12s5.4-12 12-12 12 5.4 12 12-5.4 12-12 12zm-1-17h2v10h-2V11z" fill="white"/>
+                        </svg>
+                    </div>
+                    <h3>Local Market Authority</h3>
+                    <p>Deep knowledge of Triangle NC real estate markets. We understand Durham, Raleigh, and Chapel Hill neighborhoods, trends, and comparable properties.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECHNOLOGY SECTION -->
+    <section class="technology">
+        <div class="container">
+            <div class="tech-container">
+                <div class="tech-content">
+                    <h2>Technology-Driven. Client-Focused.</h2>
+                    <p>Modern tools and secure platforms designed to give you complete visibility and control.</p>
+
+                    <div class="tech-features">
+                        <div class="tech-feature">
+                            <div class="tech-feature-icon">✓</div>
+                            <div class="tech-feature-text">Real-time appraisal status tracking</div>
+                        </div>
+                        <div class="tech-feature">
+                            <div class="tech-feature-icon">✓</div>
+                            <div class="tech-feature-text">Secure document upload and download</div>
+                        </div>
+                        <div class="tech-feature">
+                            <div class="tech-feature-icon">✓</div>
+                            <div class="tech-feature-text">Digital signatures and authentication</div>
+                        </div>
+                        <div class="tech-feature">
+                            <div class="tech-feature-icon">✓</div>
+                            <div class="tech-feature-text">Mobile-responsive account dashboard</div>
+                        </div>
+                        <div class="tech-feature">
+                            <div class="tech-feature-icon">✓</div>
+                            <div class="tech-feature-text">Instant report delivery and access</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tracker-card">
+                    <div class="tracker-header">
+                        <div class="tracker-status">In Progress</div>
+                    </div>
+
+                    <div class="tracker-property">
+                        <div class="tracker-label">Property Address</div>
+                        <div class="tracker-value">123 Main Street, Durham</div>
+                    </div>
+
+                    <div class="tracker-property">
+                        <div class="tracker-label">Property Type</div>
+                        <div class="tracker-value">Single Family</div>
+                    </div>
+
+                    <div class="tracker-property">
+                        <div class="tracker-label">Estimated Delivery</div>
+                        <div class="tracker-value">April 2, 2026</div>
+                    </div>
+
+                    <div class="tracker-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="progress-label">65% Complete</div>
+                    </div>
+
+                    <div class="tracker-steps">
+                        <div class="tracker-step completed">
+                            <div class="step-dot">✓</div>
+                            <div class="step-label">Ordered</div>
+                        </div>
+                        <div class="tracker-step completed">
+                            <div class="step-dot">✓</div>
+                            <div class="step-label">Inspected</div>
+                        </div>
+                        <div class="tracker-step active">
+                            <div class="step-dot">●</div>
+                            <div class="step-label">Analyzing</div>
+                        </div>
+                        <div class="tracker-step">
+                            <div class="step-dot">4</div>
+                            <div class="step-label">Delivered</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Clients Say</h2>
+                <p class="section-subtitle">Real reviews from real homeowners and professionals</p>
+            </div>
+
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">Keith was incredibly professional and thorough. The appraisal report was detailed and delivered in 4 days. Couldn't have asked for a better experience.</p>
+                    <div class="testimonial-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <div class="testimonial-author">Sarah Chen</div>
+                    <div class="testimonial-role">Homebuyer, Chapel Hill</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">We've used Designer Homes for multiple refinances. Reliable, professional, and they always hit their deadlines. Highly recommended for any lender in the Triangle.</p>
+                    <div class="testimonial-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <div class="testimonial-author">Robert Martinez</div>
+                    <div class="testimonial-role">Mortgage Broker, Raleigh</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">The digital process made everything smooth and transparent. I could track my appraisal status online, which gave me peace of mind during a complex transaction.</p>
+                    <div class="testimonial-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <div class="testimonial-author">Jennifer Walsh</div>
+                    <div class="testimonial-role">Real Estate Attorney, Durham</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA SECTION -->
+    <section class="final-cta" id="contact">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p class="final-cta-subtitle">Get an accurate appraisal from NC's most trusted residential appraiser. Fast turnaround, competitive pricing, defensible results.</p>
+
+            <div class="final-cta-buttons">
+                <button class="btn btn-primary">Get a Quote Today</button>
+                <button class="btn btn-outline">Call (973) 725-9580</button>
+            </div>
+
+            <div class="final-cta-area">
+                <strong>Serving:</strong> Durham · Raleigh · Chapel Hill · Cary · Morrisville · Apex · Garner · Wakefield · and surrounding areas
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section footer-about">
+                    <div class="footer-logo">DESIGNER HOMES</div>
+                    <p>NC State-Certified Residential Appraiser serving the Triangle with professional expertise and modern technology.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#process">How It Works</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#services">All Services</a></li>
+                        <li><a href="#services">Single Family</a></li>
+                        <li><a href="#services">Condo</a></li>
+                        <li><a href="#services">Multi-Family</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="tel:+19737259580">Phone: (973) 725-9580</a></li>
+                        <li><a href="mailto:info@designerhomesre.com">Email: info@designerhomesre.com</a></li>
+                        <li><a href="#">Durham, NC</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-copyright">&copy; 2026 Designer Homes Real Estate Services. All rights reserved.</div>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== NAVIGATION =====
+        const navbar = document.getElementById('navbar');
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navLinks = document.getElementById('navLinks');
+
+        // Sticky nav on scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when link clicked
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // ===== INTERSECTION OBSERVER FOR ANIMATIONS =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+
+                    // Animate counters when metrics section is visible
+                    if (entry.target.classList.contains('metrics')) {
+                        animateCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animation
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // ===== COUNTER ANIMATION =====
+        function animateCounters() {
+            const counters = document.querySelectorAll('.metric-number');
+
+            counters.forEach(counter => {
+                if (counter.hasAttribute('data-animated')) return;
+
+                counter.setAttribute('data-animated', 'true');
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current) + (counter.textContent.includes('+') ? '+' : '');
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = counter.getAttribute('data-target');
+                    }
+                };
+
+                updateCounter();
+            });
+        }
+
+        // ===== SMOOTH SCROLL =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ===== ACTIVE NAV STATE =====
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.parentElement.classList.add('active');
+                }
+            });
+        });
+
+        // ===== CTA BUTTONS =====
+        document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // In a real app, this would open a modal or navigate to a form
+                alert('Get a Quote functionality would be implemented here');
+            });
+        });
+    </script>
+</body>
+</html>

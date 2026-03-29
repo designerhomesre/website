@@ -4,35 +4,38 @@
 
 /* ROOT VARIABLES */
 :root {
-  --color-primary: #1B2A4A;
-  --color-primary-dark: #141E35;
-  --color-accent: #C9A84C;
-  --color-accent-light: #DEB559;
+  --color-primary: #2C3E50;
+  --color-primary-dark: #1A252F;
+  --color-accent: #C9A96E;
+  --color-accent-light: #D4B882;
   --color-white: #FFFFFF;
-  --color-light-bg: #F7F8FA;
-  --color-dark-text: #2D2D2D;
-  --color-medium-text: #5A6275;
-  --color-border: #E2E5EB;
-  --color-success: #2D8F5E;
-  --color-error: #C94545;
-  --color-warning: #D4941E;
-  --color-info: #1E88E5;
-  --color-new: #2196F3;
-  --color-contacted: #FFC107;
+  --color-light-bg: #F8F9FA;
+  --color-dark-text: #2C3E50;
+  --color-medium-text: #6C757D;
+  --color-border: #E9ECEF;
+  --color-success: #28A745;
+  --color-error: #DC3545;
+  --color-warning: #F39C12;
+  --color-info: #3498DB;
+  --color-new: #3498DB;
+  --color-contacted: #F39C12;
   --color-quoted: #FF9800;
-  --color-converted: #2D8F5E;
+  --color-converted: #28A745;
   --color-lost: #9E9E9E;
-  --color-paid: #2D8F5E;
-  --color-unpaid: #C94545;
-  --color-overdue: #C94545;
+  --color-paid: #28A745;
+  --color-unpaid: #DC3545;
+  --color-overdue: #DC3545;
   --color-draft: #9E9E9E;
-  --color-sent: #2196F3;
+  --color-sent: #3498DB;
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
 
-  --border-radius: 8px;
+  --border-radius: 12px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   --transition: all 0.3s ease;
 }
 
@@ -270,7 +273,7 @@ a:hover {
   outline: none;
   border-color: var(--color-accent);
   background-color: var(--color-white);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
 }
 
 .search-box input::placeholder {
@@ -412,7 +415,7 @@ a:hover {
 }
 
 .sidebar-link.active {
-  background-color: rgba(201, 168, 76, 0.2);
+  background-color: rgba(201, 169, 110, 0.2);
   color: var(--color-accent-light);
   border-left-color: var(--color-accent);
 }
@@ -694,13 +697,13 @@ a:hover {
 }
 
 .badge-new {
-  background-color: rgba(33, 150, 243, 0.15);
-  color: #1E88E5;
+  background-color: rgba(52, 152, 219, 0.15);
+  color: #3498DB;
 }
 
 .badge-contacted {
-  background-color: rgba(255, 193, 7, 0.15);
-  color: #FBC02D;
+  background-color: rgba(243, 156, 18, 0.15);
+  color: #F39C12;
 }
 
 .badge-quoted {
@@ -709,7 +712,7 @@ a:hover {
 }
 
 .badge-converted {
-  background-color: rgba(45, 143, 94, 0.15);
+  background-color: rgba(40, 167, 69, 0.15);
   color: var(--color-success);
 }
 
@@ -719,17 +722,17 @@ a:hover {
 }
 
 .badge-paid {
-  background-color: rgba(45, 143, 94, 0.15);
+  background-color: rgba(40, 167, 69, 0.15);
   color: var(--color-success);
 }
 
 .badge-unpaid {
-  background-color: rgba(201, 69, 69, 0.15);
+  background-color: rgba(220, 53, 69, 0.15);
   color: var(--color-error);
 }
 
 .badge-overdue {
-  background-color: rgba(201, 69, 69, 0.15);
+  background-color: rgba(220, 53, 69, 0.15);
   color: var(--color-error);
 }
 
@@ -739,8 +742,8 @@ a:hover {
 }
 
 .badge-sent {
-  background-color: rgba(33, 150, 243, 0.15);
-  color: #1E88E5;
+  background-color: rgba(52, 152, 219, 0.15);
+  color: #3498DB;
 }
 
 .badge-accepted,
@@ -758,12 +761,12 @@ a:hover {
 }
 
 /* Color-based badge variants (used by JS statusBadge helper) */
-.badge-blue { background-color: rgba(33, 150, 243, 0.15); color: #1E88E5; }
-.badge-amber { background-color: rgba(255, 193, 7, 0.15); color: #F57C00; }
+.badge-blue { background-color: rgba(52, 152, 219, 0.15); color: #3498DB; }
+.badge-amber { background-color: rgba(243, 156, 18, 0.15); color: #F39C12; }
 .badge-orange { background-color: rgba(255, 152, 0, 0.15); color: #E65100; }
-.badge-green { background-color: rgba(45, 143, 94, 0.15); color: var(--color-success); }
+.badge-green { background-color: rgba(40, 167, 69, 0.15); color: var(--color-success); }
 .badge-gray { background-color: rgba(158, 158, 158, 0.15); color: #616161; }
-.badge-red { background-color: rgba(201, 69, 69, 0.15); color: var(--color-error); }
+.badge-red { background-color: rgba(220, 53, 69, 0.15); color: var(--color-error); }
 .badge-teal { background-color: rgba(0, 150, 136, 0.15); color: #00897B; }
 
 /* ============================================================================
@@ -859,7 +862,7 @@ a:hover {
 .filter-select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
 }
 
 /* ============================================================================
@@ -929,7 +932,7 @@ a:hover {
 
 .quick-action-btn:hover {
   border-color: var(--color-accent);
-  background-color: rgba(201, 168, 76, 0.05);
+  background-color: rgba(201, 169, 110, 0.05);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -1021,7 +1024,7 @@ a:hover {
 .form-group select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
   background-color: var(--color-white);
 }
 
