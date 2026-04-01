@@ -79,6 +79,7 @@
    ===================================================== */
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+button, input, select, textarea { font-family: inherit; line-height: inherit; }
 
 html {
   font-size: 16px;
@@ -190,8 +191,10 @@ nav {
 
 .nav-link {
   color: var(--color-white);
+  font-family: var(--font-base);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
+  line-height: var(--leading-normal);
   transition: color var(--transition);
   background: none; border: none; cursor: pointer;
 }
