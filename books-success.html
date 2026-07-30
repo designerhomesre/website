@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You — Designer Homes Real Estate Services</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/books.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo" aria-label="Designer Homes Home">
+        <img src="/images/logo-light.svg" alt="Designer Homes Real Estate Services" class="logo-img" width="220" height="48">
+      </a>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="books-page">
+    <section class="books-hero" style="min-height:60vh;display:flex;align-items:center;">
+      <div class="books-wrap" style="text-align:center;max-width:680px;">
+        <p class="books-eyebrow books-hero-eyebrow">Order Confirmed</p>
+        <h1 id="ty-title" style="font-size:clamp(2rem,4.5vw,3rem);">Thank you</h1>
+        <p class="books-subhead" id="ty-msg" style="margin:0 auto;">
+          Thank you for supporting this project and being part of this important milestone.
+          Your order has been received and will be prepared for shipment within 48 hours.
+        </p>
+        <div id="ty-order" style="margin:1.5rem auto 0;max-width:420px;"></div>
+        <p class="books-shipnote" style="color:#c9d3dc;margin-top:1.25rem;">
+          A confirmation email is on its way. You’ll receive another email with tracking once your package ships.
+          Delivery time begins after the carrier accepts the package.
+        </p>
+        <div class="books-hero-cta" style="justify-content:center;margin-top:1.75rem;">
+          <a href="books.html" class="btn btn-primary">Back to the Books</a>
+          <a href="index.html" class="btn btn-secondary-light">Return Home</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    'use strict';
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var sid = params.get('session_id');
+      var box = document.getElementById('ty-order');
+      if (!sid) return;
+      fetch('/.netlify/functions/book-order-status?session_id=' + encodeURIComponent(sid))
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (!d || !d.found) return; // webhook may still be finishing
+          if (d.first_name) document.getElementById('ty-title').textContent = 'Thank you, ' + d.first_name;
+          var digital = d.has_digital ? '<p style="color:#c9d3dc;margin-top:.5rem;">Your digital downloads are being emailed to you separately.</p>' : '';
+          box.innerHTML =
+            '<div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:1rem 1.25rem;color:#fff;">' +
+              '<div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#C9A96E;">Order</div>' +
+              '<div style="font-family:Playfair Display,serif;font-size:1.3rem;">' + d.order_number + '</div>' +
+              '<div style="color:#c9d3dc;">Total paid: $' + d.total + '</div>' +
+            '</div>' + digital;
+        }).catch(function () {});
+    })();
+  </script>
+</body>
+</html>

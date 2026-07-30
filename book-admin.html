@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Book Orders — Designer Homes Admin</title>
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <style>
+    :root { --ink:#2C3E50; --gold:#C9A96E; --muted:#6c757d; --line:#e5e8ec; --bg:#f5f6f8; --ok:#28a745; --warn:#b8860b; --bad:#c0392b; }
+    * { box-sizing:border-box; } body { margin:0; font-family:-apple-system,Segoe UI,Arial,sans-serif; background:var(--bg); color:var(--ink); }
+    header { background:var(--ink); color:#fff; padding:14px 20px; display:flex; align-items:center; gap:16px; }
+    header .t { font-weight:700; } header .sp { flex:1; } header a { color:#cdd6df; font-size:13px; }
+    .wrap { max-width:1180px; margin:20px auto; padding:0 16px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    input, select, textarea, button { font:inherit; }
+    input[type=text], input[type=search], input[type=date], select, textarea {
+      padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink);
+    }
+    button { padding:8px 14px; border-radius:8px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+    button.primary { background:var(--ink); color:#fff; border-color:var(--ink); }
+    button.gold { background:var(--gold); color:#1A252F; border-color:var(--gold); }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); font-size:14px; vertical-align:middle; }
+    th { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+    .badge { font-size:11px; padding:3px 8px; border-radius:999px; font-weight:600; }
+    .b-paid{background:#e7f6ec;color:#1e7e34;} .b-await{background:#fff4e0;color:#b8860b;}
+    .b-ship{background:#e6f0fb;color:#1c6fc9;} .b-done{background:#eef1f4;color:#555;} .b-bad{background:#fdecea;color:#c0392b;}
+    .muted { color:var(--muted); font-size:13px; }
+    dialog { border:none; border-radius:14px; padding:0; width:min(680px,94vw); }
+    .dlg-head { background:var(--ink); color:#fff; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; }
+    .dlg-body { padding:18px; max-height:70vh; overflow:auto; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+    .field label { font-size:12px; color:var(--muted); }
+    .hint { font-size:12px; color:var(--muted); }
+    #login { max-width:460px; margin:60px auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="t">📚 Book Orders</span>
+    <span class="sp"></span>
+    <a href="admin.html">Main admin</a>
+    <a href="#" id="signout" style="display:none;">Sign out</a>
+  </header>
+
+  <!-- Token gate -->
+  <div class="wrap" id="login">
+    <div class="card">
+      <h2 style="margin-top:0;">Admin access</h2>
+      <p class="muted">Paste the <code>ADMIN_API_TOKEN</code> (set in Netlify environment variables). It is stored only for this browser session.</p>
+      <div class="field"><label>Admin API token</label><input type="password" id="token" placeholder="paste token"></div>
+      <button class="primary" id="tokenBtn">Continue</button>
+      <div id="loginErr" class="muted" style="color:var(--bad);margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <div class="wrap" id="app" style="display:none;">
+    <!-- Filters -->
+    <div class="card">
+      <div class="row">
+        <input type="search" id="q" placeholder="Search name, email, order #, tracking…" style="min-width:240px;flex:1;">
+        <select id="fFulfill"><option value="">All fulfillment</option></select>
+        <select id="fPay"><option value="">All payment</option><option>paid</option><option>Refunded</option></select>
+        <select id="fProduct">
+          <option value="">All products</option>
+          <option value="memoir-paperback">Memoir — Paperback</option>
+          <option value="memoir-hardcover">Memoir — Hardcover</option>
+          <option value="workbook">Companion Workbook</option>
+          <option value="combo">Combo Package</option>
+        </select>
+        <input type="date" id="fFrom" title="From date">
+        <input type="date" id="fTo" title="To date">
+        <button class="primary" id="applyBtn">Filter</button>
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <button id="slipsBtn">🖨 Print selected packing slips</button>
+        <button id="unfulfilledBtn">⬇ Export unfulfilled (CSV)</button>
+        <button class="gold" id="pirateBtn">🏴‍☠️ Pirate Ship CSV</button>
+        <span class="muted" id="count"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead><tr>
+          <th><input type="checkbox" id="selAll"></th>
+          <th>Order</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Fulfillment</th><th></th>
+        </tr></thead>
+        <tbody id="rows"><tr><td colspan="9" class="muted">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Order detail dialog -->
+  <dialog id="dlg">
+    <div class="dlg-head"><strong id="dlgTitle">Order</strong><button onclick="document.getElementById('dlg').close()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">×</button></div>
+    <div class="dlg-body" id="dlgBody"></div>
+  </dialog>
+
+  <script>
+    'use strict';
+    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || '';
+    var STATES = [];
+    function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+    function money(c){return '$'+(Number(c||0)/100).toFixed(2);}
+    function el(id){return document.getElementById(id);}
+
+    async function api(action, payload, raw) {
+      var res = await fetch('/.netlify/functions/book-admin', {
+        method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN },
+        body: JSON.stringify(Object.assign({ action: action }, payload||{}))
+      });
+      if (res.status === 401) { signOut(); throw new Error('Unauthorized — check the token.'); }
+      if (raw) return res;
+      if (!res.ok) { var e = await res.json().catch(function(){return{};}); throw new Error(e.error || ('Error '+res.status)); }
+      return res.json();
+    }
+
+    function badge(status) {
+      var map = { 'Paid':'b-paid','Delivered':'b-done','Shipped':'b-ship','Canceled':'b-bad','Refunded':'b-bad','Needs Attention':'b-bad' };
+      var cls = map[status] || 'b-await';
+      return '<span class="badge '+cls+'">'+esc(status)+'</span>';
+    }
+
+    var current = [];
+    async function load() {
+      el('rows').innerHTML = '<tr><td colspan="9" class="muted">Loading…</td></tr>';
+      try {
+        var d = await api('list', {
+          search: el('q').value.trim() || undefined,
+          fulfillment_status: el('fFulfill').value || undefined,
+          payment_status: el('fPay').value || undefined,
+          product_id: el('fProduct').value || undefined,
+          date_from: el('fFrom').value ? new Date(el('fFrom').value).toISOString() : undefined,
+          date_to: el('fTo').value ? new Date(el('fTo').value+'T23:59:59').toISOString() : undefined
+        });
+        STATES = d.states || STATES; fillStates();
+        current = d.orders || [];
+        el('count').textContent = current.length + ' order(s)';
+        el('rows').innerHTML = current.length ? current.map(rowHtml).join('') :
+          '<tr><td colspan="9" class="muted">No orders found.</td></tr>';
+      } catch (e) { el('rows').innerHTML = '<tr><td colspan="9" class="muted" style="color:#c0392b;">'+esc(e.message)+'</td></tr>'; }
+    }
+
+    function rowHtml(o) {
+      var date = new Date(o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      var tags = []; if (o.has_physical) tags.push('📦'); if (o.has_digital) tags.push('★');
+      return '<tr>'+
+        '<td><input type="checkbox" class="selrow" value="'+esc(o.id)+'"></td>'+
+        '<td><strong>'+esc(o.order_number)+'</strong></td>'+
+        '<td>'+esc(date)+'</td>'+
+        '<td>'+esc(o.customer_name||'')+'<br><span class="muted">'+esc(o.customer_email||'')+'</span></td>'+
+        '<td>'+tags.join(' ')+'</td>'+
+        '<td>'+money(o.total_cents)+'</td>'+
+        '<td>'+esc(o.payment_status||'')+'</td>'+
+        '<td>'+badge(o.fulfillment_status)+'</td>'+
+        '<td><button data-id="'+esc(o.id)+'" class="openBtn">Open</button></td>'+
+      '</tr>';
+    }
+
+    function fillStates() {
+      if (!STATES.length) return;
+      var sel = el('fFulfill'); if (sel.options.length > 1) return;
+      STATES.forEach(function(s){ var o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
+    }
+
+    // Detail dialog
+    async function openOrder(id) {
+      el('dlgBody').innerHTML = '<p class="muted">Loading…</p>';
+      el('dlg').showModal();
+      try {
+        var d = await api('get', { id: id }); var o = d.order;
+        el('dlgTitle').textContent = o.order_number;
+        var a = o.shipping_address || {};
+        var items = (o._items||[]).map(function(i){ return '<li>'+i.quantity+'× '+esc(i.name)+' <span class="muted">('+esc(i.format)+')</span></li>'; }).join('');
+        var stateOpts = STATES.map(function(s){ return '<option'+(s===o.fulfillment_status?' selected':'')+'>'+s+'</option>'; }).join('');
+        el('dlgBody').innerHTML =
+          '<div class="grid2">'+
+            '<div><h3 style="margin:0 0 6px;">Customer</h3><div>'+esc(o.customer_name||'')+'<br><span class="muted">'+esc(o.customer_email||'')+'</span><br>'+esc(o.customer_phone||'')+'</div></div>'+
+            '<div><h3 style="margin:0 0 6px;">Ship to</h3><div>'+(o.has_physical?
+              esc(a.name||'')+'<br>'+esc(a.line1||'')+(a.line2?'<br>'+esc(a.line2):'')+'<br>'+esc([a.city,a.state].filter(Boolean).join(', '))+' '+esc(a.postal_code||'')+'<br>'+esc(a.country||'')
+              :'<span class="muted">Digital only</span>')+'</div></div>'+
+          '</div>'+
+          '<h3 style="margin:14px 0 6px;">Items</h3><ul style="margin:0 0 6px;">'+items+'</ul>'+
+          '<div class="muted">Subtotal '+money(o.subtotal_cents)+' · Shipping '+money(o.shipping_cents)+' · Tax '+money(o.tax_cents)+' · Discount '+money(o.discount_cents)+' · <strong>Total '+money(o.total_cents)+'</strong></div>'+
+          '<div class="muted">Digital delivery: '+esc(o.digital_delivery_status)+' · Confirmation email: '+esc(o.email_confirmation_status)+'</div>'+
+          '<hr style="border:none;border-top:1px solid var(--line);margin:14px 0;">'+
+          '<div class="field"><label>Fulfillment status</label><select id="dStatus">'+stateOpts+'</select></div>'+
+          '<div class="grid2">'+
+            '<div class="field"><label>Carrier</label><input type="text" id="dCarrier" value="'+esc(o.shipping_carrier||'')+'" placeholder="USPS"></div>'+
+            '<div class="field"><label>Service</label><input type="text" id="dService" value="'+esc(o.shipping_service||'')+'" placeholder="Media Mail"></div>'+
+            '<div class="field"><label>Tracking number</label><input type="text" id="dTrack" value="'+esc(o.tracking_number||'')+'"></div>'+
+            '<div class="field"><label>Label cost ($)</label><input type="text" id="dLabel" value="'+(o.shipping_label_cost_cents!=null?(o.shipping_label_cost_cents/100).toFixed(2):'')+'"></div>'+
+          '</div>'+
+          '<div class="field"><label>Internal notes (admin only)</label><textarea id="dNotes" rows="2">'+esc(o.admin_notes||'')+'</textarea></div>'+
+          '<div class="row" style="margin-top:6px;">'+
+            '<button class="primary" id="saveBtn">Save changes</button>'+
+            '<button id="packBtn">Mark packed</button>'+
+            '<button class="gold" id="shipBtn">Mark shipped + email</button>'+
+          '</div>'+
+          '<div class="row" style="margin-top:8px;">'+
+            '<button id="resendConf">Resend confirmation</button>'+
+            (o.has_digital?'<button id="resendDig">Resend digital downloads</button>':'')+
+            '<a href="packing-slip.html?ids='+encodeURIComponent(o.id)+'" target="_blank"><button>🖨 Packing slip</button></a>'+
+          '</div>'+
+          '<div id="dMsg" class="hint" style="margin-top:8px;"></div>';
+
+        var msg = el('dMsg');
+        function shipPayload(){ return {
+          id:o.id, shipping_carrier:el('dCarrier').value, shipping_service:el('dService').value,
+          tracking_number:el('dTrack').value,
+          shipping_label_cost_cents: el('dLabel').value ? Math.round(parseFloat(el('dLabel').value)*100) : undefined
+        };}
+        el('saveBtn').onclick = async function(){ try{
+          await api('update_status',{id:o.id,fulfillment_status:el('dStatus').value});
+          await api('set_shipping', shipPayload());
+          await api('add_note',{id:o.id, admin_notes:el('dNotes').value});
+          msg.textContent='Saved.'; load();
+        }catch(e){ msg.textContent=e.message; } };
+        el('packBtn').onclick = async function(){ try{ await api('mark_packed',{id:o.id}); msg.textContent='Marked packed (Ready to Ship).'; openOrder(o.id); load(); }catch(e){msg.textContent=e.message;} };
+        el('shipBtn').onclick = async function(){ try{ var r=await api('mark_shipped', shipPayload()); msg.textContent='Marked shipped. Email '+(r.emailed?'sent.':'skipped (email not configured).'); openOrder(o.id); load(); }catch(e){msg.textContent=e.message;} };
+        el('resendConf').onclick = async function(){ try{ var r=await api('resend_confirmation',{id:o.id}); msg.textContent='Confirmation '+(r.skipped?'skipped (email off).':'resent.'); }catch(e){msg.textContent=e.message;} };
+        if (el('resendDig')) el('resendDig').onclick = async function(){ try{ var r=await api('resend_digital',{id:o.id}); msg.textContent='Digital email '+(r.skipped?'skipped (email off).':'resent ('+r.count+' links).'); }catch(e){msg.textContent=e.message;} };
+      } catch (e) { el('dlgBody').innerHTML = '<p style="color:#c0392b;">'+esc(e.message)+'</p>'; }
+    }
+
+    function selectedIds(){ return Array.prototype.map.call(document.querySelectorAll('.selrow:checked'), function(c){return c.value;}); }
+
+    function downloadCsv(filename, text) {
+      var blob = new Blob([text], {type:'text/csv'}); var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href=url; a.download=filename; a.click(); URL.revokeObjectURL(url);
+    }
+    function toCsv(rows) {
+      return rows.map(function(r){ return r.map(function(v){ var s=String(v==null?'':v); return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }).join(','); }).join('\r\n');
+    }
+
+    // Wire up
+    el('tokenBtn').onclick = function(){
+      var t = el('token').value.trim(); if(!t){ el('loginErr').textContent='Enter a token.'; return; }
+      TOKEN = t; sessionStorage.setItem('dh-book-admin-token', t);
+      api('list',{limit:1}).then(function(){ showApp(); }).catch(function(e){ el('loginErr').textContent=e.message; });
+    };
+    function showApp(){ el('login').style.display='none'; el('app').style.display=''; el('signout').style.display=''; load(); }
+    function signOut(){ sessionStorage.removeItem('dh-book-admin-token'); location.reload(); }
+    el('signout').onclick = function(e){ e.preventDefault(); signOut(); };
+    el('applyBtn').onclick = load;
+    el('q').addEventListener('keydown', function(e){ if(e.key==='Enter') load(); });
+    el('selAll').onchange = function(e){ document.querySelectorAll('.selrow').forEach(function(c){c.checked=e.target.checked;}); };
+    document.addEventListener('click', function(e){ var b=e.target.closest('.openBtn'); if(b) openOrder(b.getAttribute('data-id')); });
+    el('slipsBtn').onclick = function(){ var ids=selectedIds(); if(!ids.length){alert('Select at least one order.');return;} window.open('packing-slip.html?ids='+ids.join(','), '_blank'); };
+    el('unfulfilledBtn').onclick = async function(){ try{
+      var d = await api('export_unfulfilled'); var rows=[['Order','Date','Name','Email','Total','Fulfillment','Tracking']];
+      (d.orders||[]).forEach(function(o){ rows.push([o.order_number,new Date(o.created_at).toISOString().slice(0,10),o.customer_name,o.customer_email,(o.total_cents/100).toFixed(2),o.fulfillment_status,o.tracking_number||'']); });
+      downloadCsv('unfulfilled-orders.csv', toCsv(rows));
+    }catch(e){alert(e.message);} };
+    el('pirateBtn').onclick = async function(){ try{
+      var res = await api('pirateship_csv', {}, true); var text = await res.text();
+      downloadCsv('pirateship-export.csv', text);
+    }catch(e){alert(e.message);} };
+
+    if (TOKEN) { api('list',{limit:1}).then(showApp).catch(function(){ /* show login */ }); }
+  </script>
+</body>
+</html>

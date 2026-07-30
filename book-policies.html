@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Store Policies — Designer Homes Real Estate Services</title>
+  <meta name="description" content="Shipping, returns, replacement, damaged-package, and digital download policies for the Designer Homes memoir and workbook store.">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/books.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo" aria-label="Designer Homes Home">
+        <img src="/images/logo-light.svg" alt="Designer Homes Real Estate Services" class="logo-img" width="220" height="48">
+      </a>
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+        <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <main id="books-page">
+    <section class="books-section">
+      <div class="books-wrap" style="max-width:820px;">
+        <p class="books-eyebrow">Book Store</p>
+        <h1 class="books-h2">Store Policies</h1>
+        <p class="books-lead">The sections below govern purchases of the memoir and companion workbook.
+          Items marked <span class="books-placeholder">Placeholder</span> require the owner’s approval before launch.</p>
+
+        <h2 class="books-h2" id="shipping" style="font-size:1.5rem;">Shipping Policy</h2>
+        <p class="books-prose">Orders are processed and shipped within 48 hours of purchase. Delivery time begins after
+          the shipping carrier accepts the package and varies based on destination and shipping service. Physical books
+          ship from Durham, NC, typically via USPS Media Mail unless another service is selected.</p>
+
+        <h2 class="books-h2" id="returns" style="font-size:1.5rem;">Return &amp; Replacement Policy <span class="books-placeholder">Placeholder — owner to approve</span></h2>
+        <p class="books-prose">__PLACEHOLDER__ Describe whether returns are accepted, the window, condition requirements, and
+          who pays return shipping. (Business decision — requires owner approval.)</p>
+
+        <h2 class="books-h2" id="damaged" style="font-size:1.5rem;">Damaged or Lost Package Policy <span class="books-placeholder">Placeholder — owner to approve</span></h2>
+        <p class="books-prose">__PLACEHOLDER__ Describe the process if an order arrives damaged or is lost in transit
+          (e.g., contact window, proof required, replacement vs. refund).</p>
+
+        <h2 class="books-h2" id="digital" style="font-size:1.5rem;">Digital Download Policy</h2>
+        <p class="books-prose">Eligible orders (hardcover and combo package) receive a complimentary e-book and a fillable
+          workbook PDF, delivered by secure, time-limited download links after payment is confirmed. Digital items are tied
+          to your order for personal use. <span class="books-placeholder">Placeholder</span> Owner to confirm any additional
+          licensing or non-refundable terms for digital goods.</p>
+
+        <h2 class="books-h2" id="privacy" style="font-size:1.5rem;">Privacy &amp; Terms</h2>
+        <p class="books-prose">Your information is handled per our
+          <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>. Payments are processed securely by
+          Stripe; we never store full card details.
+          <span class="books-placeholder">Placeholder</span> Owner to confirm sales-tax treatment before enabling tax at checkout.</p>
+
+        <p class="books-shipnote" style="margin-top:2rem;">Questions? Email
+          <a href="mailto:info@designerhomesre.com">info@designerhomesre.com</a> or call (973) 725-9580.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    var h=document.querySelector('.hamburger'),m=document.querySelector('.nav-menu');
+    if(h&&m)h.addEventListener('click',function(){h.classList.toggle('active');m.classList.toggle('active');});
+  </script>
+</body>
+</html>
