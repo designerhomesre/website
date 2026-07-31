@@ -35,9 +35,12 @@
     // Master switch. Keep false until real prices/covers/descriptions are set.
     storeLive: false,
 
+    preorderNotice:
+      'Preorders are open now. Physical books are expected to begin shipping in about two weeks, once bulk inventory arrives.',
+
     // The exact processing/shipping language required. DO NOT imply delivery in 48h.
     processingNotice:
-      'Orders are processed and shipped within 48 hours of purchase. Delivery ' +
+      'Preorders will be processed and shipped within 48 hours after bulk inventory is received. Delivery ' +
       'time begins after the shipping carrier accepts the package and varies ' +
       'based on destination and shipping service.',
 
@@ -113,6 +116,7 @@
       shortName: 'Memoir — Paperback',
       priceCents: 2500,
       published: true,
+      preorder: true,
       physical: true,
       featured: false,
       coverImage: '/images/books/pride-property-power-memoir-cover.jpg',
@@ -139,6 +143,7 @@
       shortName: 'Memoir — Hardcover',
       priceCents: 4000,
       published: true,
+      preorder: true,
       physical: true,
       featured: false,
       coverImage: '/images/books/pride-property-power-memoir-cover.jpg',
@@ -166,6 +171,7 @@
       shortName: 'Companion Workbook',
       priceCents: 2000,
       published: true,
+      preorder: true,
       physical: true,
       featured: false,
       coverImage: '/images/books/pride-property-power-workbook-cover.png',
@@ -190,6 +196,7 @@
       shortName: 'Memoir & Workbook Combo',
       priceCents: 4000,
       published: true,
+      preorder: true,
       physical: true,
       featured: true,                   // recommended offer
       badge: 'Best Value',
@@ -254,6 +261,8 @@
   //   The shipping answer uses the exact required language.
   // ===========================================================================
   var faqs = [
+    { q: 'Are these preorders?',
+      a: store.preorderNotice + ' You will receive a confirmation email after checkout and a shipment-confirmation email when your package ships.' },
     { q: 'When are orders shipped?',
       a: store.processingNotice },
     { q: 'How long will delivery take?',
@@ -261,7 +270,7 @@
          'varies based on destination and the shipping service selected. We do not ' +
          'guarantee an in-hand date.' },
     { q: 'What comes with each package?',
-      a: 'The paperback includes the physical memoir. The hardcover includes the physical memoir plus complimentary e-book and fillable workbook PDF bonuses. The workbook includes the physical companion workbook. The combo includes one paperback memoir, one physical workbook, and the complimentary e-book and fillable workbook PDF.' },
+      a: 'The paperback includes the physical memoir plus the digital memoir PDF. The hardcover includes the physical memoir plus the digital memoir PDF. The workbook includes the physical companion workbook plus the fillable workbook PDF. The combo includes one paperback memoir, one physical workbook, the digital memoir PDF, and the fillable workbook PDF.' },
     { q: 'How are digital copies delivered?',
       a: 'After your payment is confirmed, eligible orders receive an email with secure, ' +
          'time-limited download links for the e-book and/or fillable workbook PDF.' },

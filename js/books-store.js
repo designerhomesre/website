@@ -58,6 +58,7 @@
   // ---- 4. Product cards ----
   function stockBadge(p) {
     if (p.soldOut) return '<div class="books-stock books-stock--out">Sold out</div>';
+    if (p.preorder) return '<div class="books-stock books-stock--low">Preorder</div>';
     if (typeof p.inventory === 'number') {
       if (p.inventory <= 0) return p.allowBackorder
         ? '<div class="books-stock books-stock--low">Available on back-order</div>'
@@ -99,7 +100,7 @@
       : '';
 
     var shipLine = p.physical
-      ? '<p class="books-shipnote">Ships from Durham, NC. ' + esc(CFG.store.processingNotice.split('.')[0]) + '.</p>'
+      ? '<p class="books-shipnote">Ships from Durham, NC. ' + esc(p.preorder ? CFG.store.preorderNotice : CFG.store.processingNotice.split('.')[0] + '.') + '</p>'
       : '<p class="books-shipnote">Digital delivery by email after purchase.</p>';
 
     var isbnLine = p.isbn
@@ -107,7 +108,7 @@
       : '';
 
     var btn = purchasable
-      ? '<button class="btn btn-primary books-buy" data-product="' + esc(p.id) + '">Add to Order</button>'
+      ? '<button class="btn btn-primary books-buy" data-product="' + esc(p.id) + '">' + (p.preorder ? 'Preorder Now' : 'Add to Order') + '</button>'
       : '<button class="btn btn-primary" disabled aria-disabled="true" title="Not yet available for purchase">Coming Soon</button>';
 
     return '' +

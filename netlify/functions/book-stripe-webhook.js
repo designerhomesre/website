@@ -196,6 +196,11 @@ async function handleCompleted(session) {
     } catch (e) { console.error('digital email failed:', e.message); }
   }
 
+  try {
+    const a = mail.adminOrderEmail(emailModel);
+    await mail.send(a.to, a.subject, a.html);
+  } catch (e) { console.error('admin order email failed:', e.message); }
+
   // Decrement inventory for tracked products (best-effort).
   for (const r of computed.resolved) {
     try { await S.sbRpc('decrement_book_inventory', { p_product_id: r.productId, p_qty: r.quantity }); } catch (e) {}

@@ -11,11 +11,12 @@
 
 const FROM = process.env.BOOK_FROM_EMAIL || 'Designer Homes Real Estate <info@designerhomesre.com>';
 const SUPPORT_EMAIL = 'info@designerhomesre.com';
+const ADMIN_EMAIL = process.env.BOOK_ADMIN_EMAIL || SUPPORT_EMAIL;
 const SUPPORT_PHONE = '(973) 725-9580';
 const BRAND = 'Designer Homes Real Estate Services';
 const NAVY = '#2C3E50';
 const GOLD = '#C9A96E';
-const PROCESSING_NOTICE = 'Orders are processed and shipped within 48 hours of purchase. Delivery ' +
+const PROCESSING_NOTICE = 'Preorders will be processed and shipped within 48 hours after bulk inventory is received. Delivery ' +
   'time begins after the shipping carrier accepts the package and varies based on destination and shipping service.';
 
 function esc(s) {
@@ -117,6 +118,21 @@ function digitalDeliveryEmail(order, links) {
   return { subject: 'Your digital downloads — order ' + order.order_number, html: shell('Digital Downloads', body) };
 }
 
+function adminOrderEmail(order) {
+  const subject = 'New book preorder — ' + order.order_number;
+  const body =
+    '<p style="font-size:16px;"><strong>New book preorder received.</strong></p>' +
+    '<p><strong>Customer:</strong> ' + esc(order.customer_name || '') + '<br>' +
+    '<strong>Email:</strong> ' + esc(order.customer_email || '') + '<br>' +
+    '<strong>Order:</strong> ' + esc(order.order_number || '') + '<br>' +
+    '<strong>Total paid:</strong> ' + money(order.total_cents) + '</p>' +
+    '<p style="margin:14px 0 4px;"><strong>Items to fulfill</strong></p>' +
+    itemsTable(order._items) +
+    (order._hasPhysical ? '<p style="margin-top:16px;"><strong>Ship to:</strong></p>' + addressBlock(order._shipping) : '') +
+    '<p style="margin-top:16px;color:#6c757d;font-size:13px;">Log in to the book admin page to mark the order packed, add tracking, or export unfulfilled orders for labels.</p>';
+  return { to: ADMIN_EMAIL, subject: subject, html: shell('New Book Preorder', body) };
+}
+
 function shipmentEmail(order) {
   const firstName = (order.customer_name || '').trim().split(/\s+/)[0] || 'there';
   const carrier = order.shipping_carrier || 'the carrier';
@@ -138,4 +154,4 @@ function shipmentEmail(order) {
   return { subject: 'Your order has shipped — ' + order.order_number, html: shell('Shipment Confirmation', body) };
 }
 
-module.exports = { send, thankYouEmail, digitalDeliveryEmail, shipmentEmail };
+module.exports = { send, thankYouEmail, digitalDeliveryEmail, adminOrderEmail, shipmentEmail };

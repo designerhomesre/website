@@ -54,6 +54,7 @@ existing appraisal site except adding a "Books" nav link and a homepage feature.
 | `SUPABASE_SERVICE_KEY` | Supabase **service role** key (server only — never in the browser) |
 | `RESEND_API_KEY` | Resend API key for transactional email |
 | `BOOK_FROM_EMAIL` | Optional. Default: `Designer Homes Real Estate <info@designerhomesre.com>` |
+| `BOOK_ADMIN_EMAIL` | Optional. Where new-order/admin alerts are sent. Defaults to `info@designerhomesre.com` |
 | `ADMIN_API_TOKEN` | Long random secret that protects the order dashboard/API |
 | `DOWNLOAD_SIGNING_SECRET` | Random secret used to sign download links (falls back to webhook secret) |
 | `SITE_URL` | `https://designerhomesre.com` (already used by the existing functions) |
