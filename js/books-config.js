@@ -82,16 +82,16 @@
       label: 'Memoir — e-book edition',
       isbn: '979-8-9970832-2-9',
       bucket: 'book-digital',           // private bucket (see migration)
-      storageKey: 'memoir-ebook.pdf',   // __PLACEHOLDER__ upload real file, keep private
-      downloadName: 'Memoir-eBook.pdf'  // __PLACEHOLDER__ final filename buyer sees
+      storageKey: 'memoir-ebook.pdf',
+      downloadName: 'Pride-Property-Power-Memoir.pdf'
     },
     WORKBOOK_PDF: {
       id: 'WORKBOOK_PDF',
       label: 'Companion Workbook — fillable PDF',
       isbn: '979-8-9970832-5-0',
       bucket: 'book-digital',
-      storageKey: 'workbook-fillable.pdf', // __PLACEHOLDER__ upload real fillable PDF
-      downloadName: 'Companion-Workbook-Fillable.pdf'
+      storageKey: 'workbook-fillable.pdf',
+      downloadName: 'Pride-Property-Power-Workbook-Fillable.pdf'
     }
   };
 
@@ -118,8 +118,8 @@
       coverImage: '/images/books/pride-property-power-memoir-cover.jpg',
       coverAlt: 'Front cover of Pride, Property & Power',
       shortDescription: 'A memoir and blueprint for building beyond survival.',
-      includes: ['Paperback memoir'],
-      entitlements: { ebook: false, workbookPdf: false }, // configurable
+      includes: ['Paperback memoir', 'Digital PDF edition of the memoir'],
+      entitlements: { ebook: true, workbookPdf: false },
       isbn: '979-8-9970832-0-5',
       pageCount: null,
       dimensions: 'TBD',
@@ -146,10 +146,9 @@
       shortDescription: 'A hardcover edition of the memoir and blueprint for building beyond survival.',
       includes: [
         'Hardcover memoir',
-        'Complimentary e-book edition of the memoir',
-        'Fillable PDF copy of the companion workbook'
+        'Digital PDF edition of the memoir'
       ],
-      entitlements: { ebook: true, workbookPdf: true }, // hardcover grants both bonuses
+      entitlements: { ebook: true, workbookPdf: false },
       isbn: '979-8-9970832-1-2',
       pageCount: null,
       dimensions: 'TBD',
@@ -172,8 +171,8 @@
       coverImage: '/images/books/pride-property-power-workbook-cover.png',
       coverAlt: 'Front cover of the Pride, Property & Power companion workbook',
       shortDescription: '42 worksheets to build credit, ownership, and generational wealth.',
-      includes: ['Physical companion workbook'],
-      entitlements: { ebook: false, workbookPdf: false }, // configurable
+      includes: ['Physical companion workbook', 'Fillable PDF copy of the workbook'],
+      entitlements: { ebook: false, workbookPdf: true },
       isbn: '979-8-9970832-4-3',
       pageCount: null,
       dimensions: 'TBD',
