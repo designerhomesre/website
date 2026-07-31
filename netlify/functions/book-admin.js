@@ -161,7 +161,10 @@ async function resendConfirmation(body) {
   order._shipping = order.shipping_address;
   const m = mail.thankYouEmail(order);
   const r = await mail.send(order.customer_email, m.subject, m.html);
-  await S.sbUpdate('book_orders', 'id=eq.' + esc(body.id), { email_confirmation_at: new Date().toISOString() });
+  await S.sbUpdate('book_orders', 'id=eq.' + esc(body.id), {
+    email_confirmation_status: r && r.skipped ? 'skipped' : 'sent',
+    email_confirmation_at: new Date().toISOString()
+  });
   return { ok: true, skipped: !!(r && r.skipped) };
 }
 
@@ -180,7 +183,10 @@ async function resendDigital(body) {
     await S.sbUpdate('book_digital_grants', 'id=eq.' + esc(g.id),
       { resent_at: new Date().toISOString(), resent_count: (g.resent_count || 0) + 1 });
   }
-  await S.sbUpdate('book_orders', 'id=eq.' + esc(order.id), { digital_delivery_at: new Date().toISOString() });
+  await S.sbUpdate('book_orders', 'id=eq.' + esc(order.id), {
+    digital_delivery_status: r && r.skipped ? 'skipped' : 'sent',
+    digital_delivery_at: new Date().toISOString()
+  });
   return { ok: true, skipped: !!(r && r.skipped), count: links.length };
 }
 
