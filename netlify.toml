@@ -29,6 +29,25 @@
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "no-store, no-cache, must-revalidate"
 
+# Book store admin / print / success pages — keep out of search indexes.
+[[headers]]
+  for = "/book-admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/packing-slip.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/books-success.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
 [[redirects]]
   from = "/app"
   to = "/app/index.html"
@@ -42,4 +61,14 @@
 [[redirects]]
   from = "/portal"
   to = "/portal.html"
+  status = 200
+
+[[redirects]]
+  from = "/books"
+  to = "/books.html"
+  status = 200
+
+[[redirects]]
+  from = "/book-admin"
+  to = "/book-admin.html"
   status = 200
