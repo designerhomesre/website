@@ -28,7 +28,7 @@ exports.handler = async (event) => {
   let evt;
   try {
     if (!secret || !sig) throw new Error('Missing webhook secret or signature');
-    // Netlify may base64-encode the body; constructEvent needs the raw string.
+    // Hosts may base64-encode the body; constructEvent needs the raw string.
     const raw = event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString('utf8') : event.body;
     evt = stripe.webhooks.constructEvent(raw, sig, secret);
   } catch (err) {
@@ -71,14 +71,15 @@ async function handleCompleted(session) {
   try { cart = JSON.parse((full.metadata && full.metadata.cart) || '[]'); } catch (e) {}
   const items = cart.map(function (c) { return { productId: c.p, quantity: c.q }; });
   const computed = S.computeOrder(items);
-  if (computed.error) { console.error('Recompute failed:', computed.error); }
+  if (computed.error) {
+    throw new Error('Book order recompute failed: ' + computed.error);
+  }
 
   const totalCents = full.amount_total;
   const shippingCents = (full.total_details && full.total_details.amount_shipping) || (computed.shippingCents || 0);
   const taxCents = (full.total_details && full.total_details.amount_tax) || 0;
   const discountCents = (full.total_details && full.total_details.amount_discount) || 0;
-  const subtotalCents = (computed && computed.subtotalCents) != null ? computed.subtotalCents
-    : (totalCents - shippingCents - taxCents + discountCents);
+  const subtotalCents = computed.subtotalCents;
 
   const cd = full.customer_details || {};
   const ship = full.shipping_details || (full.customer_details && full.customer_details.address ? { name: cd.name, address: cd.address } : null);
@@ -89,11 +90,8 @@ async function handleCompleted(session) {
     postal_code: ship.address.postal_code || '', country: ship.address.country || ''
   } : null;
 
-  const hasPhysical = !!(computed && computed.hasPhysical);
-  const ent = (computed && computed.entitlements) || {
-    ebook: full.metadata.ent_ebook === '1',
-    workbookPdf: full.metadata.ent_workbook_pdf === '1'
-  };
+  const hasPhysical = !!computed.hasPhysical;
+  const ent = computed.entitlements;
   const hasDigital = !!(ent.ebook || ent.workbookPdf);
 
   // Order number (sequence via RPC; fallback to random).
@@ -145,7 +143,7 @@ async function handleCompleted(session) {
   const orderId = inserted.id;
 
   // Order items.
-  const itemRows = (computed && computed.resolved || []).map(function (r) {
+  const itemRows = computed.resolved.map(function (r) {
     return {
       order_id: orderId, product_id: r.productId, sku: r.sku, name: r.name,
       format: r.format, unit_amount_cents: r.unitAmountCents, quantity: r.quantity,
@@ -166,7 +164,7 @@ async function handleCompleted(session) {
     } catch (e) { console.error('grant insert', e.message); }
     grantLinks.push({
       label: label,
-      url: siteUrl + '/.netlify/functions/book-download?order=' + orderId + '&file=' + fileId + '&token=' + token
+      url: siteUrl + '/api/book-download?order=' + orderId + '&file=' + fileId + '&token=' + token
     });
   }
   if (ent.ebook) await grant('MEMOIR_EBOOK', 'Memoir e-book');
@@ -174,7 +172,7 @@ async function handleCompleted(session) {
 
   // Emails (non-fatal; tracked).
   const emailModel = Object.assign({}, inserted, {
-    _items: (computed && computed.resolved) || [],
+    _items: computed.resolved,
     _hasPhysical: hasPhysical,
     _shipping: shipAddr
   });
@@ -199,7 +197,7 @@ async function handleCompleted(session) {
   }
 
   // Decrement inventory for tracked products (best-effort).
-  for (const r of (computed && computed.resolved) || []) {
+  for (const r of computed.resolved) {
     try { await S.sbRpc('decrement_book_inventory', { p_product_id: r.productId, p_qty: r.quantity }); } catch (e) {}
   }
 

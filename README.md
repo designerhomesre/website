@@ -13,12 +13,12 @@ This platform serves Designer Homes Real Estate Services with:
 
 **Technology Stack:**
 - Static HTML/CSS/JavaScript (no build process required)
-- Netlify hosting with automatic deployments
+- Vercel hosting with automatic deployments
 - localStorage-based MVP for client-side data persistence
 - Future integration: Supabase for backend database
 
 **Key Features:**
-- Security headers (CSP, X-Frame-Options, etc.) configured via netlify.toml
+- Security headers (CSP, X-Frame-Options, etc.) configured via `vercel.json`
 - SEO optimization (sitemap.xml, robots.txt)
 - Protected routes for internal app and admin sections
 - Responsive design with public and admin CSS
@@ -55,8 +55,10 @@ Designer Homes website/
 │   ├── admin-core.js            # Admin core functionality
 │   └── admin-modules.js         # Admin module management
 │
-├── netlify.toml                 # Netlify build & deployment config
-├── _redirects                   # Netlify redirect rules
+├── vercel.json                  # Vercel headers and rewrites
+├── api/                         # Vercel API functions
+├── netlify.toml                 # Legacy Netlify compatibility config
+├── _redirects                   # Legacy Netlify redirect rules
 ├── robots.txt                   # SEO robots configuration
 ├── sitemap.xml                  # XML sitemap for search engines
 ├── .gitignore                   # Git ignore rules
@@ -67,7 +69,7 @@ Designer Homes website/
 
 ### Prerequisites
 - GitHub account with repository access
-- Netlify account (free tier supported)
+- Vercel account
 - Git installed locally
 
 ### GitHub Setup
@@ -85,20 +87,20 @@ Designer Homes website/
    git push -u origin main
    ```
 
-### Netlify Deployment
-1. Log in to [Netlify](https://app.netlify.com)
-2. Click "New site from Git"
+### Vercel Deployment
+1. Log in to [Vercel](https://vercel.com)
+2. Click "Add New..." → "Project"
 3. Connect your GitHub repository
-4. Netlify will automatically detect `netlify.toml`
+4. Vercel will detect the static site and `api/` functions
 5. Configure environment variables (see below)
 6. Click "Deploy"
 
 **Build Settings (Auto-detected):**
-- Publish directory: `.` (root directory)
+- Output directory: `.` (root directory)
 - Build command: (none required)
 
 ### Environment Variables
-Set these in Netlify Site Settings → Build & Deploy → Environment:
+Set these in Vercel Project Settings → Environment Variables:
 
 ```
 # Future Supabase Integration
@@ -113,7 +115,7 @@ ANTHROPIC_API_KEY=sk-ant-...   # For Claude integration
 ## Security Notes
 
 ### Security Headers
-The `netlify.toml` file configures the following security headers:
+The `vercel.json` file configures the following security headers:
 - **X-Frame-Options: DENY** — Prevents clickjacking attacks
 - **X-Content-Type-Options: nosniff** — Prevents MIME type sniffing
 - **X-XSS-Protection** — Legacy XSS protection (1; mode=block)
@@ -132,7 +134,7 @@ The CSP allows connections to:
 - Anthropic API (`https://api.anthropic.com`)
 - Supabase (`https://*.supabase.co`)
 
-**Store API keys only in Netlify environment variables, never in code.**
+**Store API keys only in Vercel environment variables, never in code.**
 
 ## Development Workflow
 
@@ -167,7 +169,7 @@ The CSP allows connections to:
    ```
 
 4. Open a Pull Request on GitHub
-5. Merge to `main` branch to trigger Netlify deployment
+5. Merge to `main` branch to trigger Vercel deployment
 
 ## Future Enhancements
 

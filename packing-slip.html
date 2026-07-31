@@ -74,7 +74,7 @@
     function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
     async function api(action, payload) {
-      var res = await fetch('/.netlify/functions/book-admin', {
+      var res = await fetch('/api/book-admin', {
         method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN },
         body: JSON.stringify(Object.assign({ action: action }, payload||{}))
       });

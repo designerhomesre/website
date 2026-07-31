@@ -1,0 +1,9 @@
+{
+  "name": "designer-homes-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static Designer Homes website with Vercel API functions for the book store.",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}

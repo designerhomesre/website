@@ -6,11 +6,12 @@ redesign or regress the existing appraisal website.
 
 ## Context & source of truth
 - Repo: `github.com/designerhomesre/website`, branch `main`. Base commit before this work: `f2c4137`.
-- **Hosting is Netlify** (not Vercel): `netlify.toml` + `netlify/functions/`. Static multi-page
-  HTML site, vanilla JS, no build step. Deploys happen from `main` via Netlify.
+- **Hosting is Vercel** (owner clarification after this handoff was written). Static multi-page
+  HTML site, vanilla JS, with Vercel API functions in `api/` wrapping the original
+  `netlify/functions/` handlers.
 - Read `CLAUDE.md` and `BOOK_STORE_SETUP.md` first — they describe the whole design.
 - Single source of truth for products/prices/entitlements/shipping/copy: `js/books-config.js`
-  (loaded in the browser AND required by the Netlify functions so prices are verified server-side).
+  (loaded in the browser AND required by the server functions so prices are verified server-side).
 
 ## Hard guardrails
 - Do NOT invent prices, titles, ISBNs, page counts, dimensions, descriptions, or cover art.
@@ -28,7 +29,8 @@ Functions: `netlify/functions/create-book-checkout.js`, `book-stripe-webhook.js`
 `book-download.js`, `book-order-status.js`, `book-admin.js`, `lib/books-shared.js`, `lib/email.js`.
 Admin: `book-admin.html`, `packing-slip.html`.
 DB: `supabase/migrations/0001_book_store.sql` (already run by the owner).
-Config/scripts: `netlify.toml`, `.env.example`, `.env` (gitignored), `scripts/set-netlify-env.sh`.
+Config/scripts: `vercel.json`, `netlify.toml` legacy compatibility, `.env.example`,
+`.env` (gitignored), `scripts/set-vercel-env.sh`.
 
 ## PART 1 — Audit (report issues with file:line; fix low-risk ones directly)
 1. **Server-side pricing:** confirm `create-book-checkout.js` and `book-stripe-webhook.js`

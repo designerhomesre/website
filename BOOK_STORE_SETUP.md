@@ -4,7 +4,7 @@ This document explains how to configure, launch, and operate the memoir & workbo
 storefront that was added to the existing site. It changes **nothing** about the
 existing appraisal site except adding a "Books" nav link and a homepage feature.
 
-> Architecture: static HTML + **Netlify Functions** (matches the existing site) +
+> Architecture: static HTML + **Vercel API Functions** (with legacy Netlify handler wrappers) +
 > **Stripe** Checkout + **Supabase** (Postgres + private Storage) + **Resend** email.
 > Prices and digital entitlements are verified **server-side** from `js/books-config.js`.
 
@@ -23,7 +23,9 @@ existing appraisal site except adding a "Books" nav link and a homepage feature.
 - `book-admin.html` — order dashboard
 - `packing-slip.html` — printable packing slips
 
-**Serverless functions** (`netlify/functions/`)
+**Serverless functions**
+- `api/` — Vercel API entrypoints that adapt the existing audited handlers.
+- `netlify/functions/` — shared handler logic retained for continuity.
 - `create-book-checkout.js` — creates the Stripe Checkout Session (server-priced)
 - `book-stripe-webhook.js` — verified webhook → writes order, grants downloads, emails
 - `book-download.js` — entitlement-checked secure download endpoint
@@ -35,12 +37,14 @@ existing appraisal site except adding a "Books" nav link and a homepage feature.
 - `supabase/migrations/0001_book_store.sql`
 
 **Config**
-- `netlify.toml` — noindex headers + `/books`, `/book-admin` redirects (edited)
+- `vercel.json` — noindex/security headers, `/books` + `/book-admin` rewrites, and
+  legacy `/.netlify/functions/:function` → `/api/:function` compatibility.
+- `netlify.toml` — legacy config retained from the original implementation.
 - 14 public pages — added the "Books" nav link (edited)
 
 ---
 
-## 2. Environment variables (Netlify → Site settings → Environment)
+## 2. Environment variables (Vercel → Project → Settings → Environment Variables)
 
 | Variable | Purpose |
 |---|---|
@@ -61,7 +65,7 @@ Generate secrets, e.g.: `openssl rand -hex 32`.
 
 ## 3. Supabase
 
-1. Create (or reuse) a Supabase project. Copy the **Project URL** and **service role** key into Netlify env.
+1. Create (or reuse) a Supabase project. Copy the **Project URL** and **service role** key into Vercel env.
 2. Open **SQL editor**, paste `supabase/migrations/0001_book_store.sql`, run it.
    - Creates `book_orders`, `book_order_items`, `book_digital_grants`, `book_inventory`.
    - Enables **RLS with no anon policies** → the public key can read nothing; only the
@@ -79,7 +83,7 @@ You do **not** need to pre-create Stripe Products — checkout uses dynamic
 1. In Stripe (test mode), get `sk_test_…` → `STRIPE_SECRET_KEY`.
 2. In Stripe **Wallets**, enable Apple Pay / Google Pay (Checkout shows them automatically).
 3. **Webhook**: Developers → Webhooks → Add endpoint:
-   - URL: `https://designerhomesre.com/.netlify/functions/book-stripe-webhook`
+   - URL: `https://designerhomesre.com/api/book-stripe-webhook`
    - Events: `checkout.session.completed`
    - Copy the signing secret → `STRIPE_WEBHOOK_SECRET`.
    - Payment is only marked paid via this verified webhook — never from the success page.
@@ -93,7 +97,7 @@ You do **not** need to pre-create Stripe Products — checkout uses dynamic
 2. Add the DNS records Resend shows you (typically at your DNS host):
    - **SPF** (TXT), **DKIM** (CNAME/TXT records Resend provides), and a **Return-Path/MX** if requested.
    - Recommended: a **DMARC** TXT record (`v=DMARC1; p=none; rua=mailto:info@designerhomesre.com`).
-3. Wait for verification, then set `RESEND_API_KEY`. Until configured, emails are safely skipped (orders still record).
+3. Wait for verification, then set `RESEND_API_KEY` in Vercel. Until configured, emails are safely skipped (orders still record).
 
 ---
 
@@ -153,7 +157,7 @@ Delivered, Canceled, Refunded, Needs Attention.
 
 ## 9. Test plan (Stripe TEST mode)
 
-Use Stripe test cards (`4242 4242 4242 4242`, any future date/CVC). With test keys set:
+Use Stripe test cards (`4242 4242 4242 4242`, any future date/CVC). With test keys set in Vercel:
 
 - [ ] Paperback / Hardcover / Workbook / Combo purchase each create a paid order
 - [ ] Multiple quantities and multiple products in one order

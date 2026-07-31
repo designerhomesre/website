@@ -172,7 +172,7 @@ async function resendDigital(body) {
   const links = (order._grants || []).map(function (g) {
     const def = CFG.digitalFiles[g.file_id] || { label: g.file_id };
     return { label: def.label || g.file_id,
-      url: siteUrl + '/.netlify/functions/book-download?order=' + order.id + '&file=' + g.file_id + '&token=' + g.token };
+      url: siteUrl + '/api/book-download?order=' + order.id + '&file=' + g.file_id + '&token=' + g.token };
   });
   const m = mail.digitalDeliveryEmail(order, links);
   const r = await mail.send(order.customer_email, m.subject, m.html);

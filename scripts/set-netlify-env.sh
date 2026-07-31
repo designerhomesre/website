@@ -6,7 +6,7 @@
 #   netlify link           # choose the site for designerhomesre.com
 #
 # Usage:  bash scripts/set-netlify-env.sh
-# It skips any variable still set to REPLACE_ME so you never push placeholders.
+# It skips any variable still set to REPLACE_ME or REPLACE_WITH_* so you never push placeholders.
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -26,7 +26,7 @@ set -a; source ./.env 2>/dev/null || true; set +a
 
 for name in "${VARS[@]}"; do
   val="${!name-}"
-  if [ -z "${val:-}" ] || [ "$val" = "REPLACE_ME" ]; then
+  if [ -z "${val:-}" ] || [ "$val" = "REPLACE_ME" ] || [[ "$val" == REPLACE_WITH_* ]]; then
     echo "skip  $name (not set)"
     continue
   fi

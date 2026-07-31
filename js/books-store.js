@@ -162,7 +162,7 @@
     btn.disabled = true; btn.textContent = 'Redirecting…';
     // Send only product id + quantity. The server looks up the real price
     // and entitlements from books-config.js — the browser total is never trusted.
-    fetch('/.netlify/functions/create-book-checkout', {
+    fetch('/api/create-book-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: [{ productId: productId, quantity: qty }] })

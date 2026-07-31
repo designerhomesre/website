@@ -33,7 +33,7 @@
         <h1 id="ty-title" style="font-size:clamp(2rem,4.5vw,3rem);">Thank you</h1>
         <p class="books-subhead" id="ty-msg" style="margin:0 auto;">
           Thank you for supporting this project and being part of this important milestone.
-          Your order has been received and will be prepared for shipment within 48 hours.
+          Your order has been received. Orders are processed and shipped within 48 hours of purchase.
         </p>
         <div id="ty-order" style="margin:1.5rem auto 0;max-width:420px;"></div>
         <p class="books-shipnote" style="color:#c9d3dc;margin-top:1.25rem;">
@@ -55,7 +55,12 @@
       var sid = params.get('session_id');
       var box = document.getElementById('ty-order');
       if (!sid) return;
-      fetch('/.netlify/functions/book-order-status?session_id=' + encodeURIComponent(sid))
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+      fetch('/api/book-order-status?session_id=' + encodeURIComponent(sid))
         .then(function (r) { return r.json(); })
         .then(function (d) {
           if (!d || !d.found) return; // webhook may still be finishing
@@ -64,8 +69,8 @@
           box.innerHTML =
             '<div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:1rem 1.25rem;color:#fff;">' +
               '<div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#C9A96E;">Order</div>' +
-              '<div style="font-family:Playfair Display,serif;font-size:1.3rem;">' + d.order_number + '</div>' +
-              '<div style="color:#c9d3dc;">Total paid: $' + d.total + '</div>' +
+              '<div style="font-family:Playfair Display,serif;font-size:1.3rem;">' + esc(d.order_number) + '</div>' +
+              '<div style="color:#c9d3dc;">Total paid: $' + esc(d.total) + '</div>' +
             '</div>' + digital;
         }).catch(function () {});
     })();

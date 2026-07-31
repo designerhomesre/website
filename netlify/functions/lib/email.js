@@ -15,6 +15,8 @@ const SUPPORT_PHONE = '(973) 725-9580';
 const BRAND = 'Designer Homes Real Estate Services';
 const NAVY = '#2C3E50';
 const GOLD = '#C9A96E';
+const PROCESSING_NOTICE = 'Orders are processed and shipped within 48 hours of purchase. Delivery ' +
+  'time begins after the shipping carrier accepts the package and varies based on destination and shipping service.';
 
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -85,7 +87,7 @@ function thankYouEmail(order) {
   const body =
     '<p style="font-size:16px;">Hi ' + esc(firstName) + ',</p>' +
     '<p>Thank you for supporting this project and being part of this important milestone. ' +
-    'Your order has been received and will be prepared for shipment within 48 hours. ' +
+    'Your order has been received. ' +
     'You will receive another email with tracking information once your package is on the way.</p>' +
     '<p style="margin:14px 0 4px;"><strong>Order ' + esc(order.order_number) + '</strong></p>' +
     itemsTable(order._items) +
@@ -97,8 +99,7 @@ function thankYouEmail(order) {
       '<tr><td style="font-weight:700;padding-top:6px;">Total paid</td><td style="text-align:right;font-weight:700;padding-top:6px;">' + money(order.total_cents) + '</td></tr>' +
     '</table>' +
     (order._hasPhysical ? '<p style="margin-top:16px;"><strong>Shipping to:</strong></p>' + addressBlock(order._shipping) : '') +
-    '<p style="margin-top:16px;color:#6c757d;font-size:13px;">Orders are processed and shipped within 48 hours of purchase. ' +
-    'Delivery time begins after the shipping carrier accepts the package and varies based on destination and shipping service.</p>';
+    '<p style="margin-top:16px;color:#6c757d;font-size:13px;">' + PROCESSING_NOTICE + '</p>';
   return { subject: 'Thank you — order ' + order.order_number, html: shell('Order Confirmation', body) };
 }
 

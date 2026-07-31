@@ -51,7 +51,7 @@
   <div class="wrap" id="login">
     <div class="card">
       <h2 style="margin-top:0;">Admin access</h2>
-      <p class="muted">Paste the <code>ADMIN_API_TOKEN</code> (set in Netlify environment variables). It is stored only for this browser session.</p>
+      <p class="muted">Paste the <code>ADMIN_API_TOKEN</code> (set in Vercel environment variables). It is stored only for this browser session.</p>
       <div class="field"><label>Admin API token</label><input type="password" id="token" placeholder="paste token"></div>
       <button class="primary" id="tokenBtn">Continue</button>
       <div id="loginErr" class="muted" style="color:var(--bad);margin-top:8px;"></div>
@@ -110,7 +110,7 @@
     function el(id){return document.getElementById(id);}
 
     async function api(action, payload, raw) {
-      var res = await fetch('/.netlify/functions/book-admin', {
+      var res = await fetch('/api/book-admin', {
         method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN },
         body: JSON.stringify(Object.assign({ action: action }, payload||{}))
       });
