@@ -194,8 +194,8 @@
       physical: true,
       featured: true,                   // recommended offer
       badge: 'Best Value',
-      coverImage: '/images/books/pride-property-power-workbook-cover.png',
-      coverAlt: 'Front cover of the Pride, Property & Power workbook included in the bundle',
+      coverImage: '/images/books/combo-cover.jpg',
+      coverAlt: 'Pride, Property & Power paperback and companion workbook shown side by side',
       shortDescription: 'Bundle includes one paperback memoir and one physical workbook.',
       includes: [
         'One paperback memoir',
