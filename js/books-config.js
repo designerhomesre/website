@@ -33,7 +33,7 @@
   var store = {
     currency: 'usd',
     // Master switch. Keep false until real prices/covers/descriptions are set.
-    storeLive: false,
+    storeLive: true,
 
     preorderNotice:
       'Preorders are open now. Physical books are expected to begin shipping in about two weeks, once bulk inventory arrives.',
@@ -55,7 +55,7 @@
         { code: 'other',                label: 'Other' }
       ],
       // Flat domestic rate charged at checkout, in cents. __PLACEHOLDER__ — set real rate.
-      flatRateCents: null,          // e.g. 499 for $4.99
+      flatRateCents: 600,
       freeShippingThresholdCents: null, // e.g. 5000 for free shipping over $50 (null = disabled)
       allowedRegions: ['US'],       // ISO country codes eligible for checkout
       digitalOnlyShippingCents: 0   // digital-only orders never pay shipping
