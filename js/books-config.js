@@ -229,21 +229,24 @@
     },
     synopsis: {
       heading: 'About the Memoir',
-      body: '__PLACEHOLDER__ Replace with a concise 2–3 paragraph memoir synopsis.',
+      body: 'Keith Manning Jr. grew up loving blocks his family had lived on for generations but never owned. His mother’s first home showed him what a deed could give a family — and what ownership alone could not fix. A childhood dream of becoming a McDonald’s owner-operator ended in a single morning, in a chapel, on the first day of a takeover — and that betrayal pushed him toward real estate, appraisal, public service, and a different understanding of power.\n\nIn Pride, Property & Power, Manning braids memoir with a practical blueprint for navigating credit, homeownership, the trades, investing, relocation, property taxes, and generational wealth. Honest about violence, displacement, business betrayal, and the real costs first-generation owners carry, he argues one thing without flinching: pride in where you come from should never cost you the chance to own, build, and leave something behind.\n\nPride is not equity. This book is the map he had to draw by hand, in the dark, handed to the next one coming up.',
       themes: ['Credit', 'Home buying', 'Generational wealth'],
-      audience: '__PLACEHOLDER__ Who this book is for.',
-      authorStatement: '__PLACEHOLDER__ A short personal statement from the author.'
+      audience: 'Young Black and Latino men from inner-city backgrounds, first-generation would-be owners, families learning the language of ownership, and anyone who was never handed the map.',
+      authorStatement: 'This book is two things at once, on purpose. It is a memoir — my real life, from the streets of Jersey City to a closing table in Durham, North Carolina. And it is a blueprint — everything I learned the hard way about ownership, real estate, appraisal, property taxes, the trades, relocation, and building wealth, laid out so you do not have to learn it as slowly as I did.'
     },
     workbook: {
       heading: 'The Companion Workbook',
-      purpose: 'A practical companion to Pride, Property & Power.',
-      applies: '__PLACEHOLDER__ How readers apply the memoir’s lessons.',
-      includes: ['42 worksheets to build credit, ownership, and generational wealth']
+      purpose: 'The book told the story. The workbook is where you do the work.',
+      applies: 'Every time Pride, Property & Power points toward action, the companion workbook turns that lesson into a page you can write on, date, revisit, and bring to the kitchen table.',
+      includes: [
+        '42 worksheets to build credit, ownership, and generational wealth',
+        'Credit review, DTI, mortgage-readiness, and loan-program worksheets',
+        'Family ownership, relocation, house-hacking, estate, and community wealth planning pages'
+      ]
     },
     accomplishment: {
       heading: 'A Milestone Worth Sharing',
-      body: '__PLACEHOLDER__ A sincere, proud paragraph on publishing this memoir and ' +
-            'workbook as an extension of the Designer Homes mission.'
+      body: 'Pride, Property & Power extends the Designer Homes mission beyond appraisals and transactions. It is a personal story, a professional blueprint, and a practical push toward ownership, written so the next person coming up has language, evidence, and a plan before they reach the closing table.'
     }
   };
 
@@ -259,8 +262,7 @@
          'varies based on destination and the shipping service selected. We do not ' +
          'guarantee an in-hand date.' },
     { q: 'What comes with each package?',
-      a: '__PLACEHOLDER__ Summarize what each option includes. The hardcover and combo ' +
-         'package include a complimentary e-book and a fillable workbook PDF.' },
+      a: 'The paperback includes the physical memoir. The hardcover includes the physical memoir plus complimentary e-book and fillable workbook PDF bonuses. The workbook includes the physical companion workbook. The combo includes one paperback memoir, one physical workbook, and the complimentary e-book and fillable workbook PDF.' },
     { q: 'How are digital copies delivered?',
       a: 'After your payment is confirmed, eligible orders receive an email with secure, ' +
          'time-limited download links for the e-book and/or fillable workbook PDF.' },
@@ -268,10 +270,11 @@
       a: 'Yes. Once your order ships, you will receive a shipment-confirmation email with ' +
          'the carrier and a tracking link.' },
     { q: 'What if my shipment is damaged or lost?',
-      a: '__PLACEHOLDER__ Owner to approve a damaged/lost policy. Contact ' + store.support.email +
-         ' and we will help resolve it.' },
+      a: 'If your shipment arrives damaged or appears lost in transit, contact ' + store.support.email +
+         ' with your order number and photos or tracking details so we can review the issue and help resolve it.' },
     { q: 'What is your return or replacement policy?',
-      a: '__PLACEHOLDER__ Owner to approve return/replacement terms.' },
+      a: 'For order issues, damaged items, or replacement questions, contact ' + store.support.email +
+         ' with your order number. Digital download links are tied to the original order and may be reissued if an eligible link expires.' },
     { q: 'How do I contact support?',
       a: 'Email ' + store.support.email + ' or call ' + store.support.phone + '.' }
   ];

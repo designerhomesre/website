@@ -20,11 +20,20 @@
   var isPlaceholder = function (v) { return typeof v === 'string' && v.indexOf('__PLACEHOLDER__') !== -1; };
   var clean = function (v) { return isPlaceholder(v) ? v.replace('__PLACEHOLDER__', '').trim() : v; };
   var phTag = function (v) { return isPlaceholder(v) ? ' <span class="books-placeholder">Placeholder</span>' : ''; };
+  var paragraphHtml = function (v) {
+    return String(clean(v)).split(/\n{2,}/).map(function (part) {
+      return '<p>' + esc(part.trim()) + '</p>';
+    }).join('');
+  };
 
   // ---- 1. Fill [data-content] text nodes from config.content ----
   document.querySelectorAll('[data-content]').forEach(function (el) {
     var raw = byPath(CFG.content, el.getAttribute('data-content'));
     if (raw == null) return;
+    if (el.getAttribute('data-content') === 'synopsis.body') {
+      el.innerHTML = paragraphHtml(raw) + phTag(raw);
+      return;
+    }
     el.innerHTML = esc(clean(raw)) + phTag(raw);
   });
 
