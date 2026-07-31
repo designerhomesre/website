@@ -129,13 +129,14 @@ function verifyDownloadToken(orderId, fileId, token) {
 // ---------------------------------------------------------------------------
 async function sb(path, opts) {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) throw new Error('Supabase not configured');
-  const res = await fetch(SUPABASE_URL + path, Object.assign({
-    headers: Object.assign({
+  opts = opts || {};
+  const headers = Object.assign({
       'Content-Type': 'application/json',
       'apikey': SUPABASE_SERVICE_KEY,
       'Authorization': 'Bearer ' + SUPABASE_SERVICE_KEY
-    }, (opts && opts.headers) || {})
-  }, opts || {}));
+    }, opts.headers || {});
+  const fetchOpts = Object.assign({}, opts, { headers: headers });
+  const res = await fetch(SUPABASE_URL + path, fetchOpts);
   const text = await res.text();
   let json = null; try { json = text ? JSON.parse(text) : null; } catch (e) { json = text; }
   if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + (typeof json === 'string' ? json : JSON.stringify(json)));
