@@ -80,6 +80,7 @@
     MEMOIR_EBOOK: {
       id: 'MEMOIR_EBOOK',
       label: 'Memoir — e-book edition',
+      isbn: '979-8-9970832-2-9',
       bucket: 'book-digital',           // private bucket (see migration)
       storageKey: 'memoir-ebook.pdf',   // __PLACEHOLDER__ upload real file, keep private
       downloadName: 'Memoir-eBook.pdf'  // __PLACEHOLDER__ final filename buyer sees
@@ -87,6 +88,7 @@
     WORKBOOK_PDF: {
       id: 'WORKBOOK_PDF',
       label: 'Companion Workbook — fillable PDF',
+      isbn: '979-8-9970832-5-0',
       bucket: 'book-digital',
       storageKey: 'workbook-fillable.pdf', // __PLACEHOLDER__ upload real fillable PDF
       downloadName: 'Companion-Workbook-Fillable.pdf'
@@ -106,20 +108,19 @@
     {
       id: 'memoir-paperback',
       sku: 'MEM-PB',
-      name: '__PLACEHOLDER__ Memoir Title',
+      name: 'Pride, Property & Power',
       format: 'Paperback',
       shortName: 'Memoir — Paperback',
-      priceCents: null,                 // __PLACEHOLDER__
-      published: false,                 // flip to true when ready
+      priceCents: 2500,
+      published: true,
       physical: true,
       featured: false,
-      coverImage: '/images/books/memoir-paperback-cover.jpg', // __PLACEHOLDER__ add artwork
-      coverAlt: 'Front cover of the paperback memoir (placeholder)',
-      shortDescription: '__PLACEHOLDER__ One-line description of the paperback memoir.',
+      coverImage: '/images/books/pride-property-power-memoir-cover.jpg',
+      coverAlt: 'Front cover of Pride, Property & Power',
+      shortDescription: 'A memoir and blueprint for building beyond survival.',
       includes: ['Paperback memoir'],
       entitlements: { ebook: false, workbookPdf: false }, // configurable
-      // Physical catalog metadata — placeholders, do not invent.
-      isbn: 'TBD',
+      isbn: '979-8-9970832-0-5',
       pageCount: null,
       dimensions: 'TBD',
       // Shipping
@@ -133,23 +134,23 @@
     {
       id: 'memoir-hardcover',
       sku: 'MEM-HC',
-      name: '__PLACEHOLDER__ Memoir Title',
+      name: 'Pride, Property & Power',
       format: 'Hardcover',
       shortName: 'Memoir — Hardcover',
-      priceCents: null,
-      published: false,
+      priceCents: 4000,
+      published: true,
       physical: true,
       featured: false,
-      coverImage: '/images/books/memoir-hardcover-cover.jpg',
-      coverAlt: 'Front cover of the hardcover memoir (placeholder)',
-      shortDescription: '__PLACEHOLDER__ One-line description of the hardcover memoir.',
+      coverImage: '/images/books/pride-property-power-memoir-cover.jpg',
+      coverAlt: 'Front cover of Pride, Property & Power',
+      shortDescription: 'A hardcover edition of the memoir and blueprint for building beyond survival.',
       includes: [
         'Hardcover memoir',
         'Complimentary e-book edition of the memoir',
         'Fillable PDF copy of the companion workbook'
       ],
       entitlements: { ebook: true, workbookPdf: true }, // hardcover grants both bonuses
-      isbn: 'TBD',
+      isbn: '979-8-9970832-1-2',
       pageCount: null,
       dimensions: 'TBD',
       weightOz: null,
@@ -161,19 +162,19 @@
     {
       id: 'workbook',
       sku: 'WKB',
-      name: '__PLACEHOLDER__ Companion Workbook Title',
+      name: 'Pride, Property & Power Workbook',
       format: 'Physical Workbook',
       shortName: 'Companion Workbook',
-      priceCents: null,
-      published: false,
+      priceCents: 2000,
+      published: true,
       physical: true,
       featured: false,
-      coverImage: '/images/books/workbook-cover.jpg',
-      coverAlt: 'Front cover of the companion workbook (placeholder)',
-      shortDescription: '__PLACEHOLDER__ One-line description of the companion workbook.',
+      coverImage: '/images/books/pride-property-power-workbook-cover.png',
+      coverAlt: 'Front cover of the Pride, Property & Power companion workbook',
+      shortDescription: '42 worksheets to build credit, ownership, and generational wealth.',
       includes: ['Physical companion workbook'],
       entitlements: { ebook: false, workbookPdf: false }, // configurable
-      isbn: 'TBD',
+      isbn: '979-8-9970832-4-3',
       pageCount: null,
       dimensions: 'TBD',
       weightOz: null,
@@ -185,17 +186,17 @@
     {
       id: 'combo',
       sku: 'COMBO',
-      name: '__PLACEHOLDER__ Memoir + Workbook Combo',
+      name: 'Pride, Property & Power Paperback + Workbook Bundle',
       format: 'Combo Package',
       shortName: 'Memoir & Workbook Combo',
-      priceCents: null,
-      published: false,
+      priceCents: 4000,
+      published: true,
       physical: true,
       featured: true,                   // recommended offer
       badge: 'Best Value',
-      coverImage: '/images/books/combo-cover.jpg',
-      coverAlt: 'The memoir paperback and companion workbook shown together (placeholder)',
-      shortDescription: '__PLACEHOLDER__ One-line description of the combo package.',
+      coverImage: '/images/books/pride-property-power-workbook-cover.png',
+      coverAlt: 'Front cover of the Pride, Property & Power workbook included in the bundle',
+      shortDescription: 'Bundle includes one paperback memoir and one physical workbook.',
       includes: [
         'One paperback memoir',
         'One physical companion workbook',
@@ -205,7 +206,7 @@
       entitlements: { ebook: true, workbookPdf: true }, // combo grants both bonuses
       // Combo ships two physical items; weight is combined.
       containsPhysical: ['memoir-paperback', 'workbook'],
-      isbn: 'TBD',
+      isbn: '979-8-9970832-0-5 + 979-8-9970832-4-3',
       pageCount: null,
       dimensions: 'TBD',
       weightOz: null,                   // __PLACEHOLDER__ combined packaged weight
@@ -222,22 +223,22 @@
   var content = {
     hero: {
       eyebrow: 'A New Release',
-      headline: '__PLACEHOLDER__ Memoir Title',
-      subhead: '__PLACEHOLDER__ A short, celebratory launch message (1–2 sentences).',
-      authorLine: 'by __PLACEHOLDER__ Author Name'
+      headline: 'Pride, Property & Power',
+      subhead: 'A memoir and blueprint for building beyond survival, with a companion workbook for putting the lessons into action.',
+      authorLine: 'by Keith Manning Jr.'
     },
     synopsis: {
       heading: 'About the Memoir',
       body: '__PLACEHOLDER__ Replace with a concise 2–3 paragraph memoir synopsis.',
-      themes: ['__PLACEHOLDER__ Theme one', '__PLACEHOLDER__ Theme two', '__PLACEHOLDER__ Theme three'],
+      themes: ['Credit', 'Home buying', 'Generational wealth'],
       audience: '__PLACEHOLDER__ Who this book is for.',
       authorStatement: '__PLACEHOLDER__ A short personal statement from the author.'
     },
     workbook: {
       heading: 'The Companion Workbook',
-      purpose: '__PLACEHOLDER__ What the workbook is for and how it complements the memoir.',
+      purpose: 'A practical companion to Pride, Property & Power.',
       applies: '__PLACEHOLDER__ How readers apply the memoir’s lessons.',
-      includes: ['__PLACEHOLDER__ What the physical workbook includes']
+      includes: ['42 worksheets to build credit, ownership, and generational wealth']
     },
     accomplishment: {
       heading: 'A Milestone Worth Sharing',

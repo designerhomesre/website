@@ -93,6 +93,10 @@
       ? '<p class="books-shipnote">Ships from Durham, NC. ' + esc(CFG.store.processingNotice.split('.')[0]) + '.</p>'
       : '<p class="books-shipnote">Digital delivery by email after purchase.</p>';
 
+    var isbnLine = p.isbn
+      ? '<p class="books-card-meta">' + (p.id === 'combo' ? 'ISBNs: ' : 'ISBN-13: ') + esc(p.isbn) + '</p>'
+      : '';
+
     var btn = purchasable
       ? '<button class="btn btn-primary books-buy" data-product="' + esc(p.id) + '">Add to Order</button>'
       : '<button class="btn btn-primary" disabled aria-disabled="true" title="Not yet available for purchase">Coming Soon</button>';
@@ -109,6 +113,7 @@
           includesHtml(p) +
           digitalNote +
           stockBadge(p) +
+          isbnLine +
           (purchasable
             ? '<div class="books-qty"><label for="qty-' + esc(p.id) + '">Qty</label>' +
               '<input type="number" id="qty-' + esc(p.id) + '" min="1" max="20" value="1" inputmode="numeric"></div>'
@@ -188,7 +193,8 @@
       '@context': 'https://schema.org', '@type': 'Book',
       name: clean(CFG.content.hero.headline),
       author: { '@type': 'Person', name: clean(CFG.content.hero.authorLine).replace(/^by\s+/i, '') },
-      description: clean(CFG.content.synopsis.body).slice(0, 300)
+      description: clean(CFG.content.synopsis.body).slice(0, 300),
+      isbn: memoir && memoir.isbn ? memoir.isbn : undefined
     };
     if (offers.length) ld.offers = offers;
     var tag = document.getElementById('books-jsonld');
