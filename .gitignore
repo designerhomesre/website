@@ -4,3 +4,4 @@ node_modules/
 .env.local
 .netlify/
 *.log
+.vercel

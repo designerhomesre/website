@@ -20,9 +20,10 @@ if [ "$TARGET" != "preview" ] && [ "$TARGET" != "production" ] && [ "$TARGET" !=
   exit 1
 fi
 
-if ! command -v vercel >/dev/null 2>&1; then
-  echo "Vercel CLI not found. Install with: npm i -g vercel" >&2
-  exit 1
+if command -v vercel >/dev/null 2>&1; then
+  VERCEL_CMD=(vercel)
+else
+  VERCEL_CMD=(npx vercel)
 fi
 if [ ! -f .env ]; then echo ".env not found. Copy .env.example to .env first." >&2; exit 1; fi
 
@@ -39,9 +40,9 @@ for name in "${VARS[@]}"; do
     echo "skip  $name (not set)"
     continue
   fi
-  printf '%s' "$val" | vercel env add "$name" "$TARGET" >/dev/null
+  printf '%s' "$val" | "${VERCEL_CMD[@]}" env add "$name" "$TARGET" >/dev/null
   echo "set   $name ($TARGET)"
 done
 
-echo "Done. Verify with: vercel env ls"
+echo "Done. Verify with: ${VERCEL_CMD[*]} env ls"
 echo "Redeploy so functions pick up the new values."
