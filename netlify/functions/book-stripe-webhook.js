@@ -167,7 +167,10 @@ async function handleCompleted(session) {
       url: siteUrl + '/api/book-download?order=' + orderId + '&file=' + fileId + '&token=' + token
     });
   }
-  if (ent.ebook) await grant('MEMOIR_EBOOK', 'Memoir e-book');
+  if (ent.ebook) {
+    await grant('MEMOIR_EBOOK', 'Memoir PDF');
+    await grant('MEMOIR_EPUB', 'Memoir EPUB for reading apps');
+  }
   if (ent.workbookPdf) await grant('WORKBOOK_PDF', 'Fillable Workbook PDF');
 
   // Emails (non-fatal; tracked).

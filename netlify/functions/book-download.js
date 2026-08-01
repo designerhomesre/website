@@ -20,6 +20,7 @@ const CFG = S.CFG;
 
 const ENTITLEMENT_FOR_FILE = {
   MEMOIR_EBOOK: 'entitlement_ebook',
+  MEMOIR_EPUB: 'entitlement_ebook',
   WORKBOOK_PDF: 'entitlement_workbook_pdf'
 };
 const SIGNED_URL_TTL = 300; // seconds

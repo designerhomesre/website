@@ -82,11 +82,19 @@
   var digitalFiles = {
     MEMOIR_EBOOK: {
       id: 'MEMOIR_EBOOK',
-      label: 'Memoir — e-book edition',
+      label: 'Memoir — PDF edition',
       isbn: '979-8-9970832-2-9',
       bucket: 'book-digital',           // private bucket (see migration)
       storageKey: 'memoir-ebook.pdf',
       downloadName: 'Pride-Property-Power-Memoir.pdf'
+    },
+    MEMOIR_EPUB: {
+      id: 'MEMOIR_EPUB',
+      label: 'Memoir — EPUB edition for reading apps',
+      isbn: '979-8-9970832-2-9',
+      bucket: 'book-digital',
+      storageKey: 'memoir-ebook.epub',
+      downloadName: 'Pride-Property-Power-Memoir.epub'
     },
     WORKBOOK_PDF: {
       id: 'WORKBOOK_PDF',
