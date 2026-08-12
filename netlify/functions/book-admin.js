@@ -8,7 +8,7 @@
  * Actions (POST { action, ... }):
  *   list, get, update_status, add_note, set_shipping, mark_packed,
  *   mark_shipped, resend_confirmation, resend_digital, export_unfulfilled,
- *   pirateship_csv
+ *   shippo_csv, pirateship_csv
  *
  * Env: ADMIN_API_TOKEN, SUPABASE_URL, SUPABASE_SERVICE_KEY, RESEND_API_KEY, SITE_URL
  */
@@ -53,6 +53,7 @@ exports.handler = async (event) => {
       case 'resend_confirmation':  return S.jsonResponse(200, await resendConfirmation(body), headers);
       case 'resend_digital':       return S.jsonResponse(200, await resendDigital(body), headers);
       case 'export_unfulfilled':   return S.jsonResponse(200, await exportUnfulfilled(), headers);
+      case 'shippo_csv':           return await shippoCsv(body, headers);
       case 'pirateship_csv':       return await pirateShipCsv(body, headers);
       default:                     return S.jsonResponse(400, { error: 'Unknown action' }, headers);
     }
@@ -89,6 +90,7 @@ async function listOrders(body) {
     const ids = new Set((items || []).map(function (i) { return i.order_id; }));
     orders = orders.filter(function (o) { return ids.has(o.id); });
   }
+  await attachItems(orders);
   return { orders: orders, states: FULFILLMENT_STATES };
 }
 
@@ -187,7 +189,79 @@ async function resendDigital(body) {
 async function exportUnfulfilled() {
   const orders = await S.sbSelect('book_orders',
     'select=*&has_physical=eq.true&fulfillment_status=in.(Paid,Awaiting Fulfillment,Packing,Ready to Ship)&order=created_at.asc');
+  await attachItems(orders);
   return { orders: orders };
+}
+
+async function attachItems(orders) {
+  for (const o of (orders || [])) {
+    const items = await S.sbSelect('book_order_items', 'order_id=eq.' + esc(o.id) + '&order=created_at.asc');
+    o._items = items || [];
+    o.item_summary = (items || []).map(function (it) {
+      return it.quantity + 'x ' + (it.name || it.product_id || 'Book');
+    }).join('; ');
+  }
+}
+
+function orderWeightOz(items) {
+  let weightOz = 0;
+  (items || []).forEach(function (it) {
+    const p = CFG.getProduct(it.product_id);
+    if (p && typeof p.weightOz === 'number') weightOz += p.weightOz * it.quantity;
+  });
+  return weightOz || '';
+}
+
+// Shippo CSV upload fields. Shippo requires recipient name, street 1, postal,
+// city, state, country, email, and sometimes phone; recommended fields include
+// order number, order date, total weight, dimensions, and item detail.
+async function shippoCsv(body, headers) {
+  const orders = await exportUnfulfilled().then(function (r) { return r.orders; });
+  const cols = ['Order Number', 'Order Date', 'Recipient Name', 'Company Name', 'Street Line 1',
+    'Street Line 2', 'City', 'State', 'Country', 'Postal Code', 'Recipient Email',
+    'Phone Number', 'Total Order Weight', 'Weight Unit', 'Package Length', 'Package Width',
+    'Package Height', 'Dimension Unit', 'Total Order Price', 'Order Currency',
+    'Item Title', 'Item Quantity', 'SKU Number', 'Price Per Item', 'Item Price Currency'];
+  const lines = [cols.map(csvCell).join(',')];
+  for (const o of orders) {
+    const a = o.shipping_address || {};
+    const items = o._items && o._items.length ? o._items : [{ name: o.item_summary || 'Book order', quantity: 1, sku: '' }];
+    const weight = orderWeightOz(o._items);
+    for (const it of items) {
+      lines.push([
+        o.order_number,
+        new Date(o.created_at).toISOString().slice(0, 10),
+        a.name || o.customer_name || '',
+        a.company || '',
+        a.line1 || '',
+        a.line2 || '',
+        a.city || '',
+        a.state || '',
+        a.country || 'US',
+        a.postal_code || '',
+        o.customer_email || CFG.store.support.email,
+        o.customer_phone || CFG.store.support.phone || '',
+        weight,
+        weight ? 'oz' : '',
+        '', '', '', '',
+        (o.total_cents / 100).toFixed(2),
+        (o.currency || 'usd').toUpperCase(),
+        it.name || it.product_id || 'Book',
+        it.quantity || 1,
+        it.sku || '',
+        it.unit_amount_cents != null ? (it.unit_amount_cents / 100).toFixed(2) : '',
+        (o.currency || 'usd').toUpperCase()
+      ].map(csvCell).join(','));
+    }
+  }
+  return {
+    statusCode: 200,
+    headers: Object.assign({}, headers, {
+      'Content-Type': 'text/csv',
+      'Content-Disposition': 'attachment; filename="shippo-orders.csv"'
+    }),
+    body: lines.join('\r\n')
+  };
 }
 
 // Pirate Ship-compatible CSV. Weights/dims default from config, overridable per order.

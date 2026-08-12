@@ -144,11 +144,15 @@ Digital entitlements are configurable per product via `entitlements: { ebook, wo
 4. Open an order to: update fulfillment status, add internal notes, enter carrier/service/
    tracking/label cost, **Mark packed**, **Mark shipped** (sends the tracking email),
    **Resend confirmation**, **Resend digital downloads**.
-5. **Packing slips**: select rows → "Print selected packing slips" (or per-order). Print
-   dialog → letter size; there's an ink-saving toggle and automatic page breaks.
-6. **Pirate Ship**: "Pirate Ship CSV" downloads an import file for unfulfilled physical
-   orders (weights default from config; editable in Pirate Ship before buying labels).
-   After you buy/print the label, paste tracking back into the order and Mark shipped.
+5. **Packing slips**: select rows → "Print selected packing slips" (or per-order).
+   Print dialog → letter size with automatic page breaks.
+6. **Shippo**: "Shippo label CSV" downloads unfulfilled physical orders with the
+   recipient, full mailing address, order number, item title/quantity/SKU, email,
+   phone, price, and weight fields. Upload it in Shippo → Orders → Upload CSV,
+   map/save the fields once, then batch-create 4x6 labels.
+7. **Pirate Ship**: "Pirate Ship CSV" downloads an import file for unfulfilled physical
+   orders (weights default from config; editable before buying labels).
+8. After you buy/print the label, paste tracking back into the order and Mark shipped.
 
 Fulfillment states: Paid, Awaiting Fulfillment, Packing, Ready to Ship, Shipped,
 Delivered, Canceled, Refunded, Needs Attention.
@@ -167,7 +171,7 @@ Use Stripe test cards (`4242 4242 4242 4242`, any future date/CVC). With test ke
 - [ ] Hardcover/Combo → digital-delivery email with working, expiring links
 - [ ] Paperback-only buyer **cannot** reach a bonus file by editing the download URL
 - [ ] Thank-you email received; shipment email on "Mark shipped"; tracking link works
-- [ ] Packing slip prints (single + batch); Pirate Ship CSV opens correctly
+- [ ] Packing slip prints (single + batch); Shippo and Pirate Ship CSVs open correctly
 - [ ] Admin API rejects requests without the token
 - [ ] Mobile layout of `/books` looks right
 

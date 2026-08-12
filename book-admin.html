@@ -77,9 +77,10 @@
         <button class="primary" id="applyBtn">Filter</button>
       </div>
       <div class="row" style="margin-top:10px;">
-        <button id="slipsBtn">🖨 Print selected packing slips</button>
-        <button id="unfulfilledBtn">⬇ Export unfulfilled (CSV)</button>
-        <button class="gold" id="pirateBtn">🏴‍☠️ Pirate Ship CSV</button>
+        <button id="slipsBtn">Print selected packing slips</button>
+        <button id="unfulfilledBtn">Export unfulfilled CSV</button>
+        <button class="gold" id="shippoBtn">Shippo label CSV</button>
+        <button id="pirateBtn">Pirate Ship CSV</button>
         <span class="muted" id="count"></span>
       </div>
     </div>
@@ -88,9 +89,9 @@
       <table>
         <thead><tr>
           <th><input type="checkbox" id="selAll"></th>
-          <th>Order</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Fulfillment</th><th></th>
+          <th>Order</th><th>Date</th><th>Customer</th><th>Products</th><th>Ship To</th><th>Total</th><th>Payment</th><th>Fulfillment</th><th></th>
         </tr></thead>
-        <tbody id="rows"><tr><td colspan="9" class="muted">Loading…</td></tr></tbody>
+        <tbody id="rows"><tr><td colspan="10" class="muted">Loading…</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -128,7 +129,7 @@
 
     var current = [];
     async function load() {
-      el('rows').innerHTML = '<tr><td colspan="9" class="muted">Loading…</td></tr>';
+      el('rows').innerHTML = '<tr><td colspan="10" class="muted">Loading…</td></tr>';
       try {
         var d = await api('list', {
           search: el('q').value.trim() || undefined,
@@ -142,8 +143,8 @@
         current = d.orders || [];
         el('count').textContent = current.length + ' order(s)';
         el('rows').innerHTML = current.length ? current.map(rowHtml).join('') :
-          '<tr><td colspan="9" class="muted">No orders found.</td></tr>';
-      } catch (e) { el('rows').innerHTML = '<tr><td colspan="9" class="muted" style="color:#c0392b;">'+esc(e.message)+'</td></tr>'; }
+          '<tr><td colspan="10" class="muted">No orders found.</td></tr>';
+      } catch (e) { el('rows').innerHTML = '<tr><td colspan="10" class="muted" style="color:#c0392b;">'+esc(e.message)+'</td></tr>'; }
     }
 
     function rowHtml(o) {
@@ -154,12 +155,17 @@
         '<td><strong>'+esc(o.order_number)+'</strong></td>'+
         '<td>'+esc(date)+'</td>'+
         '<td>'+esc(o.customer_name||'')+'<br><span class="muted">'+esc(o.customer_email||'')+'</span></td>'+
-        '<td>'+tags.join(' ')+'</td>'+
+        '<td>'+esc(o.item_summary || tags.join(' ') || '')+'</td>'+
+        '<td>'+shipToShort(o.shipping_address)+'</td>'+
         '<td>'+money(o.total_cents)+'</td>'+
         '<td>'+esc(o.payment_status||'')+'</td>'+
         '<td>'+badge(o.fulfillment_status)+'</td>'+
         '<td><button data-id="'+esc(o.id)+'" class="openBtn">Open</button></td>'+
       '</tr>';
+    }
+    function shipToShort(a) {
+      if (!a) return '<span class="muted">Digital only</span>';
+      return esc([a.city, a.state].filter(Boolean).join(', '))+'<br><span class="muted">'+esc(a.postal_code||'')+'</span>';
     }
 
     function fillStates() {
@@ -253,9 +259,13 @@
     document.addEventListener('click', function(e){ var b=e.target.closest('.openBtn'); if(b) openOrder(b.getAttribute('data-id')); });
     el('slipsBtn').onclick = function(){ var ids=selectedIds(); if(!ids.length){alert('Select at least one order.');return;} window.open('packing-slip.html?ids='+ids.join(','), '_blank'); };
     el('unfulfilledBtn').onclick = async function(){ try{
-      var d = await api('export_unfulfilled'); var rows=[['Order','Date','Name','Email','Total','Fulfillment','Tracking']];
-      (d.orders||[]).forEach(function(o){ rows.push([o.order_number,new Date(o.created_at).toISOString().slice(0,10),o.customer_name,o.customer_email,(o.total_cents/100).toFixed(2),o.fulfillment_status,o.tracking_number||'']); });
+      var d = await api('export_unfulfilled'); var rows=[['Order','Date','Name','Email','Phone','Products','Address 1','Address 2','City','State','Postal Code','Country','Total','Fulfillment','Tracking']];
+      (d.orders||[]).forEach(function(o){ var a=o.shipping_address||{}; rows.push([o.order_number,new Date(o.created_at).toISOString().slice(0,10),o.customer_name,o.customer_email,o.customer_phone||'',o.item_summary||'',a.line1||'',a.line2||'',a.city||'',a.state||'',a.postal_code||'',a.country||'US',(o.total_cents/100).toFixed(2),o.fulfillment_status,o.tracking_number||'']); });
       downloadCsv('unfulfilled-orders.csv', toCsv(rows));
+    }catch(e){alert(e.message);} };
+    el('shippoBtn').onclick = async function(){ try{
+      var res = await api('shippo_csv', {}, true); var text = await res.text();
+      downloadCsv('shippo-orders.csv', text);
     }catch(e){alert(e.message);} };
     el('pirateBtn').onclick = async function(){ try{
       var res = await api('pirateship_csv', {}, true); var text = await res.text();
