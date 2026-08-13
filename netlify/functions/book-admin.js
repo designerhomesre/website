@@ -18,7 +18,6 @@ const crypto = require('crypto');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const S = require('./lib/books-shared');
 const mail = require('./lib/email');
-const bookWebhook = require('./book-stripe-webhook');
 const CFG = S.CFG;
 
 const FULFILLMENT_STATES = ['Paid', 'Awaiting Fulfillment', 'Packing', 'Ready to Ship',
@@ -198,7 +197,6 @@ async function exportUnfulfilled() {
 
 async function syncStripeOrders(body) {
   if (!process.env.STRIPE_SECRET_KEY) throw new Error('Stripe not configured');
-  if (typeof bookWebhook._handleCompleted !== 'function') throw new Error('Stripe sync unavailable');
 
   const limit = Math.min(100, parseInt(body.limit, 10) || 100);
   const sessions = await stripe.checkout.sessions.list({ limit });
@@ -212,15 +210,126 @@ async function syncStripeOrders(body) {
       continue;
     }
     try {
-      await bookWebhook._handleCompleted(session);
+      const existing = await S.sbSelect('book_orders', 'select=id&stripe_session_id=eq.' + esc(session.id) + '&limit=1');
+      if (existing && existing.length) {
+        skipped++;
+        continue;
+      }
+      await importStripeSession(session.id);
       imported++;
     } catch (err) {
-      if (err && err.__alreadyProcessed) skipped++;
-      else errors.push({ sessionId: session.id, error: err.message || 'sync_failed' });
+      errors.push({ sessionId: session.id, error: err.message || 'sync_failed' });
     }
   }
 
   return { ok: true, imported, skipped, errors };
+}
+
+async function importStripeSession(sessionId) {
+  const full = await stripe.checkout.sessions.retrieve(sessionId, {
+    expand: ['line_items', 'payment_intent', 'total_details.breakdown']
+  });
+  if (!full.metadata || full.metadata.kind !== 'book_order' || full.payment_status !== 'paid') return null;
+
+  let cart = [];
+  try { cart = JSON.parse((full.metadata && full.metadata.cart) || '[]'); } catch (e) {}
+  const computed = S.computeOrder(cart.map(function (c) { return { productId: c.p, quantity: c.q }; }));
+  if (computed.error) throw new Error('Book order recompute failed: ' + computed.error);
+
+  const cd = full.customer_details || {};
+  const ship = full.shipping_details || (cd.address ? { name: cd.name, address: cd.address } : null);
+  const shipAddr = ship && ship.address ? {
+    name: ship.name || cd.name || '',
+    line1: ship.address.line1 || '',
+    line2: ship.address.line2 || '',
+    city: ship.address.city || '',
+    state: ship.address.state || '',
+    postal_code: ship.address.postal_code || '',
+    country: ship.address.country || ''
+  } : null;
+  const ent = computed.entitlements;
+  const hasDigital = !!(ent.ebook || ent.workbookPdf);
+
+  let orderNumber;
+  try {
+    const seq = await S.sbRpc('next_book_order_seq', {});
+    orderNumber = S.orderNumberFromSeq(typeof seq === 'number' ? seq : (Array.isArray(seq) ? seq[0] : seq));
+  } catch (e) {
+    orderNumber = S.fallbackOrderNumber();
+  }
+
+  const orderRow = {
+    order_number: orderNumber,
+    customer_name: (shipAddr && shipAddr.name) || cd.name || '',
+    customer_email: cd.email || full.customer_email || '',
+    customer_phone: cd.phone || '',
+    shipping_address: shipAddr,
+    subtotal_cents: computed.subtotalCents,
+    shipping_cents: (full.total_details && full.total_details.amount_shipping) || computed.shippingCents || 0,
+    tax_cents: (full.total_details && full.total_details.amount_tax) || 0,
+    discount_cents: (full.total_details && full.total_details.amount_discount) || 0,
+    total_cents: full.amount_total,
+    currency: full.currency,
+    has_physical: !!computed.hasPhysical,
+    has_digital: hasDigital,
+    entitlement_ebook: !!ent.ebook,
+    entitlement_workbook_pdf: !!ent.workbookPdf,
+    stripe_session_id: full.id,
+    stripe_payment_intent: (full.payment_intent && full.payment_intent.id) || full.payment_intent || null,
+    payment_status: 'paid',
+    fulfillment_status: computed.hasPhysical ? 'Awaiting Fulfillment' : 'Paid',
+    digital_delivery_status: hasDigital ? 'pending' : 'not_applicable',
+    email_confirmation_status: 'pending'
+  };
+
+  const insertedRows = await S.sbInsert('book_orders', orderRow);
+  const inserted = Array.isArray(insertedRows) ? insertedRows[0] : insertedRows;
+  const orderId = inserted.id;
+  const itemRows = computed.resolved.map(function (r) {
+    return {
+      order_id: orderId,
+      product_id: r.productId,
+      sku: r.sku,
+      name: r.name,
+      format: r.format,
+      unit_amount_cents: r.unitAmountCents,
+      quantity: r.quantity,
+      physical: r.physical
+    };
+  });
+  if (itemRows.length) await S.sbInsert('book_order_items', itemRows, 'return=minimal');
+
+  async function grant(fileId) {
+    await S.sbInsert('book_digital_grants', {
+      order_id: orderId,
+      file_id: fileId,
+      token: S.makeDownloadToken(orderId, fileId),
+      request_count: 0
+    }, 'return=minimal');
+  }
+  if (ent.ebook) await grant('MEMOIR_EBOOK');
+  if (ent.workbookPdf) await grant('WORKBOOK_PDF');
+
+  const emailModel = Object.assign({}, inserted, {
+    _items: computed.resolved,
+    _hasPhysical: computed.hasPhysical,
+    _shipping: shipAddr
+  });
+  try {
+    const t = mail.thankYouEmail(emailModel);
+    const r = await mail.send(orderRow.customer_email, t.subject, t.html);
+    await S.sbUpdate('book_orders', 'id=eq.' + esc(orderId), {
+      email_confirmation_status: r && r.skipped ? 'skipped' : 'sent',
+      email_confirmation_at: new Date().toISOString()
+    });
+  } catch (e) { console.error('sync thank-you email failed:', e.message); }
+  try {
+    const adminEmail = process.env.BOOK_ADMIN_EMAIL || CFG.store.support.email;
+    const a = mail.adminOrderEmail(emailModel);
+    await mail.send(adminEmail, a.subject, a.html);
+  } catch (e) { console.error('sync admin email failed:', e.message); }
+
+  return inserted;
 }
 
 async function attachItems(orders) {
