@@ -49,6 +49,7 @@ exports.handler = async (event) => {
       case 'update_status':        return S.jsonResponse(200, await updateStatus(body), headers);
       case 'add_note':             return S.jsonResponse(200, await addNote(body), headers);
       case 'set_shipping':         return S.jsonResponse(200, await setShipping(body), headers);
+      case 'set_address':          return S.jsonResponse(200, await setAddress(body), headers);
       case 'mark_packed':          return S.jsonResponse(200, await markPacked(body), headers);
       case 'mark_shipped':         return S.jsonResponse(200, await markShipped(body), headers);
       case 'resend_confirmation':  return S.jsonResponse(200, await resendConfirmation(body), headers);
@@ -128,6 +129,14 @@ async function setShipping(body) {
   if (body.shipping_label_cost_cents != null) patch.shipping_label_cost_cents = parseInt(body.shipping_label_cost_cents, 10);
   if (body.ship_date) patch.ship_date = body.ship_date;
   const rows = await S.sbUpdate('book_orders', 'id=eq.' + esc(body.id), patch);
+  return { ok: true, order: rows[0] };
+}
+
+async function setAddress(body) {
+  if (!body.id || !body.shipping_address) throw new Error('id and shipping_address required');
+  const rows = await S.sbUpdate('book_orders', 'id=eq.' + esc(body.id), {
+    shipping_address: body.shipping_address
+  });
   return { ok: true, order: rows[0] };
 }
 
