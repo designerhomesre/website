@@ -128,13 +128,13 @@ async function sb(path, opts) {
   const supabaseUrl = process.env.SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_KEY;
   if (!supabaseUrl || !serviceKey) throw new Error('Supabase not configured');
-  const res = await fetch(supabaseUrl + path, Object.assign({
-    headers: Object.assign({
-      'Content-Type': 'application/json',
-      'apikey': serviceKey,
-      'Authorization': 'Bearer ' + serviceKey
-    }, (opts && opts.headers) || {})
-  }, opts || {}));
+  const fetchOpts = Object.assign({}, opts || {});
+  fetchOpts.headers = Object.assign({
+    'Content-Type': 'application/json',
+    'apikey': serviceKey,
+    'Authorization': 'Bearer ' + serviceKey
+  }, (opts && opts.headers) || {});
+  const res = await fetch(supabaseUrl + path, fetchOpts);
   const text = await res.text();
   let json = null; try { json = text ? JSON.parse(text) : null; } catch (e) { json = text; }
   if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + (typeof json === 'string' ? json : JSON.stringify(json)));
