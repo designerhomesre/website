@@ -38,7 +38,7 @@
   <main id="slips"></main>
   <script>
     'use strict';
-    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || '';
+    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || localStorage.getItem('dh-book-admin-token') || '';
     var ids = new URLSearchParams(location.search).get('ids') || '';
     ids = ids.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
     function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}

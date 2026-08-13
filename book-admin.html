@@ -78,6 +78,7 @@
       </div>
       <div class="row" style="margin-top:10px;">
         <button id="slipsBtn">Print selected packing slips</button>
+        <button id="syncBtn">Sync Stripe orders</button>
         <button id="unfulfilledBtn">Export unfulfilled CSV</button>
         <button class="gold" id="shippoBtn">Shippo label CSV</button>
         <button id="pirateBtn">Pirate Ship CSV</button>
@@ -104,7 +105,7 @@
 
   <script>
     'use strict';
-    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || '';
+    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || localStorage.getItem('dh-book-admin-token') || '';
     var STATES = [];
     function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
     function money(c){return '$'+(Number(c||0)/100).toFixed(2);}
@@ -247,17 +248,23 @@
     // Wire up
     el('tokenBtn').onclick = function(){
       var t = el('token').value.trim(); if(!t){ el('loginErr').textContent='Enter a token.'; return; }
-      TOKEN = t; sessionStorage.setItem('dh-book-admin-token', t);
+      TOKEN = t; sessionStorage.setItem('dh-book-admin-token', t); localStorage.setItem('dh-book-admin-token', t);
       api('list',{limit:1}).then(function(){ showApp(); }).catch(function(e){ el('loginErr').textContent=e.message; });
     };
     function showApp(){ el('login').style.display='none'; el('app').style.display=''; el('signout').style.display=''; load(); }
-    function signOut(){ sessionStorage.removeItem('dh-book-admin-token'); location.reload(); }
+    function signOut(){ sessionStorage.removeItem('dh-book-admin-token'); localStorage.removeItem('dh-book-admin-token'); location.reload(); }
     el('signout').onclick = function(e){ e.preventDefault(); signOut(); };
     el('applyBtn').onclick = load;
     el('q').addEventListener('keydown', function(e){ if(e.key==='Enter') load(); });
     el('selAll').onchange = function(e){ document.querySelectorAll('.selrow').forEach(function(c){c.checked=e.target.checked;}); };
     document.addEventListener('click', function(e){ var b=e.target.closest('.openBtn'); if(b) openOrder(b.getAttribute('data-id')); });
     el('slipsBtn').onclick = function(){ var ids=selectedIds(); if(!ids.length){alert('Select at least one order.');return;} window.open('packing-slip.html?ids='+ids.join(','), '_blank'); };
+    el('syncBtn').onclick = async function(){ try{
+      el('syncBtn').disabled = true; el('syncBtn').textContent = 'Syncing...';
+      var r = await api('sync_stripe_orders', { limit: 100 });
+      alert('Stripe sync complete. Imported '+r.imported+' order(s). Skipped '+r.skipped+'. Errors '+r.errors.length+'.');
+      load();
+    }catch(e){alert(e.message);} finally { el('syncBtn').disabled = false; el('syncBtn').textContent = 'Sync Stripe orders'; } };
     el('unfulfilledBtn').onclick = async function(){ try{
       var d = await api('export_unfulfilled'); var rows=[['Order','Date','Name','Email','Phone','Products','Address 1','Address 2','City','State','Postal Code','Country','Total','Fulfillment','Tracking']];
       (d.orders||[]).forEach(function(o){ var a=o.shipping_address||{}; rows.push([o.order_number,new Date(o.created_at).toISOString().slice(0,10),o.customer_name,o.customer_email,o.customer_phone||'',o.item_summary||'',a.line1||'',a.line2||'',a.city||'',a.state||'',a.postal_code||'',a.country||'US',(o.total_cents/100).toFixed(2),o.fulfillment_status,o.tracking_number||'']); });

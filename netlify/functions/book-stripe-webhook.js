@@ -211,3 +211,5 @@ async function handleCompleted(session) {
 
   console.log('Book order recorded:', orderNumber, orderId);
 }
+
+exports._handleCompleted = handleCompleted;

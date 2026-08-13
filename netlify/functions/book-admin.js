@@ -15,8 +15,10 @@
 'use strict';
 
 const crypto = require('crypto');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const S = require('./lib/books-shared');
 const mail = require('./lib/email');
+const bookWebhook = require('./book-stripe-webhook');
 const CFG = S.CFG;
 
 const FULFILLMENT_STATES = ['Paid', 'Awaiting Fulfillment', 'Packing', 'Ready to Ship',
@@ -52,6 +54,7 @@ exports.handler = async (event) => {
       case 'mark_shipped':         return S.jsonResponse(200, await markShipped(body), headers);
       case 'resend_confirmation':  return S.jsonResponse(200, await resendConfirmation(body), headers);
       case 'resend_digital':       return S.jsonResponse(200, await resendDigital(body), headers);
+      case 'sync_stripe_orders':   return S.jsonResponse(200, await syncStripeOrders(body), headers);
       case 'export_unfulfilled':   return S.jsonResponse(200, await exportUnfulfilled(), headers);
       case 'shippo_csv':           return await shippoCsv(body, headers);
       case 'pirateship_csv':       return await pirateShipCsv(body, headers);
@@ -191,6 +194,33 @@ async function exportUnfulfilled() {
     'select=*&has_physical=eq.true&fulfillment_status=in.(Paid,Awaiting Fulfillment,Packing,Ready to Ship)&order=created_at.asc');
   await attachItems(orders);
   return { orders: orders };
+}
+
+async function syncStripeOrders(body) {
+  if (!process.env.STRIPE_SECRET_KEY) throw new Error('Stripe not configured');
+  if (typeof bookWebhook._handleCompleted !== 'function') throw new Error('Stripe sync unavailable');
+
+  const limit = Math.min(100, parseInt(body.limit, 10) || 100);
+  const sessions = await stripe.checkout.sessions.list({ limit });
+  let imported = 0;
+  let skipped = 0;
+  const errors = [];
+
+  for (const session of (sessions.data || [])) {
+    if (!session.metadata || session.metadata.kind !== 'book_order' || session.payment_status !== 'paid') {
+      skipped++;
+      continue;
+    }
+    try {
+      await bookWebhook._handleCompleted(session);
+      imported++;
+    } catch (err) {
+      if (err && err.__alreadyProcessed) skipped++;
+      else errors.push({ sessionId: session.id, error: err.message || 'sync_failed' });
+    }
+  }
+
+  return { ok: true, imported, skipped, errors };
 }
 
 async function attachItems(orders) {
