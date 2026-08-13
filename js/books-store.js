@@ -72,7 +72,7 @@
   function priceHtml(p) {
     var price = CFG.formatPrice(p.priceCents);
     if (price && p.published) return '<div class="books-card-price">' + price + '</div>';
-    return '<div class="books-card-price"><span class="bk-soon">Pricing coming soon</span></div>';
+    return '<div class="books-card-price"><span class="bk-soon">Not available</span></div>';
   }
 
   function includesHtml(p) {
@@ -88,8 +88,8 @@
     var featured = p.featured ? ' books-card--featured' : '';
     var cover = p.coverImage
       ? '<img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || p.shortName) + '" width="300" height="200" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
-        '<span class="bk-ph" style="display:none;">Cover artwork<br>coming soon</span>'
-      : '<span class="bk-ph">Cover artwork<br>coming soon</span>';
+        '<span class="bk-ph" style="display:none;">Cover artwork<br>unavailable</span>'
+      : '<span class="bk-ph">Cover artwork<br>unavailable</span>';
 
     var digitalNote = (p.entitlements && (p.entitlements.ebook || p.entitlements.workbookPdf))
       ? '<p class="books-shipnote">★ Includes complimentary digital bonus' +
@@ -108,7 +108,7 @@
 
     var btn = purchasable
       ? '<button class="btn btn-primary books-buy" data-product="' + esc(p.id) + '">Add to Order</button>'
-      : '<button class="btn btn-primary" disabled aria-disabled="true" title="Not yet available for purchase">Coming Soon</button>';
+      : '<button class="btn btn-primary" disabled aria-disabled="true" title="Not available for purchase">Not Available</button>';
 
     return '' +
       '<article class="books-card' + featured + '" aria-labelledby="prod-' + esc(p.id) + '">' +
