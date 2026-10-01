@@ -1,0 +1,8 @@
+# Internal docs & working files — never deploy to the public site.
+DHRES-*
+*.docx
+*.md
+scripts/
+supabase/
+netlify/functions/node_modules/
+.env*

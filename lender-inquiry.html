@@ -18,6 +18,7 @@
   <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
 
   <!-- Favicon -->
+  <link rel="canonical" href="https://designerhomesre.com/lender-inquiry.html">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
   <!-- Google Fonts -->
@@ -41,13 +42,13 @@
 
       <ul class="nav-menu">
         <li class="nav-item">
-          <a href="index.html" class="nav-link">Home</a>
+          <a href="/" class="nav-link">Home</a>
         </li>
         <li class="nav-item">
           <a href="about.html" class="nav-link">About</a>
         </li>
         <li class="nav-item">
-          <a href="books.html" class="nav-link">Books</a>
+          <a href="/books" class="nav-link">Books</a>
         </li>
         <li class="nav-item dropdown">
           <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
@@ -109,7 +110,7 @@
           <div>
             <h2 class="section-title">Reliable Appraisal Services for Lenders</h2>
             <p style="font-size: var(--font-size-lg); line-height: var(--line-height-relaxed); color: var(--color-medium-text);">
-              Designer Homes Real Estate Services provides reliable, high-quality appraisal services for lending institutions throughout the Triangle region of North Carolina. If you are a lender, AMC, or institution looking to add a qualified appraiser to your panel, please complete the form below.
+              Designer Homes Real Estate Services provides reliable, high-quality appraisal services for lending institutions throughout the Triangle region of North Carolina. If you are a lender, AMC, or institution looking to add a qualified appraiser to your panel, please complete the form below. Designer Homes is <strong>UAD 3.6 ready</strong> — our lender reports are delivered on the redesigned Uniform Residential Appraisal Report (URAR) that Fannie Mae and Freddie Mac now require, so your panel stays compliant through the transition.
             </p>
           </div>
 
@@ -132,6 +133,11 @@
                 <strong>NCDOR Real Property Appraiser I</strong>
               </p>
 
+              <p style="margin-bottom: 0.75rem;">
+                <strong>UAD 3.6 / Redesigned URAR Ready</strong><br>
+                Fannie Mae &amp; Freddie Mac dynamic-form reporting
+              </p>
+
               <hr style="border: none; border-top: 1px solid var(--color-border); margin: 1.5rem 0;">
 
               <p style="margin-bottom: 0.5rem;"><strong>Service Area:</strong> Triangle Region, NC</p>
@@ -148,7 +154,7 @@
         <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Lender Inquiry Form</h2>
 
         <div style="max-width: 700px; margin: 0 auto;">
-          <form id="lender-inquiry-form" name="lender-inquiry" class="inquiry-form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <form id="lender-inquiry-form" name="lender-inquiry" class="inquiry-form" method="POST" action="/api/inquiry">
             <input type="hidden" name="form-name" value="lender-inquiry">
             <input type="hidden" name="bot-field">
             <!-- Company/Institution Name -->
@@ -418,7 +424,7 @@
         <div class="footer-column">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="/" class="footer-link">Home</a></li>
             <li><a href="about.html" class="footer-link">About</a></li>
             <li><a href="services.html" class="footer-link">Services</a></li>
             <li><a href="service-area.html" class="footer-link">Service Area</a></li>
@@ -433,9 +439,9 @@
           <ul>
             <li><a href="measurement-services.html" class="footer-link">Home Measurements</a></li>
             <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
-            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
-            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
-            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">FHA Appraisals</a></li>
             <li><a href="services.html#mass-appraisal" class="footer-link">Mass Appraisal</a></li>
             <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
           </ul>
@@ -636,7 +642,7 @@
       }
     }
 
-    // ===== Form Submission Handler (Netlify Forms) =====
+    // ===== Form Submission Handler (/api/inquiry → email via Resend) =====
     const form = document.getElementById('lender-inquiry-form');
     if (form) {
       form.addEventListener('submit', function(e) {
@@ -644,17 +650,21 @@
 
         const formData = new FormData(form);
 
-        fetch('/', {
+        const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; }
+        fetch('/api/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(formData).toString()
         })
+        .then(r => r.json().then(data => { if (!r.ok || !data.ok) throw new Error(data.error || 'Send failed'); }))
         .then(() => {
           form.style.display = 'none';
           document.getElementById('success-message').style.display = 'block';
           document.getElementById('success-message').scrollIntoView({ behavior: 'smooth', block: 'center' });
         })
         .catch((err) => {
+          if (submitBtn) { submitBtn.disabled = false; }
           console.error('Form submission error:', err);
           alert('There was an error submitting your inquiry. Please try again or email us directly at info@designerhomesre.com');
         });

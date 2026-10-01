@@ -61,6 +61,12 @@
     // Low-inventory threshold used for "Only N left" badges.
     lowInventoryThreshold: 5,
 
+    // External retailer links shown on the storefront hero ("Also available on …").
+    // Leave url null to hide. Fill in the Amazon detail-page URL when available.
+    retailers: [
+      { name: 'Amazon', url: null } // __PLACEHOLDER__ e.g. 'https://www.amazon.com/dp/XXXXXXXXXX'
+    ],
+
     // Support contact shown across the storefront / emails.
     support: {
       email: 'info@designerhomesre.com',

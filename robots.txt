@@ -1,6 +1,15 @@
 User-agent: *
 Allow: /
 Disallow: /app/
-Disallow: /admin.html
 Disallow: /admin
+Disallow: /admin.html
+Disallow: /portal
+Disallow: /portal.html
+Disallow: /book-admin
+Disallow: /book-admin.html
+Disallow: /packing-slip.html
+Disallow: /books-success.html
+Disallow: /api/
+Disallow: /DHRES-
+
 Sitemap: https://designerhomesre.com/sitemap.xml

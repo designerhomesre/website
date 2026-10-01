@@ -51,6 +51,16 @@
     }).join('');
   }
 
+  // ---- 2b. External retailers (e.g. Amazon) — shown only when a URL is configured ----
+  var retail = document.getElementById('books-retailers');
+  var retailers = (CFG.store.retailers || []).filter(function (r) { return r && r.url; });
+  if (retail && retailers.length) {
+    retail.innerHTML = 'Also available on ' + retailers.map(function (r) {
+      return '<a href="' + esc(r.url) + '" rel="noopener" target="_blank">' + esc(r.name) + '</a>';
+    }).join(', ') + '.';
+    retail.hidden = false;
+  }
+
   // ---- 3. Processing notice (exact required language) ----
   var proc = document.getElementById('books-processing-notice');
   if (proc) proc.textContent = CFG.store.processingNotice;
@@ -206,7 +216,9 @@
       isbn: memoir && memoir.isbn ? memoir.isbn : undefined
     };
     if (offers.length) ld.offers = offers;
+    // books.html now ships static JSON-LD in <head> (richer: editions, workbook, FAQ).
+    // Only inject the dynamic fallback when no static block exists.
     var tag = document.getElementById('books-jsonld');
-    if (tag) tag.textContent = JSON.stringify(ld);
+    if (tag && !tag.textContent.trim()) tag.textContent = JSON.stringify(ld);
   } catch (e) { /* non-fatal */ }
 })();
