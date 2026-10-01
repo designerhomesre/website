@@ -18,6 +18,7 @@
   <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
 
   <!-- Favicon -->
+  <link rel="canonical" href="https://designerhomesre.com/quote.html">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
   <!-- Google Fonts -->
@@ -665,13 +666,13 @@
 
       <ul class="nav-menu">
         <li class="nav-item">
-          <a href="index.html" class="nav-link">Home</a>
+          <a href="/" class="nav-link">Home</a>
         </li>
         <li class="nav-item">
           <a href="about.html" class="nav-link">About</a>
         </li>
         <li class="nav-item">
-          <a href="books.html" class="nav-link">Books</a>
+          <a href="/books" class="nav-link">Books</a>
         </li>
         <li class="nav-item dropdown">
           <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
@@ -751,7 +752,9 @@
 
       <!-- Form -->
       <div class="form-card">
-        <form id="quote-form" name="quote-form" method="POST" action="https://formspree.io/f/xqegpjek">
+        <form id="quote-form" name="quote-form" method="POST" action="/api/inquiry">
+          <input type="hidden" name="form-name" value="quote-form">
+          <p class="hidden" style="position:absolute;left:-9999px;" aria-hidden="true"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
           <!-- STEP 1: About You -->
           <div class="form-step active" data-step="1">
@@ -1183,7 +1186,7 @@
         <div class="footer-column">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="/" class="footer-link">Home</a></li>
             <li><a href="about.html" class="footer-link">About</a></li>
             <li><a href="services.html" class="footer-link">Services</a></li>
             <li><a href="service-area.html" class="footer-link">Service Area</a></li>
@@ -1198,9 +1201,9 @@
           <ul>
             <li><a href="measurement-services.html" class="footer-link">Home Measurements</a></li>
             <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
-            <li><a href="services.html#divorce-appraisals" class="footer-link">Divorce Appraisals</a></li>
-            <li><a href="services.html#estate-appraisals" class="footer-link">Estate Appraisals</a></li>
-            <li><a href="services.html#fha-appraisals" class="footer-link">FHA Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">Divorce Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">Estate Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">FHA Appraisals</a></li>
             <li><a href="services.html#mass-appraisal" class="footer-link">Mass Appraisal</a></li>
             <li><a href="lender-inquiry.html" class="footer-link">Lender Inquiry</a></li>
           </ul>
@@ -1465,24 +1468,28 @@
       document.getElementById('reference-number').textContent = refNumber;
       document.getElementById('confirm-email').textContent = document.getElementById('email').value;
 
-      // Show success message
-      reviewContent.style.display = 'none';
-      successMessage.classList.add('show');
-
-      // Submit form to Netlify
+      // Submit to /api/inquiry (emails the office via Resend). Only show the
+      // success panel once the server confirms delivery.
       const formData = new FormData(form);
-      fetch('/', {
+      formData.set('reference_number', refNumber);
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true; submitBtn.textContent = 'Sending…';
+      fetch('/api/inquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData).toString()
       })
-      .then(() => console.log('Form submitted successfully'))
-      .catch(err => console.error('Form submission error:', err));
-
-      // Scroll to success message
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
+      .then(r => r.json().then(data => { if (!r.ok || !data.ok) throw new Error(data.error || 'Send failed'); }))
+      .then(() => {
+        reviewContent.style.display = 'none';
+        successMessage.classList.add('show');
+        setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 100);
+      })
+      .catch(err => {
+        console.error('Form submission error:', err);
+        submitBtn.disabled = false; submitBtn.textContent = originalLabel;
+        alert('There was an error sending your quote request. Please try again, or email us directly at info@designerhomesre.com or call (973) 725-9580.');
+      });
     }
 
     // ===== Mobile Navigation Toggle =====

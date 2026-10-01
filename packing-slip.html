@@ -4,132 +4,79 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Packing Slips — Designer Homes</title>
+  <title>Packing Slips - Designer Homes</title>
   <style>
-    :root { --ink:#2C3E50; --gold:#C9A96E; --muted:#6c757d; --line:#dcdfe3; }
     * { box-sizing: border-box; }
-    body { font-family: -apple-system, Segoe UI, Arial, sans-serif; color: var(--ink); margin: 0; background:#eceef1; }
-    .toolbar { position: sticky; top:0; background:#fff; border-bottom:1px solid var(--line); padding:12px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .toolbar button, .toolbar a.btn { font:inherit; padding:8px 14px; border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; text-decoration:none; }
-    .toolbar .primary { background: var(--ink); color:#fff; border-color: var(--ink); }
-    .toolbar label { font-size:14px; color:var(--muted); display:flex; align-items:center; gap:6px; }
-    .sheets { max-width: 8.5in; margin: 16px auto; }
-    .slip {
-      background:#fff; width: 8.5in; min-height: 10.6in; padding: 0.6in; margin: 0 auto 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.08); position: relative;
-    }
-    .slip-head { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--ink); padding-bottom:12px; }
-    .brand { font-size:18px; font-weight:700; }
-    .brand small { display:block; font-weight:400; color:var(--muted); font-size:12px; }
-    .slip-meta { text-align:right; font-size:13px; color:var(--muted); }
-    .slip-meta strong { color:var(--ink); font-size:15px; }
-    .cols { display:flex; gap:24px; margin-top:16px; }
-    .col { flex:1; }
-    .col h3 { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; }
-    .addr { font-size:15px; line-height:1.5; }
-    table.items { width:100%; border-collapse:collapse; margin-top:18px; }
-    table.items th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); border-bottom:1px solid var(--line); padding:6px 4px; }
-    table.items td { padding:8px 4px; border-bottom:1px solid var(--line); font-size:14px; vertical-align:top; }
-    .chk { width:18px; height:18px; border:2px solid var(--ink); border-radius:4px; display:inline-block; }
-    .digital-note { margin-top:14px; padding:10px 12px; border:1px dashed var(--gold); border-radius:8px; font-size:13px; color:#8a6d3b; background:#fdf9ee; }
-    .note-box { margin-top:16px; }
-    .note-box .label { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
-    .note-box .val { border:1px solid var(--line); border-radius:6px; padding:8px; min-height:36px; font-size:14px; }
-    .admin-note { background:#fff7f0; }
-    .thanks { margin-top:20px; font-style:italic; color:var(--ink); }
-    .foot { position:absolute; bottom:0.5in; left:0.6in; right:0.6in; font-size:11px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px; }
-    .empty { text-align:center; padding:40px; color:var(--muted); }
-    /* Ink-saving mode */
-    body.ink-saver .slip-head { border-color:#999; }
-    body.ink-saver .brand small, body.ink-saver .digital-note { color:#555; background:#fff; border-color:#bbb; }
+    body { margin: 0; font-family: Arial, sans-serif; color: #1f2d3d; background: #f4f5f7; }
+    header { padding: 12px 18px; background: #2C3E50; color: #fff; display: flex; gap: 10px; align-items: center; }
+    header strong { flex: 1; }
+    button { border: 1px solid #d8dde3; border-radius: 6px; padding: 7px 12px; background: #fff; cursor: pointer; }
+    #msg { max-width: 900px; margin: 18px auto; color: #6c757d; }
+    .slip { width: 8.5in; min-height: 11in; margin: 18px auto; padding: .5in; background: #fff; border: 1px solid #ddd; page-break-after: always; }
+    .top { display: flex; justify-content: space-between; gap: 20px; border-bottom: 2px solid #2C3E50; padding-bottom: 14px; }
+    .brand { font-weight: 700; font-size: 20px; color: #2C3E50; }
+    .order { text-align: right; }
+    h2 { margin: 18px 0 8px; font-size: 15px; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .addr { line-height: 1.45; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { padding: 9px 6px; border-bottom: 1px solid #e5e8ec; text-align: left; }
+    th { font-size: 12px; color: #6c757d; text-transform: uppercase; }
+    .check { width: 36px; font-size: 22px; }
+    .muted { color: #6c757d; font-size: 13px; }
+    .footer { margin-top: 30px; border-top: 1px solid #e5e8ec; padding-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     @media print {
-      .toolbar { display:none; }
-      body { background:#fff; }
-      .sheets { margin:0; max-width:none; }
-      .slip { box-shadow:none; margin:0; page-break-after: always; width:auto; min-height:auto; }
-      .slip:last-child { page-break-after: auto; }
-      @page { size: letter; margin: 0.4in; }
+      header, #msg { display: none; }
+      body { background: #fff; }
+      .slip { margin: 0; border: 0; width: auto; min-height: 10in; }
     }
   </style>
 </head>
 <body>
-  <div class="toolbar">
-    <button class="primary" onclick="window.print()">🖨 Print</button>
-    <label><input type="checkbox" id="inkSaver"> Ink-saving mode</label>
-    <a class="btn" href="book-admin.html">← Back to orders</a>
-    <span id="status" style="color:var(--muted);font-size:13px;"></span>
-  </div>
-  <div class="sheets" id="sheets"><div class="empty">Loading packing slips…</div></div>
-
+  <header><strong>Designer Homes Packing Slips</strong><button onclick="window.print()">Print</button></header>
+  <div id="msg">Loading selected orders...</div>
+  <main id="slips"></main>
   <script>
     'use strict';
-    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || '';
-    var params = new URLSearchParams(location.search);
-    var ids = (params.get('ids') || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-
-    document.getElementById('inkSaver').addEventListener('change', function (e) {
-      document.body.classList.toggle('ink-saver', e.target.checked);
-    });
-
+    var TOKEN = sessionStorage.getItem('dh-book-admin-token') || localStorage.getItem('dh-book-admin-token') || '';
+    var ids = new URLSearchParams(location.search).get('ids') || '';
+    ids = ids.split(',').map(function (x) { return x.trim(); }).filter(Boolean);
     function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-
+    function money(c){return '$'+(Number(c||0)/100).toFixed(2);}
     async function api(action, payload) {
       var res = await fetch('/api/book-admin', {
-        method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN },
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN },
         body: JSON.stringify(Object.assign({ action: action }, payload||{}))
       });
-      if (!res.ok) throw new Error('Request failed ('+res.status+')');
+      if (!res.ok) throw new Error(res.status === 401 ? 'Admin token required. Open book-admin.html first and log in.' : 'Could not load order.');
       return res.json();
     }
-
-    function slipHtml(o) {
-      var a = o.shipping_address || {};
-      var date = new Date(o.created_at).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-      var phys = (o._items||[]).filter(function(i){return i.physical;});
-      var digital = (o._items||[]).filter(function(i){return !i.physical;});
-      var digitalEnt = [];
-      if (o.entitlement_ebook) digitalEnt.push('Memoir e-book');
-      if (o.entitlement_workbook_pdf) digitalEnt.push('Fillable workbook PDF');
-
-      var itemRows = phys.map(function(i){
-        return '<tr><td><span class="chk"></span></td><td>'+esc(i.name)+'</td><td>'+esc(i.format)+'</td><td style="text-align:center;">'+i.quantity+'</td></tr>';
-      }).join('') || '<tr><td colspan="4" style="color:var(--muted);">No physical items to pack.</td></tr>';
-
-      return '<div class="slip">'+
-        '<div class="slip-head">'+
-          '<div class="brand">Designer Homes Real Estate Services<small>Durham, NC · info@designerhomesre.com</small></div>'+
-          '<div class="slip-meta"><strong>'+esc(o.order_number)+'</strong><br>'+esc(date)+'</div>'+
-        '</div>'+
-        '<div class="cols">'+
-          '<div class="col"><h3>Ship To</h3><div class="addr">'+
-            esc(a.name||o.customer_name||'')+'<br>'+esc(a.line1||'')+(a.line2?'<br>'+esc(a.line2):'')+'<br>'+
-            esc([a.city,a.state].filter(Boolean).join(', '))+' '+esc(a.postal_code||'')+'<br>'+esc(a.country||'')+
-          '</div></div>'+
-          '<div class="col"><h3>Contact</h3><div class="addr">'+esc(o.customer_email||'')+'</div></div>'+
-        '</div>'+
-        '<table class="items"><thead><tr><th>✓</th><th>Item</th><th>Format</th><th>Qty</th></tr></thead><tbody>'+itemRows+'</tbody></table>'+
-        (digitalEnt.length ? '<div class="digital-note"><strong>Digital items (do not pack):</strong> '+esc(digitalEnt.join(', '))+' — delivered by email.</div>' : '')+
-        (o._customer_note ? '<div class="note-box"><div class="label">Customer note</div><div class="val">'+esc(o._customer_note)+'</div></div>' : '')+
-        (o.admin_notes ? '<div class="note-box"><div class="label">Internal note (admin only)</div><div class="val admin-note">'+esc(o.admin_notes)+'</div></div>' : '')+
-        '<div class="thanks">Thank you for supporting this milestone. — Designer Homes Real Estate Services</div>'+
-        '<div class="foot">Packing slip · '+esc(o.order_number)+' · This document intentionally omits payment details.</div>'+
-      '</div>';
+    function address(a) {
+      if (!a) return '<span class="muted">No shipping address</span>';
+      return '<div class="addr">'+esc(a.name||'')+'<br>'+esc(a.line1||'')+(a.line2?'<br>'+esc(a.line2):'')+'<br>'+esc([a.city,a.state].filter(Boolean).join(', '))+' '+esc(a.postal_code||'')+'<br>'+esc(a.country||'')+'</div>';
     }
-
+    function slip(o) {
+      var items = (o._items||[]).map(function (it) {
+        return '<tr><td class="check">&#9633;</td><td>'+esc(it.name||it.product_id)+'</td><td>'+esc(it.sku||'')+'</td><td>'+Number(it.quantity||1)+'</td></tr>';
+      }).join('');
+      return '<section class="slip">'+
+        '<div class="top"><div><div class="brand">Designer Homes Real Estate Services</div><div class="muted">Pride, Property & Power Book Order</div></div><div class="order"><strong>'+esc(o.order_number)+'</strong><br><span class="muted">'+new Date(o.created_at).toLocaleDateString()+'</span></div></div>'+
+        '<div class="grid"><div><h2>Ship To</h2>'+address(o.shipping_address)+'</div><div><h2>Customer</h2>'+esc(o.customer_name||'')+'<br>'+esc(o.customer_email||'')+'<br>'+esc(o.customer_phone||'')+'</div></div>'+
+        '<h2>Items To Pack</h2><table><thead><tr><th></th><th>Item</th><th>SKU</th><th>Qty</th></tr></thead><tbody>'+items+'</tbody></table>'+
+        '<div class="footer"><div><h2>Fulfillment</h2>Status: '+esc(o.fulfillment_status||'')+'<br>Carrier: '+esc(o.shipping_carrier||'')+'<br>Tracking: '+esc(o.tracking_number||'')+'</div><div><h2>Order Total</h2>Subtotal '+money(o.subtotal_cents)+'<br>Shipping '+money(o.shipping_cents)+'<br><strong>Total '+money(o.total_cents)+'</strong></div></div>'+
+        (o.admin_notes?'<h2>Notes</h2><p>'+esc(o.admin_notes)+'</p>':'')+
+      '</section>';
+    }
     (async function () {
-      var sheets = document.getElementById('sheets');
-      if (!TOKEN) { sheets.innerHTML = '<div class="empty">No admin session. Open this from the order dashboard.</div>'; return; }
-      if (!ids.length) { sheets.innerHTML = '<div class="empty">No orders selected. Add ?ids=ORDER_ID,ORDER_ID to the URL.</div>'; return; }
       try {
-        var out = [];
-        for (var i=0;i<ids.length;i++){
-          var d = await api('get', { id: ids[i] });
-          out.push(slipHtml(d.order));
-        }
-        sheets.innerHTML = out.join('');
-        document.getElementById('status').textContent = ids.length + ' slip(s) ready';
+        if (!ids.length) throw new Error('No orders selected.');
+        var orders = [];
+        for (const id of ids) orders.push((await api('get', { id: id })).order);
+        document.getElementById('slips').innerHTML = orders.map(slip).join('');
+        document.getElementById('msg').textContent = orders.length + ' packing slip(s) ready.';
       } catch (e) {
-        sheets.innerHTML = '<div class="empty">Could not load orders: '+esc(e.message)+'</div>';
+        document.getElementById('msg').textContent = e.message;
       }
     })();
   </script>

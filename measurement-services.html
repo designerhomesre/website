@@ -15,6 +15,7 @@
   <meta property="og:description" content="Professional ANSI-standard home measurements starting at $165. Licensed appraiser, floor plans with GLA, 24–48 hour turnaround. Serving Durham and the Triangle.">
   <meta property="og:image" content="https://designerhomesre.com/og-image.jpg">
 
+  <link rel="canonical" href="https://designerhomesre.com/measurement-services.html">
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,25 +27,25 @@
   <!-- HEADER -->
   <header>
     <nav>
-      <a href="index.html" class="logo" aria-label="Designer Homes Home">
+      <a href="/" class="logo" aria-label="Designer Homes Home">
         <img src="/images/logo-light.svg" alt="Designer Homes Real Estate Services" class="logo-img" width="220" height="48">
       </a>
       <ul class="nav-menu">
-        <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
         <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
         <li class="nav-item dropdown">
           <button class="nav-link dropdown-toggle" aria-label="Services menu">Services</button>
           <ul class="dropdown-menu">
             <li><a href="services.html" class="dropdown-item">All Services</a></li>
             <li><a href="measurement-services.html" class="dropdown-item">Home Measurements</a></li>
-            <li><a href="services.html#private" class="dropdown-item">Private Appraisals</a></li>
-            <li><a href="services.html#lender" class="dropdown-item">Lender Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="dropdown-item">Private Appraisals</a></li>
+            <li><a href="services.html#lender-appraisals" class="dropdown-item">Lender Appraisals</a></li>
             <li><a href="services.html#consulting" class="dropdown-item">Consulting</a></li>
             <li><a href="lender-inquiry.html" class="dropdown-item">Lender / Panel Inquiry</a></li>
           </ul>
         </li>
         <li class="nav-item"><a href="service-area.html" class="nav-link">Service Area</a></li>
-        <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+        <li class="nav-item"><a href="/books" class="nav-link">Books</a></li>
         <li class="nav-item"><a href="reviews.html" class="nav-link">Reviews</a></li>
         <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
         <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
@@ -186,7 +187,7 @@
         </div>
 
         <div class="ms-form-wrapper">
-          <form class="ms-form" id="measurementForm" netlify name="measurement-quote" method="POST" data-netlify="true">
+          <form class="ms-form" id="measurementForm" name="measurement-quote" method="POST" action="/api/inquiry">
             <input type="hidden" name="form-name" value="measurement-quote">
 
             <div class="ms-form-grid">
@@ -261,7 +262,7 @@
         <div class="footer-column">
           <h3>Company</h3>
           <ul>
-            <li><a href="index.html" class="footer-link">Home</a></li>
+            <li><a href="/" class="footer-link">Home</a></li>
             <li><a href="about.html" class="footer-link">About</a></li>
             <li><a href="services.html" class="footer-link">Services</a></li>
             <li><a href="service-area.html" class="footer-link">Service Area</a></li>
@@ -273,11 +274,11 @@
           <h3>Services</h3>
           <ul>
             <li><a href="measurement-services.html" class="footer-link">Home Measurements</a></li>
-            <li><a href="services.html#private" class="footer-link">Private Appraisals</a></li>
-            <li><a href="services.html#lender" class="footer-link">Lender Appraisals</a></li>
+            <li><a href="services.html#private-appraisals" class="footer-link">Private Appraisals</a></li>
+            <li><a href="services.html#lender-appraisals" class="footer-link">Lender Appraisals</a></li>
             <li><a href="services.html#consulting" class="footer-link">Consulting</a></li>
-            <li><a href="services.html#tax" class="footer-link">Tax Appeals</a></li>
-            <li><a href="services.html#mass" class="footer-link">Mass Appraisal</a></li>
+            <li><a href="services.html#tax-appeals" class="footer-link">Tax Appeals</a></li>
+            <li><a href="services.html#mass-appraisal" class="footer-link">Mass Appraisal</a></li>
           </ul>
         </div>
         <div class="footer-column">
@@ -375,9 +376,31 @@
     const form = document.getElementById('measurementForm');
     if (form) {
       form.addEventListener('submit', function(e) {
+        e.preventDefault();
         const btn = form.querySelector('button[type="submit"]');
+        const label = btn.textContent;
         btn.textContent = 'Submitting...';
         btn.disabled = true;
+        fetch('/api/inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString()
+        })
+        .then(r => r.json().then(data => { if (!r.ok || !data.ok) throw new Error(data.error || 'Send failed'); }))
+        .then(() => {
+          const done = document.createElement('div');
+          done.className = 'ms-form-success';
+          done.setAttribute('role', 'status');
+          done.innerHTML = '<h3 style="margin-bottom:.5rem;">Measurement Request Received</h3>' +
+            '<p>Thank you — we will confirm scheduling within one business day. Need it sooner? Call <a href="tel:+19737259580">(973) 725-9580</a>.</p>';
+          form.replaceWith(done);
+          done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        })
+        .catch(err => {
+          console.error('Form submission error:', err);
+          btn.textContent = label; btn.disabled = false;
+          alert('There was an error sending your request. Please try again or email info@designerhomesre.com.');
+        });
       });
     }
   </script>

@@ -11,9 +11,6 @@ const crypto = require('crypto');
 // Bundled by esbuild from the repo's single source of truth:
 const CFG = require('../../../js/books-config.js');
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-
 // ---------------------------------------------------------------------------
 // Pricing — computed ONLY from config, never from the browser payload.
 // ---------------------------------------------------------------------------
@@ -128,14 +125,16 @@ function verifyDownloadToken(orderId, fileId, token) {
 // Supabase REST helpers (service role — server only).
 // ---------------------------------------------------------------------------
 async function sb(path, opts) {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) throw new Error('Supabase not configured');
-  const res = await fetch(SUPABASE_URL + path, Object.assign({
-    headers: Object.assign({
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_SERVICE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_SERVICE_KEY
-    }, (opts && opts.headers) || {})
-  }, opts || {}));
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_KEY;
+  if (!supabaseUrl || !serviceKey) throw new Error('Supabase not configured');
+  const fetchOpts = Object.assign({}, opts || {});
+  fetchOpts.headers = Object.assign({
+    'Content-Type': 'application/json',
+    'apikey': serviceKey,
+    'Authorization': 'Bearer ' + serviceKey
+  }, (opts && opts.headers) || {});
+  const res = await fetch(supabaseUrl + path, fetchOpts);
   const text = await res.text();
   let json = null; try { json = text ? JSON.parse(text) : null; } catch (e) { json = text; }
   if (!res.ok) throw new Error('Supabase ' + res.status + ': ' + (typeof json === 'string' ? json : JSON.stringify(json)));
@@ -163,12 +162,13 @@ async function sbRpc(fn, args) {
 }
 // Create a short-lived signed URL for a PRIVATE storage object.
 async function sbSignedUrl(bucket, objectPath, expiresInSec) {
+  const supabaseUrl = process.env.SUPABASE_URL;
   const json = await sb('/storage/v1/object/sign/' + bucket + '/' + objectPath, {
     method: 'POST',
     body: JSON.stringify({ expiresIn: expiresInSec || 900 })
   });
   // Returns { signedURL: '/object/sign/...?token=...' }
-  return SUPABASE_URL + '/storage/v1' + json.signedURL;
+  return supabaseUrl + '/storage/v1' + json.signedURL;
 }
 
 // ---------------------------------------------------------------------------

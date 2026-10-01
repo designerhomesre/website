@@ -51,6 +51,16 @@
     }).join('');
   }
 
+  // ---- 2b. External retailers (e.g. Amazon) — shown only when a URL is configured ----
+  var retail = document.getElementById('books-retailers');
+  var retailers = (CFG.store.retailers || []).filter(function (r) { return r && r.url; });
+  if (retail && retailers.length) {
+    retail.innerHTML = 'Also available on ' + retailers.map(function (r) {
+      return '<a href="' + esc(r.url) + '" rel="noopener" target="_blank">' + esc(r.name) + '</a>';
+    }).join(', ') + '.';
+    retail.hidden = false;
+  }
+
   // ---- 3. Processing notice (exact required language) ----
   var proc = document.getElementById('books-processing-notice');
   if (proc) proc.textContent = CFG.store.processingNotice;
@@ -72,7 +82,7 @@
   function priceHtml(p) {
     var price = CFG.formatPrice(p.priceCents);
     if (price && p.published) return '<div class="books-card-price">' + price + '</div>';
-    return '<div class="books-card-price"><span class="bk-soon">Pricing coming soon</span></div>';
+    return '<div class="books-card-price"><span class="bk-soon">Not available</span></div>';
   }
 
   function includesHtml(p) {
@@ -88,8 +98,8 @@
     var featured = p.featured ? ' books-card--featured' : '';
     var cover = p.coverImage
       ? '<img src="' + esc(p.coverImage) + '" alt="' + esc(p.coverAlt || p.shortName) + '" width="300" height="200" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
-        '<span class="bk-ph" style="display:none;">Cover artwork<br>coming soon</span>'
-      : '<span class="bk-ph">Cover artwork<br>coming soon</span>';
+        '<span class="bk-ph" style="display:none;">Cover artwork<br>unavailable</span>'
+      : '<span class="bk-ph">Cover artwork<br>unavailable</span>';
 
     var digitalNote = (p.entitlements && (p.entitlements.ebook || p.entitlements.workbookPdf))
       ? '<p class="books-shipnote">★ Includes complimentary digital bonus' +
@@ -108,7 +118,7 @@
 
     var btn = purchasable
       ? '<button class="btn btn-primary books-buy" data-product="' + esc(p.id) + '">Add to Order</button>'
-      : '<button class="btn btn-primary" disabled aria-disabled="true" title="Not yet available for purchase">Coming Soon</button>';
+      : '<button class="btn btn-primary" disabled aria-disabled="true" title="Not available for purchase">Not Available</button>';
 
     return '' +
       '<article class="books-card' + featured + '" aria-labelledby="prod-' + esc(p.id) + '">' +
@@ -206,7 +216,9 @@
       isbn: memoir && memoir.isbn ? memoir.isbn : undefined
     };
     if (offers.length) ld.offers = offers;
+    // books.html now ships static JSON-LD in <head> (richer: editions, workbook, FAQ).
+    // Only inject the dynamic fallback when no static block exists.
     var tag = document.getElementById('books-jsonld');
-    if (tag) tag.textContent = JSON.stringify(ld);
+    if (tag && !tag.textContent.trim()) tag.textContent = JSON.stringify(ld);
   } catch (e) { /* non-fatal */ }
 })();

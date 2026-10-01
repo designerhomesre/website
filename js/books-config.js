@@ -32,8 +32,8 @@
   // ===========================================================================
   var store = {
     currency: 'usd',
-    // Master switch. Keep false until real prices/covers/descriptions are set.
-    storeLive: false,
+    // Master switch for book checkout.
+    storeLive: true,
 
     // The exact processing/shipping language required. DO NOT imply delivery in 48h.
     processingNotice:
@@ -51,8 +51,8 @@
         { code: 'ups',                  label: 'UPS' },
         { code: 'other',                label: 'Other' }
       ],
-      // Flat domestic rate charged at checkout, in cents. __PLACEHOLDER__ — set real rate.
-      flatRateCents: null,          // e.g. 499 for $4.99
+      // Flat domestic rate charged at checkout, in cents.
+      flatRateCents: 600,
       freeShippingThresholdCents: null, // e.g. 5000 for free shipping over $50 (null = disabled)
       allowedRegions: ['US'],       // ISO country codes eligible for checkout
       digitalOnlyShippingCents: 0   // digital-only orders never pay shipping
@@ -60,6 +60,12 @@
 
     // Low-inventory threshold used for "Only N left" badges.
     lowInventoryThreshold: 5,
+
+    // External retailer links shown on the storefront hero ("Also available on …").
+    // Leave url null to hide. Fill in the Amazon detail-page URL when available.
+    retailers: [
+      { name: 'Amazon', url: null } // __PLACEHOLDER__ e.g. 'https://www.amazon.com/dp/XXXXXXXXXX'
+    ],
 
     // Support contact shown across the storefront / emails.
     support: {

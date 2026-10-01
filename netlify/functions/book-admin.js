@@ -8,13 +8,14 @@
  * Actions (POST { action, ... }):
  *   list, get, update_status, add_note, set_shipping, mark_packed,
  *   mark_shipped, resend_confirmation, resend_digital, export_unfulfilled,
- *   pirateship_csv
+ *   shippo_csv, pirateship_csv
  *
  * Env: ADMIN_API_TOKEN, SUPABASE_URL, SUPABASE_SERVICE_KEY, RESEND_API_KEY, SITE_URL
  */
 'use strict';
 
 const crypto = require('crypto');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const S = require('./lib/books-shared');
 const mail = require('./lib/email');
 const CFG = S.CFG;
@@ -48,11 +49,14 @@ exports.handler = async (event) => {
       case 'update_status':        return S.jsonResponse(200, await updateStatus(body), headers);
       case 'add_note':             return S.jsonResponse(200, await addNote(body), headers);
       case 'set_shipping':         return S.jsonResponse(200, await setShipping(body), headers);
+      case 'set_address':          return S.jsonResponse(200, await setAddress(body), headers);
       case 'mark_packed':          return S.jsonResponse(200, await markPacked(body), headers);
       case 'mark_shipped':         return S.jsonResponse(200, await markShipped(body), headers);
       case 'resend_confirmation':  return S.jsonResponse(200, await resendConfirmation(body), headers);
       case 'resend_digital':       return S.jsonResponse(200, await resendDigital(body), headers);
+      case 'sync_stripe_orders':   return S.jsonResponse(200, await syncStripeOrders(body), headers);
       case 'export_unfulfilled':   return S.jsonResponse(200, await exportUnfulfilled(), headers);
+      case 'shippo_csv':           return await shippoCsv(body, headers);
       case 'pirateship_csv':       return await pirateShipCsv(body, headers);
       default:                     return S.jsonResponse(400, { error: 'Unknown action' }, headers);
     }
@@ -89,6 +93,7 @@ async function listOrders(body) {
     const ids = new Set((items || []).map(function (i) { return i.order_id; }));
     orders = orders.filter(function (o) { return ids.has(o.id); });
   }
+  await attachItems(orders);
   return { orders: orders, states: FULFILLMENT_STATES };
 }
 
@@ -124,6 +129,14 @@ async function setShipping(body) {
   if (body.shipping_label_cost_cents != null) patch.shipping_label_cost_cents = parseInt(body.shipping_label_cost_cents, 10);
   if (body.ship_date) patch.ship_date = body.ship_date;
   const rows = await S.sbUpdate('book_orders', 'id=eq.' + esc(body.id), patch);
+  return { ok: true, order: rows[0] };
+}
+
+async function setAddress(body) {
+  if (!body.id || !body.shipping_address) throw new Error('id and shipping_address required');
+  const rows = await S.sbUpdate('book_orders', 'id=eq.' + esc(body.id), {
+    shipping_address: body.shipping_address
+  });
   return { ok: true, order: rows[0] };
 }
 
@@ -187,7 +200,216 @@ async function resendDigital(body) {
 async function exportUnfulfilled() {
   const orders = await S.sbSelect('book_orders',
     'select=*&has_physical=eq.true&fulfillment_status=in.(Paid,Awaiting Fulfillment,Packing,Ready to Ship)&order=created_at.asc');
+  await attachItems(orders);
   return { orders: orders };
+}
+
+async function syncStripeOrders(body) {
+  if (!process.env.STRIPE_SECRET_KEY) throw new Error('Stripe not configured');
+
+  const limit = Math.min(100, parseInt(body.limit, 10) || 100);
+  const sessions = await stripe.checkout.sessions.list({ limit });
+  let imported = 0;
+  let skipped = 0;
+  const errors = [];
+
+  for (const session of (sessions.data || [])) {
+    if (!session.metadata || session.metadata.kind !== 'book_order' || session.payment_status !== 'paid') {
+      skipped++;
+      continue;
+    }
+    try {
+      const existing = await S.sbSelect('book_orders', 'select=id&stripe_session_id=eq.' + esc(session.id) + '&limit=1');
+      if (existing && existing.length) {
+        skipped++;
+        continue;
+      }
+      await importStripeSession(session.id);
+      imported++;
+    } catch (err) {
+      errors.push({ sessionId: session.id, error: err.message || 'sync_failed' });
+    }
+  }
+
+  return { ok: true, imported, skipped, errors };
+}
+
+async function importStripeSession(sessionId) {
+  const full = await stripe.checkout.sessions.retrieve(sessionId, {
+    expand: ['line_items', 'payment_intent', 'total_details.breakdown']
+  });
+  if (!full.metadata || full.metadata.kind !== 'book_order' || full.payment_status !== 'paid') return null;
+
+  let cart = [];
+  try { cart = JSON.parse((full.metadata && full.metadata.cart) || '[]'); } catch (e) {}
+  const computed = S.computeOrder(cart.map(function (c) { return { productId: c.p, quantity: c.q }; }));
+  if (computed.error) throw new Error('Book order recompute failed: ' + computed.error);
+
+  const cd = full.customer_details || {};
+  const ship = full.shipping_details || (cd.address ? { name: cd.name, address: cd.address } : null);
+  const shipAddr = ship && ship.address ? {
+    name: ship.name || cd.name || '',
+    line1: ship.address.line1 || '',
+    line2: ship.address.line2 || '',
+    city: ship.address.city || '',
+    state: ship.address.state || '',
+    postal_code: ship.address.postal_code || '',
+    country: ship.address.country || ''
+  } : null;
+  const ent = computed.entitlements;
+  const hasDigital = !!(ent.ebook || ent.workbookPdf);
+
+  let orderNumber;
+  try {
+    const seq = await S.sbRpc('next_book_order_seq', {});
+    orderNumber = S.orderNumberFromSeq(typeof seq === 'number' ? seq : (Array.isArray(seq) ? seq[0] : seq));
+  } catch (e) {
+    orderNumber = S.fallbackOrderNumber();
+  }
+
+  const orderRow = {
+    order_number: orderNumber,
+    customer_name: (shipAddr && shipAddr.name) || cd.name || '',
+    customer_email: cd.email || full.customer_email || '',
+    customer_phone: cd.phone || '',
+    shipping_address: shipAddr,
+    subtotal_cents: computed.subtotalCents,
+    shipping_cents: (full.total_details && full.total_details.amount_shipping) || computed.shippingCents || 0,
+    tax_cents: (full.total_details && full.total_details.amount_tax) || 0,
+    discount_cents: (full.total_details && full.total_details.amount_discount) || 0,
+    total_cents: full.amount_total,
+    currency: full.currency,
+    has_physical: !!computed.hasPhysical,
+    has_digital: hasDigital,
+    entitlement_ebook: !!ent.ebook,
+    entitlement_workbook_pdf: !!ent.workbookPdf,
+    stripe_session_id: full.id,
+    stripe_payment_intent: (full.payment_intent && full.payment_intent.id) || full.payment_intent || null,
+    payment_status: 'paid',
+    fulfillment_status: computed.hasPhysical ? 'Awaiting Fulfillment' : 'Paid',
+    digital_delivery_status: hasDigital ? 'pending' : 'not_applicable',
+    email_confirmation_status: 'pending'
+  };
+
+  const insertedRows = await S.sbInsert('book_orders', orderRow);
+  const inserted = Array.isArray(insertedRows) ? insertedRows[0] : insertedRows;
+  const orderId = inserted.id;
+  const itemRows = computed.resolved.map(function (r) {
+    return {
+      order_id: orderId,
+      product_id: r.productId,
+      sku: r.sku,
+      name: r.name,
+      format: r.format,
+      unit_amount_cents: r.unitAmountCents,
+      quantity: r.quantity,
+      physical: r.physical
+    };
+  });
+  if (itemRows.length) await S.sbInsert('book_order_items', itemRows, 'return=minimal');
+
+  async function grant(fileId) {
+    await S.sbInsert('book_digital_grants', {
+      order_id: orderId,
+      file_id: fileId,
+      token: S.makeDownloadToken(orderId, fileId),
+      request_count: 0
+    }, 'return=minimal');
+  }
+  if (ent.ebook) await grant('MEMOIR_EBOOK');
+  if (ent.workbookPdf) await grant('WORKBOOK_PDF');
+
+  const emailModel = Object.assign({}, inserted, {
+    _items: computed.resolved,
+    _hasPhysical: computed.hasPhysical,
+    _shipping: shipAddr
+  });
+  try {
+    const t = mail.thankYouEmail(emailModel);
+    const r = await mail.send(orderRow.customer_email, t.subject, t.html);
+    await S.sbUpdate('book_orders', 'id=eq.' + esc(orderId), {
+      email_confirmation_status: r && r.skipped ? 'skipped' : 'sent',
+      email_confirmation_at: new Date().toISOString()
+    });
+  } catch (e) { console.error('sync thank-you email failed:', e.message); }
+  try {
+    const adminEmail = process.env.BOOK_ADMIN_EMAIL || CFG.store.support.email;
+    const a = mail.adminOrderEmail(emailModel);
+    await mail.send(adminEmail, a.subject, a.html);
+  } catch (e) { console.error('sync admin email failed:', e.message); }
+
+  return inserted;
+}
+
+async function attachItems(orders) {
+  for (const o of (orders || [])) {
+    const items = await S.sbSelect('book_order_items', 'order_id=eq.' + esc(o.id) + '&order=created_at.asc');
+    o._items = items || [];
+    o.item_summary = (items || []).map(function (it) {
+      return it.quantity + 'x ' + (it.name || it.product_id || 'Book');
+    }).join('; ');
+  }
+}
+
+function orderWeightOz(items) {
+  let weightOz = 0;
+  (items || []).forEach(function (it) {
+    const p = CFG.getProduct(it.product_id);
+    if (p && typeof p.weightOz === 'number') weightOz += p.weightOz * it.quantity;
+  });
+  return weightOz || '';
+}
+
+// Shippo CSV upload fields. Shippo requires recipient name, street 1, postal,
+// city, state, country, email, and sometimes phone; recommended fields include
+// order number, order date, total weight, dimensions, and item detail.
+async function shippoCsv(body, headers) {
+  const orders = await exportUnfulfilled().then(function (r) { return r.orders; });
+  const cols = ['Order Number', 'Order Date', 'Recipient Name', 'Company Name', 'Street Line 1',
+    'Street Line 2', 'City', 'State', 'Country', 'Postal Code', 'Recipient Email',
+    'Phone Number', 'Total Order Weight', 'Weight Unit', 'Package Length', 'Package Width',
+    'Package Height', 'Dimension Unit', 'Total Order Price', 'Order Currency',
+    'Item Title', 'Item Quantity', 'SKU Number', 'Price Per Item', 'Item Price Currency'];
+  const lines = [cols.map(csvCell).join(',')];
+  for (const o of orders) {
+    const a = o.shipping_address || {};
+    const items = o._items && o._items.length ? o._items : [{ name: o.item_summary || 'Book order', quantity: 1, sku: '' }];
+    const weight = orderWeightOz(o._items);
+    for (const it of items) {
+      lines.push([
+        o.order_number,
+        new Date(o.created_at).toISOString().slice(0, 10),
+        a.name || o.customer_name || '',
+        a.company || '',
+        a.line1 || '',
+        a.line2 || '',
+        a.city || '',
+        a.state || '',
+        a.country || 'US',
+        a.postal_code || '',
+        o.customer_email || CFG.store.support.email,
+        o.customer_phone || CFG.store.support.phone || '',
+        weight,
+        weight ? 'oz' : '',
+        '', '', '', '',
+        (o.total_cents / 100).toFixed(2),
+        (o.currency || 'usd').toUpperCase(),
+        it.name || it.product_id || 'Book',
+        it.quantity || 1,
+        it.sku || '',
+        it.unit_amount_cents != null ? (it.unit_amount_cents / 100).toFixed(2) : '',
+        (o.currency || 'usd').toUpperCase()
+      ].map(csvCell).join(','));
+    }
+  }
+  return {
+    statusCode: 200,
+    headers: Object.assign({}, headers, {
+      'Content-Type': 'text/csv',
+      'Content-Disposition': 'attachment; filename="shippo-orders.csv"'
+    }),
+    body: lines.join('\r\n')
+  };
 }
 
 // Pirate Ship-compatible CSV. Weights/dims default from config, overridable per order.

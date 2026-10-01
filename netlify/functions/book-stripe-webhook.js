@@ -185,6 +185,14 @@ async function handleCompleted(session) {
     });
   } catch (e) { console.error('thank-you email failed:', e.message); }
 
+  const adminEmail = process.env.BOOK_ADMIN_EMAIL || CFG.store.support.email;
+  if (adminEmail) {
+    try {
+      const a = mail.adminOrderEmail(emailModel);
+      await mail.send(adminEmail, a.subject, a.html);
+    } catch (e) { console.error('admin order email failed:', e.message); }
+  }
+
   if (hasDigital && grantLinks.length) {
     try {
       const d = mail.digitalDeliveryEmail(emailModel, grantLinks);
@@ -203,3 +211,5 @@ async function handleCompleted(session) {
 
   console.log('Book order recorded:', orderNumber, orderId);
 }
+
+exports._handleCompleted = handleCompleted;

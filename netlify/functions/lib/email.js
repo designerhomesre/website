@@ -138,4 +138,23 @@ function shipmentEmail(order) {
   return { subject: 'Your order has shipped — ' + order.order_number, html: shell('Shipment Confirmation', body) };
 }
 
-module.exports = { send, thankYouEmail, digitalDeliveryEmail, shipmentEmail };
+function adminOrderEmail(order) {
+  const ship = order._shipping || order.shipping_address || {};
+  const body =
+    '<p style="font-size:16px;"><strong>New paid book order received.</strong></p>' +
+    '<p><strong>Order:</strong> ' + esc(order.order_number) + '<br>' +
+    '<strong>Customer:</strong> ' + esc(order.customer_name || '') + '<br>' +
+    '<strong>Email:</strong> ' + esc(order.customer_email || '') + '<br>' +
+    '<strong>Phone:</strong> ' + esc(order.customer_phone || '') + '</p>' +
+    itemsTable(order._items) +
+    '<table style="width:100%;font-size:14px;margin-top:6px;">' +
+      '<tr><td>Subtotal</td><td style="text-align:right;">' + money(order.subtotal_cents) + '</td></tr>' +
+      '<tr><td>Shipping charged</td><td style="text-align:right;">' + money(order.shipping_cents) + '</td></tr>' +
+      '<tr><td style="font-weight:700;padding-top:6px;">Total paid</td><td style="text-align:right;font-weight:700;padding-top:6px;">' + money(order.total_cents) + '</td></tr>' +
+    '</table>' +
+    (order._hasPhysical ? '<p style="margin-top:16px;"><strong>Ship to:</strong></p>' + addressBlock(ship) : '') +
+    '<p style="margin-top:16px;">Open the book admin page to pack, export for labels, add tracking, and mark shipped.</p>';
+  return { subject: 'New book order — ' + order.order_number, html: shell('New Book Order', body) };
+}
+
+module.exports = { send, thankYouEmail, digitalDeliveryEmail, shipmentEmail, adminOrderEmail };
